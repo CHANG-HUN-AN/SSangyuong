@@ -49,5 +49,4 @@ public class ButtonObject extends Frame {
 		}
 	}
 	
-	
 }//class
