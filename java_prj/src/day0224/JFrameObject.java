@@ -105,19 +105,10 @@ public class JFrameObject {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String bname = e.getActionCommand();
-			if(bname.equals("로그인")) {
-				String did = "test";
-				String dpass ="1234";
-				String uid = tid.getText().trim();
-				String upass = tpass.getText().trim();
-				if(uid.equals(did) ) {
-					if(upass.equals(dpass)) {
-						JOptionPane.showMessageDialog(null, "로그인 성공");
-					}else {
-						JOptionPane.showMessageDialog(null, "로그인 실패,비밀번호 오류입니다.");
-					}
-				}else {
-					JOptionPane.showMessageDialog(null, "로그인 실패,아이디를 다시입력하십시오","실패",2);
+			
+			if(bname.equals("로그인") || tpass == e.getSource()) {
+				if(valitdationCheck() == true) {
+					logincheck();
 				}
 			}else if(bname.equals("취소")) {
 				tid.setText("");
@@ -125,31 +116,39 @@ public class JFrameObject {
 			}else if(bname.equals("종료")){
 				System.out.println("종료버튼이 클릭되었습니다.");
 				System.exit(0);
-			}else if(tpass == e.getSource()) {//로그인 엔터로 확인하기
-				if(bname.equals("로그인")) {
-					String did = "test";
-					String dpass ="1234";
-					String uid = tid.getText().trim();
-					String upass = tpass.getText().trim();
-					if(uid.equals(did) ) {
-						if(upass.equals(dpass)) {
-							JOptionPane.showMessageDialog(null, "로그인 성공");
-						}else {
-							JOptionPane.showMessageDialog(null, "로그인 실패,비밀번호 오류입니다.");
-						}
-					}else {
-						JOptionPane.showMessageDialog(null, "로그인 실패,아이디를 다시입력하십시오","실패",2);
-					}
-				}else if(bname.equals("취소")) {
-					tid.setText("");
-					tpass.setText("");
-				}else if(bname.equals("종료")){
-					System.out.println("종료버튼이 클릭되었습니다.");
-					System.exit(0);
-				}
+			}
 		}
 	}
-	}
-	//Method
 	
-}
+	//Method
+	public boolean valitdationCheck() {//데이터 유효성 체크
+		//tid , tpass 의 값이 없으면 메시지 호출
+		boolean count = true;
+		if (tid.getText().equals("") ) {
+			JOptionPane.showMessageDialog(null, "아이디를 입력해주세요","실패",2);
+			tid.requestFocus();
+			count = false;
+		}else if(tpass.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요","실패",2);
+			tpass.requestFocus();
+			count = false;
+		}
+		return count;
+	}
+	public void logincheck() {
+		String did = "test";
+		String dpass ="1234";
+		String uid = tid.getText().trim();
+		String upass = tpass.getText().trim();
+		if(uid.equals(did) ) {
+			if(upass.equals(dpass)) {
+				JOptionPane.showMessageDialog(null, "로그인 성공");
+			}else {
+				JOptionPane.showMessageDialog(null, "로그인 실패,비밀번호 오류입니다.");
+			}
+		}else {
+			JOptionPane.showMessageDialog(null, "로그인 실패,아이디를 다시입력하십시오","실패",2);
+		}
+	}//loginCheck()
+	
+}//class
