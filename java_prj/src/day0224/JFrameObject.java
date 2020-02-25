@@ -107,7 +107,7 @@ public class JFrameObject {
 			String bname = e.getActionCommand();
 			
 			if(bname.equals("로그인") || tpass == e.getSource()) {
-				if(valitdationCheck() == true) {
+				if(valitdationCheck()) {
 					logincheck();
 				}
 			}else if(bname.equals("취소")) {
@@ -123,15 +123,15 @@ public class JFrameObject {
 	//Method
 	public boolean valitdationCheck() {//데이터 유효성 체크
 		//tid , tpass 의 값이 없으면 메시지 호출
-		boolean count = true;
+		boolean count = false;
 		if (tid.getText().equals("") ) {
 			JOptionPane.showMessageDialog(null, "아이디를 입력해주세요","실패",2);
 			tid.requestFocus();
-			count = false;
 		}else if(tpass.getText().equals("")) {
 			JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요","실패",2);
 			tpass.requestFocus();
-			count = false;
+		}else {
+			count = true;
 		}
 		return count;
 	}
