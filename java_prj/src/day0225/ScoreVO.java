@@ -1,45 +1,50 @@
 package day0225;
 
 public class ScoreVO {
-	String std,name,kor,eng,math;
-
-	public String getStd() {
-		return std;
+	String stuno, name;
+	int kor, eng, math, tot, avg;
+	
+	public String getStuno() {
+		return stuno;
 	}
-
-	public void setStd(String std) {
-		this.std = std;
+	public void setStuno(String stuno) {
+		this.stuno = stuno;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getKor() {
+	public int getKor() {
 		return kor;
 	}
-
-	public void setKor(String kor) {
+	public void setKor(int kor) {
 		this.kor = kor;
 	}
-
-	public String getEng() {
+	public int getEng() {
 		return eng;
 	}
-
-	public void setEng(String eng) {
+	public void setEng(int eng) {
 		this.eng = eng;
 	}
-
-	public String getMath() {
+	public int getMath() {
 		return math;
 	}
-
-	public void setMath(String math) {
+	public void setMath(int math) {
 		this.math = math;
 	}
+	public int getTot() {
+		return kor+eng+math;
+	}
+	public void setTot(int tot) {
+		this.tot = tot;
+	}
+	public int getAvg() {
+		return getTot()/3;
+	}
+	public void setAvg(int avg) {
+		this.avg = avg;
+	}
+
 }

@@ -70,7 +70,7 @@ public class JFrameObject {
 		jf.setVisible(true);
 		//모니터사이즈에 맞춰 정가운데에 맞춰서 놓기
 		Dimension fsize = jf.getSize(); //jframe 사이드 setsize크기
-		Dimension scsize = Toolkit.getDefaultToolkit().getScreenSize(); //toolkit.getDefaultToolkit 으로 tookit의 호출 
+		Dimension scsize = Toolkit.getDefaultToolkit().getScreenSize(); //toolkit.getDefaultToolkit 으로 tookit의 호출
 		//getScreensize Dimension타입반환 ->현재의 모니터 사이즈크기를 가져옴
 		int width = (int)(scsize.getWidth()-fsize.getWidth())/2; //모니터 - 프레임크기 /2 
 		int height = (int)(scsize.getHeight()-fsize.getHeight())/2;
