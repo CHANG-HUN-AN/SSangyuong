@@ -1,4 +1,4 @@
-package day0226;
+package day0226_protoType;
 
 public class CrudMgmtest {
 

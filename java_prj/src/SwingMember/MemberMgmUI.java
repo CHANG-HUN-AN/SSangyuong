@@ -1,4 +1,4 @@
-package day0226_t;
+package SwingMember;
 
 
 import java.awt.BorderLayout;
@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,30 +29,35 @@ public class MemberMgmUI extends JFrame{
 	public static final int SEARCH =3 ;
 	public static final int UPDATE =4 ;
 	public static final int DELETE =5 ;
+	public static ArrayList<MemberVO> list = new ArrayList<MemberVO>();
 	
 	JPanel mainPane, menuPane;
 	JButton btnReg, btnList, btnSearch, btnUpdate, btnDelete, btnExit;
 	JLabel jl_title,jl_img;
-	Font font = new Font("맑은 고딕", Font.BOLD, 12);
-	//회원등록 필드
-	JPanel regPanel,titlePanel,jp_name,jp_addr,buttonPanel,totPane;
-	JLabel jl_name,jl_addr,jl_reg_title;
-	JTextField jt_name,jt_addr;
-	JButton jb_register,jb_cancel;
-	//list Field
-	JPanel listPane;
-	JTextArea ta;
-	//search Field
-	JPanel searchPane, jp_search,jp_serarchResult;;
+	static Font font = new Font("맑은 고딕", Font.BOLD, 12);
+//	//회원등록 필드
+//	JPanel regPanel,titlePanel,jp_name,jp_addr,buttonPanel,
+	JPanel totPane = new JPanel();
+//	JLabel jl_name,jl_addr,jl_reg_title;
+//	JTextField jt_name,jt_addr;
+//	JButton jb_register,jb_cancel;
+	//리스트 필드
+	JPanel listPane = new JPanel();
+//	JTextArea ta;
+	//서치 필드
+	JPanel searchPane= new JPanel();
+	JPanel jp_search,jp_serarchResult;;
 	JLabel jl_searchName;
 	JTextField jt_search;
 	TextArea sta;
-	//update_Field
-	JPanel updatePanel,update_subPanel,jp_updateName,jp_updateAddr,jp_updateSearch;
+	//업데이트 필드
+	JPanel updatePanel= new JPanel();
+	JPanel update_subPanel,jp_updateName,jp_updateAddr,jp_updateSearch;
 	JLabel jl_updateName,jl_updateAddr,jl_updateSearchName;
 	JTextField jt_updateName,jt_updateAddr,jt_updateSearch;
-	//delete_Field
-	JPanel deletePane,jp_deltetSearch;
+	//딜리트 필드
+	JPanel deletePane= new JPanel();
+	JPanel jp_deltetSearch;
 	JLabel jl_deleteSearchName;
 	JTextField jt_deleteSearch;
 	
@@ -64,11 +70,11 @@ public class MemberMgmUI extends JFrame{
 	//Method
 	public void start() {
 		mainPane = new JPanel();
-		totPane = new JPanel();
-		listPane = new JPanel();
-		searchPane=new JPanel();
-		updatePanel=new JPanel();
-		deletePane=new JPanel();
+//		totPane = new JPanel();
+//		listPane = new JPanel();
+//		searchPane=new JPanel();
+//		updatePanel=new JPanel();
+//		deletePane=new JPanel();
 		
 		menuPane = new JPanel(new GridLayout(10,1));
 		jl_title = new JLabel("\n== 회원등록 시스템에 오신것을 환영합니다 ==");
@@ -108,7 +114,7 @@ public class MemberMgmUI extends JFrame{
 		setLocation(width, height);
 		setVisible(true);
 
-		MemberMgmUIEvent eventobj = new MemberMgmUIEvent();
+		MemberMgmUIEvent eventobj = new MemberMgmUIEvent(this);
 		addWindowListener(eventobj);
 		btnReg.addActionListener(eventobj);
 		btnList.addActionListener(eventobj);
@@ -117,55 +123,98 @@ public class MemberMgmUI extends JFrame{
 		btnDelete.addActionListener(eventobj);
 		btnExit.addActionListener(eventobj);
 	}
+	/**
+	 *event처리
+	 * @author user
+	 */
+	class MemberMgmUIEvent extends WindowAdapter implements ActionListener {
+		//Field
+		MemberMgmUI main;
+		//Constructor
+		public MemberMgmUIEvent() {
+			
+		}
+		public MemberMgmUIEvent(MemberMgmUI main) {
+			this.main = main;
+		}
+		//Method
+		public void windowClosing(WindowEvent e) {
+//			JLabel test = new JLabel("프로그램 종료!!");
+//			test.setFont(font);
+			JOptionPane.showMessageDialog(null, getMsg("프로그램 종료!!"));
+			System.exit(0);
+		}
+		public void actionPerformed(ActionEvent e) {
+			Object obj = e.getSource();
+			if (btnReg == obj) {
+//				register();
+				new MemberRegister(main).register();
+			} else if (btnList == obj) {
+//				list();
+				new MemberList(main).list();
+			} else if (btnSearch == obj) {
+				search();
+			} else if (btnUpdate == obj) {
+				update();
+			} else if (btnDelete == obj) {
+				delete();
+			} else if (btnExit == obj) {
+				int result = JOptionPane.showConfirmDialog(null, getMsg("프로그램을 종료하시겠습니까?"));//예 0 아니요 1 취소 2
+				if(result == 0) {
+				System.exit(0);
+				}
+			}
+		}
 	
+	}// inner_class
 	/**
 	 * 등록
 	 */
-	private void register() {
-//		switchPane("register");
-		switchPane(MemberMgmUI.REGISTER);
-		
-		//object 
-		regPanel = new JPanel();
-		jp_name = new JPanel();jp_addr = new JPanel();
-		titlePanel=new JPanel();buttonPanel = new JPanel();
-		jl_name = new JLabel("이름");jl_addr = new JLabel("주소");jl_reg_title= new JLabel("회원등록폼");
-		jt_name = new JTextField(20);jt_addr = new JTextField(20);
-		jl_name.setFont(font);jl_addr.setFont(font);
-		jb_register = new JButton("등록");jb_cancel = new JButton("취소");
-		//sub panel add
-		titlePanel.add(jl_reg_title);
-		jp_name.add(jl_name);jp_name.add(jt_name);
-		jp_addr.add(jl_addr);jp_addr.add(jt_addr);
-		buttonPanel.add(jb_register);buttonPanel.add(jb_cancel);
-		//panel add
-		regPanel.setLayout(new GridLayout(4,1));
-		regPanel.add(titlePanel);
-		regPanel.add(jp_name);regPanel.add(jp_addr);
-		regPanel.add(buttonPanel);
-		
-		totPane.add(regPanel);
-		add(totPane,BorderLayout.CENTER);
-		
-		setVisible(true);
-	}
+//	private void register() {
+////		switchPane("register");
+//		switchPane(MemberMgmUI.REGISTER);
+//		
+//		//object 
+//		regPanel = new JPanel();
+//		jp_name = new JPanel();jp_addr = new JPanel();
+//		titlePanel=new JPanel();buttonPanel = new JPanel();
+//		jl_name = new JLabel("이름");jl_addr = new JLabel("주소");jl_reg_title= new JLabel("회원등록폼");
+//		jt_name = new JTextField(20);jt_addr = new JTextField(20);
+//		jl_name.setFont(font);jl_addr.setFont(font);
+//		jb_register = new JButton("등록");jb_cancel = new JButton("취소");
+//		//sub panel add
+//		titlePanel.add(jl_reg_title);
+//		jp_name.add(jl_name);jp_name.add(jt_name);
+//		jp_addr.add(jl_addr);jp_addr.add(jt_addr);
+//		buttonPanel.add(jb_register);buttonPanel.add(jb_cancel);
+//		//panel add
+//		regPanel.setLayout(new GridLayout(4,1));
+//		regPanel.add(titlePanel);
+//		regPanel.add(jp_name);regPanel.add(jp_addr);
+//		regPanel.add(buttonPanel);
+//		
+//		totPane.add(regPanel);
+//		add(totPane,BorderLayout.CENTER);
+//		
+//		setVisible(true);
+//	}
 	
 	/**
 	 *	리스트 output
 	 */
-	public  void list() {
-//		switchPane("list");
-		switchPane(MemberMgmUI.LIST);
-		//object
-		ta = new JTextArea(28,65);
-		ta.append("리스트출력");
-		ta.setEditable(false);
-		
-		listPane.add(ta);
-		add(listPane,BorderLayout.CENTER);
-		mainPane.setVisible(false);
-		setVisible(true);
-	}//list Method
+//	public  void list() {
+////		switchPane("list");
+//		switchPane(MemberMgmUI.LIST);
+//		//object
+//		ta = new JTextArea(28,65);
+//		ta.append("리스트출력");
+//		ta.setEditable(false);
+//		
+//		listPane.add(ta);
+//		add(listPane,BorderLayout.CENTER);
+//		mainPane.setVisible(false);
+//		setVisible(true);
+//	}//list Method
 	
 	/**
 	 * 검색
@@ -249,40 +298,7 @@ public class MemberMgmUI extends JFrame{
 		msgLabel.setFont(font);
 		return msgLabel;
 	}
-	/**
-	 *event처리
-	 * @author user
-	 */
-	class MemberMgmUIEvent extends WindowAdapter implements ActionListener {
 	
-		public void windowClosing(WindowEvent e) {
-//			JLabel test = new JLabel("프로그램 종료!!");
-//			test.setFont(font);
-			JOptionPane.showMessageDialog(null, getMsg("프로그램 종료!!"));
-			System.exit(0);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			Object obj = e.getSource();
-			if (btnReg == obj) {
-				register();
-			} else if (btnList == obj) {
-				list();
-			} else if (btnSearch == obj) {
-				search();
-			} else if (btnUpdate == obj) {
-				update();
-			} else if (btnDelete == obj) {
-				delete();
-			} else if (btnExit == obj) {
-				int result = JOptionPane.showConfirmDialog(null, getMsg("프로그램을 종료하시겠습니까?"));//예 0 아니요 1 취소 2
-				if(result == 0) {
-				System.exit(0);
-				}
-			}
-		}
-	
-	}// inner_class
 	/**
 	 * 패널이동시 중복문제를 해결하기위해 스위칭으로 꺼준다 
 	 * @param menu

@@ -127,6 +127,7 @@ public class ScoreMgmUI {
 	public void register() {
 		//ScoreVO 객체를 이용하여 등록
 		ScoreVO vo = new ScoreVO();
+		
 		vo.setStuno(jt_stuno.getText());
 		vo.setName(jt_name.getText());
 		vo.setKor(Integer.parseInt(jt_kor.getText()));
