@@ -1,4 +1,4 @@
-package SwingMember;
+package SwingMember2;
 
 
 import java.awt.BorderLayout;
@@ -33,50 +33,40 @@ public class MemberMgmUI extends JFrame{
 	public static final int DELETE =5 ;
 	public static  ArrayList<MemberVO> list = new ArrayList<MemberVO>();
 	
+	//Duplicate Object
+	MemberMgmUIEvent eventObj = new MemberMgmUIEvent(this);
+	
 	JPanel mainPane, menuPane;
 	JButton btnReg, btnList, btnSearch, btnUpdate, btnDelete, btnExit;
 	JLabel jl_title,jl_img;
+	//First_Form
+	JPanel showPane,ShowButtonPane;
+	JButton btnLogin,btnJoin;
+	//font
 	static Font font = new Font("맑은 고딕", Font.BOLD, 12);
 //	//회원등록 필드
-//	JPanel regPanel,titlePanel,jp_name,jp_addr,buttonPanel,
 	JPanel totPane = new JPanel();
-//	JLabel jl_name,jl_addr,jl_reg_title;
-//	JTextField jt_name,jt_addr;
-//	JButton jb_register,jb_cancel;
 	//리스트 필드
 	JPanel listPane = new JPanel();
-//	JTextArea ta;
 	//서치 필드
 	JPanel searchPane= new JPanel();
-//	JPanel jp_search,jp_serarchResult;;
-//	JLabel jl_searchName;
-//	JTextField jt_search;
-//	TextArea sta;
 	//업데이트 필드
 	JPanel updatePanel= new JPanel();
-//	JPanel update_subPanel,jp_updateName,jp_updateAddr,jp_updateSearch;
-//	JLabel jl_updateName,jl_updateAddr,jl_updateSearchName;
-//	JTextField jt_updateName,jt_updateAddr,jt_updateSearch;
 	//딜리트 필드
 	JPanel deletePane= new JPanel();
-//	JPanel jp_deltetSearch;
-//	JLabel jl_deleteSearchName;
-//	JTextField jt_deleteSearch;
-	
 	
 	//Constructor
 	public MemberMgmUI() {
-		start();
+//		start();
+		showMain();
 	}
 	
 	//Method
 	public void start() {
+		showPane.setVisible(false);
+		ShowButtonPane.setVisible(false);
+		
 		mainPane = new JPanel();
-//		totPane = new JPanel();
-//		listPane = new JPanel();
-//		searchPane=new JPanel();
-//		updatePanel=new JPanel();
-//		deletePane=new JPanel();
 		
 		menuPane = new JPanel(new GridLayout(10,1));
 		jl_title = new JLabel("\n== 회원등록 시스템에 오신것을 환영합니다 ==");
@@ -106,7 +96,7 @@ public class MemberMgmUI extends JFrame{
 		add(menuPane, BorderLayout.WEST);
 		add(mainPane, BorderLayout.CENTER);
 		
-		setSize(700,500);
+		setSize(600,500);
 		
 		Dimension fsize = getSize();
 		Dimension scsize = Toolkit.getDefaultToolkit().getScreenSize(); 
@@ -116,15 +106,47 @@ public class MemberMgmUI extends JFrame{
 		setLocation(width, height);
 		setVisible(true);
 
-		MemberMgmUIEvent eventobj = new MemberMgmUIEvent(this);
-		addWindowListener(eventobj);
-		btnReg.addActionListener(eventobj);
-		btnList.addActionListener(eventobj);
-		btnSearch.addActionListener(eventobj);
-		btnUpdate.addActionListener(eventobj);
-		btnDelete.addActionListener(eventobj);
-		btnExit.addActionListener(eventobj);
+		addWindowListener(eventObj);
+		btnReg.addActionListener(eventObj);
+		btnList.addActionListener(eventObj);
+		btnSearch.addActionListener(eventObj);
+		btnUpdate.addActionListener(eventObj);
+		btnDelete.addActionListener(eventObj);
+		btnExit.addActionListener(eventObj);
+	}//start();
+	
+	public void showMain() {
+		//Object
+		showPane=new JPanel();ShowButtonPane=new JPanel();
+		btnLogin=new JButton("로그인");btnJoin=new JButton("회원가입");;
+		jl_title = new JLabel("\n== 회원등록 시스템에 오신것을 환영합니다 ==");
+		jl_img = new JLabel(new ImageIcon("src/day0226_t/main.png"));
+		
+		//font_set
+		jl_title.setFont(new Font("맑은 고딕",Font.BOLD,16));
+		btnLogin.setFont(font);btnJoin.setFont(font);
+		
+		//panel_add
+		showPane.add(jl_img);
+		showPane.add(jl_title);	
+		ShowButtonPane.add(btnLogin);ShowButtonPane.add(btnJoin);
+		//JPanel add
+		add(showPane,BorderLayout.CENTER);
+		add(ShowButtonPane,BorderLayout.SOUTH);
+		//mid proc **size set
+		setSize(600,500);
+		Dimension fsize = getSize();
+		Dimension scsize = Toolkit.getDefaultToolkit().getScreenSize(); 
+		int width = (int)(scsize.getWidth()-fsize.getWidth())/2;
+		int height =(int)(scsize.getHeight()-fsize.getHeight())/2;
+		setLocation(width, height);
+		setVisible(true);
+		//Listener Handler
+		
+		btnLogin.addActionListener(eventObj);
+		btnJoin.addActionListener(eventObj);
 	}
+	
 	/**
 	 *event처리
 	 * @author user
@@ -141,18 +163,18 @@ public class MemberMgmUI extends JFrame{
 		}
 		//Method
 		public void windowClosing(WindowEvent e) {
-//			JLabel test = new JLabel("프로그램 종료!!");
-//			test.setFont(font);
 			JOptionPane.showMessageDialog(null, getMsg("프로그램 종료!!"));
 			System.exit(0);
 		}
+		
 		public void actionPerformed(ActionEvent e) {
 			Object obj = e.getSource();
-			if (btnReg == obj ) {
-//				register();
+			
+			if(btnLogin == obj) {
+				new MemberLogin(main);
+			}else if (btnReg == obj ) {
 				new MemberRegister(main).register();
 			} else if (btnList == obj) {
-//				list();
 				new MemberList(main).list();
 			} else if (btnSearch == obj) {
 				new MemberSearch(main).search();
@@ -167,132 +189,7 @@ public class MemberMgmUI extends JFrame{
 				}
 			}
 		}
-	
 	}// inner_class
-	/**
-	 * 등록
-	 */
-//	private void register() {
-////		switchPane("register");
-//		switchPane(MemberMgmUI.REGISTER);
-//		
-//		//object 
-//		regPanel = new JPanel();
-//		jp_name = new JPanel();jp_addr = new JPanel();
-//		titlePanel=new JPanel();buttonPanel = new JPanel();
-//		jl_name = new JLabel("이름");jl_addr = new JLabel("주소");jl_reg_title= new JLabel("회원등록폼");
-//		jt_name = new JTextField(20);jt_addr = new JTextField(20);
-//		jl_name.setFont(font);jl_addr.setFont(font);
-//		jb_register = new JButton("등록");jb_cancel = new JButton("취소");
-//		//sub panel add
-//		titlePanel.add(jl_reg_title);
-//		jp_name.add(jl_name);jp_name.add(jt_name);
-//		jp_addr.add(jl_addr);jp_addr.add(jt_addr);
-//		buttonPanel.add(jb_register);buttonPanel.add(jb_cancel);
-//		//panel add
-//		regPanel.setLayout(new GridLayout(4,1));
-//		regPanel.add(titlePanel);
-//		regPanel.add(jp_name);regPanel.add(jp_addr);
-//		regPanel.add(buttonPanel);
-//		
-//		totPane.add(regPanel);
-//		add(totPane,BorderLayout.CENTER);
-//		
-//		setVisible(true);
-//	}
-	
-	/**
-	 *	리스트 output
-	 */
-//	public  void list() {
-////		switchPane("list");
-//		switchPane(MemberMgmUI.LIST);
-//		//object
-//		ta = new JTextArea(28,65);
-//		ta.append("리스트출력");
-//		ta.setEditable(false);
-//		
-//		listPane.add(ta);
-//		add(listPane,BorderLayout.CENTER);
-//		mainPane.setVisible(false);
-//		setVisible(true);
-//	}//list Method
-	
-	/**
-	 * 검색
-	 */
-//	public void search() {
-////		switchPane("search");
-//		switchPane(MemberMgmUI.SEARCH);
-//
-//		//object
-//		 jp_search=new JPanel();jp_serarchResult = new JPanel();
-//		
-//		 jl_searchName = new JLabel("검색명>>");
-//		 jt_search= new JTextField(20);
-//		 sta= new TextArea(20,20);
-//		 sta.setEditable(false);
-//		 //sub_panel add
-//		 jp_search.add(jl_searchName);
-//		 jp_search.add(jt_search);
-//		 jp_serarchResult.add(sta);
-//		 
-//		 searchPane.add(jp_search);
-//		 searchPane.add(jp_serarchResult);
-//		 
-//		 add(searchPane,BorderLayout.CENTER);
-//		 mainPane.setVisible(false);
-//		 setVisible(true);
-//	}//search_Method//**
-	
-	/**
-	 * updateMethod
-	 */
-//	public void update() {
-////		switchPane("update");
-//		switchPane(MemberMgmUI.UPDATE);
-//
-//		//object 
-//		update_subPanel=new JPanel();
-//		 jp_updateName=new JPanel();jp_updateAddr=new JPanel();jp_updateSearch=new JPanel();
-//		 jl_updateName= new JLabel("이름");jl_updateAddr=new JLabel("주소");jl_updateSearchName=new JLabel("수정명>>");
-//		 jt_updateName=new JTextField(20);jt_updateAddr=new JTextField(20);jt_updateSearch=new JTextField(20);
-//		 //font set
-//		 jl_updateName.setFont(font);
-//		 jl_updateAddr.setFont(font);
-//		 jl_updateSearchName.setFont(font);
-//		 //component add
-//		 jp_updateSearch.add(jl_updateSearchName);jp_updateSearch.add(jt_updateSearch);
-//		 jp_updateName.add(jl_updateName);jp_updateName.add(jt_updateName);
-//		 jp_updateAddr.add(jl_updateAddr);jp_updateAddr.add(jt_updateAddr);
-//		//panel add
-//		 update_subPanel.setLayout(new GridLayout(3,1));
-//		 update_subPanel.add(jp_updateSearch);update_subPanel.add(jp_updateName);update_subPanel.add(jp_updateAddr);
-//		 updatePanel.add(update_subPanel);
-//		 add(updatePanel,BorderLayout.CENTER);
-//		 
-//		 mainPane.setVisible(false);
-//		 setVisible(true);
-//	}//update_Method//**
-	
-//	private void delete() {
-////		switchPane("delete");
-//		switchPane(MemberMgmUI.DELETE);
-//		//object
-//		 jp_deltetSearch=new JPanel();
-//		 jl_deleteSearchName=new JLabel("삭제명>>");
-//		 jt_deleteSearch=new JTextField(20);
-//		 jl_deleteSearchName.setFont(font);
-//		 //component_add
-//		 jp_deltetSearch.add(jl_deleteSearchName);
-//		 jp_deltetSearch.add(jt_deleteSearch);
-//		 //panel_add
-//		 deletePane.add(jp_deltetSearch);
-//		 add(deletePane);
-//		 
-//		 mainPane.setVisible(false);
-//		 setVisible(true);
-//	}//delete_Method//**
 	
 	//메시지를 입력받아 JLabel을 생성하고 폰트를 수정하여 리턴
 	public JLabel getMsg(String msg) {
@@ -307,7 +204,6 @@ public class MemberMgmUI extends JFrame{
 	 */
 	public void switchPane(String menu) {
 		resetPane();
-		
 		if(menu.equals("register")) {
 			totPane.removeAll();
 			totPane.setVisible(true);
@@ -325,8 +221,7 @@ public class MemberMgmUI extends JFrame{
 			deletePane.setVisible(true);
 		}
 	}
-	
-	//switching overloding
+	//switching overLoding
 	public void switchPane(int menu) {
 		resetPane();
 		//
@@ -340,6 +235,8 @@ public class MemberMgmUI extends JFrame{
 	}
 	//공통되는 부분을 메소드로 만든다!!
 	public void resetPane() {
+		showPane.setVisible(false);
+		ShowButtonPane.setVisible(false);
 		mainPane.setVisible(false);
 		totPane.setVisible(false);
 		listPane.setVisible(false);

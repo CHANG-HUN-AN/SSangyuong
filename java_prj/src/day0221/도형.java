@@ -20,6 +20,6 @@ public interface 도형 {
 	
 
 //	{System.out.println(color + " 도형");}
-	public abstract void draw();
+	public  void draw();
 //	{System.out.println("\'도형\'을 그린다");}
 }
