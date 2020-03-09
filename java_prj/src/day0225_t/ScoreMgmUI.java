@@ -62,13 +62,12 @@ public class ScoreMgmUI {
 		jt_eng = new JTextField(20);
 		jt_math = new JTextField(20);
 		
-		btnReg = new JButton("등록");
+//		btnReg = new JButton("등록");
 		btnReset = new JButton("취소");
 		btnList = new JButton("리스트");
 		btnExit = new JButton("종료");
 		btnReg.setFont(font);  btnReset.setFont(font);
 		btnList.setFont(font); btnExit.setFont(font);
-		
 		jp_stuno.add(jl_stuno);  jp_stuno.add(jt_stuno);
 		jp_name.add(jl_name);  jp_name.add(jt_name);
 		jp_kor.add(jl_kor);  jp_kor.add(jt_kor);

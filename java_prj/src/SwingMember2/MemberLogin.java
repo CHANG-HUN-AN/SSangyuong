@@ -77,7 +77,6 @@ public class MemberLogin {
 		public void actionPerformed(ActionEvent ae) {
 			Object obj = ae.getSource();
 			if(obj == btnLogin || jt_pass == ae.getSource()) {
-				System.out.println("·Î±×ÀÎµÊ");
 				if(valitdationCheck()) {
 					logincheck();
 				}
