@@ -1,0 +1,122 @@
+1.객체지향 프로그래밍(OOP-Object Oriented Programming)
+-실생활에서 일어나는 모든 일들을 모델링하여 프로그래밍 구현이 가능
+
+java가 os에 독립적인 이유 
+메모리 같은것도 jvm (가상머신)을 통해 다루어서 운영체제 위에서 작동
+c언어 c++언어는 os에 종속되어있다
+네트워크환경이 힘들다(즉, 웹 구현에 적합하지 않다)
+
+c#은 java를 벤치마킹 해서 만든 언어
+현재 유명한 객체지향 프로그램언어는 C#과 Java가 존재한다.
+
+uml-객체지향 언어의 "모델링"  할수있는 기능을 가진 도구->>다이어그램 (모델링을 구현)
+순서도-구조적 프로그램언어로 코딩하기전 로직을 짜기위한 도구
+
+-Object (instance) -c언어를 구현한사람들은 instance 라고 함 (객체의 비슷한 개념)
+	Object->클래스가 메모리에 올라가면 객체라고 함
+2.객체 모델링(Object Modeling)
+-실생활에 있는 일들을 객체로 만들기전에 만드는 설계도 같은 개념
+현업에선 개발자와 비개발자의 소통하기위해 만든다
+
+*객체 모델링 하기위해 필요한도구
+UML(Unified Modeling Language) 을 사용하여 객체 모델링을 진행함
+
+-UML을 사용하여 생성되는 산출물
+  1)UseCase Diagram
+  2)Sequence Diagram
+  3)Class Diagram
+  4)Activity Diagram
+  5)Deployment Diagram
+ ....등 순서도의 도형과 다르게 많은 산출물이 있다
+	
+*개발순서:
+객체모델링> 클래스 정의 >>클래스 구현 (.Java파일생성)>실행(메모리에 객체생성)
+
+[객체모델링 실습]
+보검씨는 평창휴게소에 들러 커피 자판기에서 밀크 커피 300원 짜리를
+마시려고 한다.먼저, 500원짜리 동전을 넣고 밀크커피를 선택 한 후 잠시 기다린 후
+밀크 커피와 잔돈 200원을 받았다.
+
+1)객체,필드(속성),행위(기능)을 만든다<----(명사,동사 구분)
+(객체)명사:보검,평창휴게소,커피 자판기,
+(기능)동사:동전 넣기,동전 받기 ,밀크커피 선택, 커피 생성, 잔돈준다,잔돈받는다
+
+2)일반화(Generalization)
+	
+	   추상화(Abstraction)
+       	   ┌-------------------> 		
+	보검(객체)	             사람(클래스:속성+행위)
+	   구체화(Abstraction)
+       	   <--------------------┘
+
+
+3)클래스 정의
+클래스 is a 명사 : 클래스와 명사(클래스) 의 관계는 상속관계
+클래스 has a 명사 : 클래스와 명사(속성)은 포함관계
+
+(사람 클래스)
+클래스명:보검->사람(클래스),  
+속성명: 돈
+행위:동전넣기 ->돈 넣기, 밀크커피 선택 - >메뉴 선택 , 잔돈받기
+
+(커피 자판기 클래스)
+속성:메뉴,돈,
+행위:동전을 받는다, 동전을 체크한다, 메뉴선택을 받는다.
+       메뉴에 해당되는것을 만든다,잔돈계산,잔돈주기
+
+(휴게소 클래스)->main클래스 (사람과 휴게소가 작업이 실행되는 공간)
+
+
+3)클래스 구현(물리적)
+->직접 코드를 짜는것
+
+Class_name: Person
+Filed: int money
+Method: int input(),String choice();
+===================================
+Class_name:  Coffe_muchine
+Filed:  final menu String MENU;int money;
+Method:String check(int money), void make(String menu),response();
+
+
+//Method
+/**
+ * [접근제어자] [리턴타입] 메소드명(){
+ * 	기능구현~
+ * 	리턴타입에 따라 출력
+ *	}
+ * */	
+
+1)리턴타입 X , 파리미터 X
+Public void test(){기능 구현};
+
+기능구현하고 끝남
+
+2)리턴타입 X , 파라미터 O 
+Public void test(int number){
+     int sum=number+100;
+s.o.p(sum);
+};
+==>호출:test(10);
+==>결과(110);
+
+
+3)리턴타입 O,파라미터 X
+public int test(){
+   int  number2 = 10;
+   return number2;
+}
+
+4)리턴타입 O ,파리미터O
+public boolean test(){
+   boolean result = false;
+   if(i>j)result = true;
+return result 
+}
+==>호출 : test(10,100)==>결과 : false
+==>호출 : test(100,10)==>결과 : true
+
+파라미터가 있는경우 고정된값이 아닌 변수형태로 값을 바꿀수있다.
+
+static 이 return값으로 들어있으면 객체 생성필요x상수의 느낌
+static이 아닌것은 객체를 생성해주고 써야한다.

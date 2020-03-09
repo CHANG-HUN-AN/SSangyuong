@@ -1,0 +1,19 @@
+1.JAVA에서 지원하는 3가지 플랫폼
+	JAVA SE
+	JAVA EE
+	JAVA ME
+2.JAVA 프로그램 작성 및 실행 순서
+3.JAVA의 특징 2가지 이상
+OOP,OS에 독립적이다
+4.JAVA의 데이터 타입->나누는기준 JVM, 즉 메모리에 저장되는 형태에 따라
+1)Primitive (기본형)-> 값
+-정수형	byte,short,int,long
+-실수형	float,double
+-문자형 	char(1byte)   
+-불린형	boolean
+2)Reference(참조형)->주소
+Class
+interpreter
+Array
+5.JAVA프로그램 단위인 클래스를 이용하여, Hello~ JAVA~를 출력하는 Hello.java 파일을 작성하세요.
+6.JAVA의 변수에 대해서 정의 하세요
