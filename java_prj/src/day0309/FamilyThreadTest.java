@@ -14,9 +14,6 @@ public class FamilyThreadTest {
 		mother.start();
 		sister.start();
 		brother.start();
-		
-		
-		
 	}
 
 }

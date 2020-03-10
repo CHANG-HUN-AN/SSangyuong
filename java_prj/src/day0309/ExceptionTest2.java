@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  */
 public class ExceptionTest2 {
 	public static void main(String[] args) {
-		StringTokenizer st = new StringTokenizer("자바 수업 입니다.");
+		StringTokenizer st = new StringTokenizer("자바 수업 입니다."); //[컴퓨터 공학] 낱말 분석 이라는 뜻을 가지고 있다
 		int tokens = st.countTokens();
 		System.out.println(tokens);
 		System.out.println("예외처리 완료");
