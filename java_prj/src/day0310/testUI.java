@@ -101,7 +101,7 @@ public class testUI extends JFrame {
 			String fname = jt_title.getText().trim();
 			
 			//event jb_load 에서 일어났으면
-			if (obj == jb_load) {
+			if (obj == jb_load) { //파일 불러오기
 				jta_body.setText("");
 				if(proc.fileCheck(fname)) {//file 여부 체크
 					String data = proc.fileRead(fname).trim();
@@ -118,8 +118,7 @@ public class testUI extends JFrame {
 					if(confirm == 0) {//기존 파일에 이어서 저장
 						appendOK=true;
 					}else if(confirm == 1) {//새로운 파일 입력
-						jt_title.setText("");
-						jt_title.requestFocus();
+						reset();
 					}
 				}else {
 					int confrimCreate =JOptionPane.showConfirmDialog(null, "파일이존재하지않습니다.\n파일을생성하시겠습니까?", "", 2);
