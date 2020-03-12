@@ -1,4 +1,4 @@
-package Score_mgm;
+package Score_mgm0225;
 
 
 /**

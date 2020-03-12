@@ -1,7 +1,8 @@
-package Score_mgm;
+package Score_mgm_s;
 
+import java.io.Serializable;
 
-public class ScoreVO {
+public class ScoreVO implements Serializable{
 	String stuno, name;
 	int kor, eng, math, tot, avg;
 	

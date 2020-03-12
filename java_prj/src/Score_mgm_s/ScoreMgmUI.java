@@ -1,4 +1,4 @@
-package Score_mgm;
+package Score_mgm_s;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -11,9 +11,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -39,11 +39,14 @@ public class ScoreMgmUI {
 	JTextField jt_stuno, jt_name, jt_kor, jt_eng, jt_math;
 	JButton btnReg, btnReset, btnList, btnExit;
 	TextArea ta_list;
+	//File io Object
 	File f;
 	FileOutputStream fos;
 	DataOutputStream dos;
 	FileInputStream fis;
 	DataInputStream dis;
+	ObjectInputStream ois ;
+	ObjectOutputStream oos ;
 
 	// Constructor
 	public ScoreMgmUI() {
@@ -168,9 +171,8 @@ public class ScoreMgmUI {
 		if (list.add(vo))
 			JOptionPane.showMessageDialog(null, "등록 성공!!");
 	}
-
 	/**
-	 * 등록 --학번으로 생선된 파일 저장
+	 * registerFile - file에 값을 저장하기
 	 */
 	public void registerFile() {
 		ScoreVO vo = new ScoreVO();
@@ -182,12 +184,11 @@ public class ScoreMgmUI {
 		vo.setMath(Integer.parseInt(jt_eng.getText()));
 
 		try {
+			//new Object
 			f = new File("c:/dev/sist/" + vo.getStuno() + ".dat");
-
 			fos = new FileOutputStream(f);
-			dos = new DataOutputStream(fos);
-			f.createNewFile();
-
+			dos = new DataOutputStream(fos); //dataOutputStream 은 f.createFile을 만들지않아도 생성자에 스트림을 넣어주면
+			//그 경로에 파일을 생성해준다.
 //			dos.writeUTF(vo.getStuno()+"\t"+vo.getName()+"\t"+vo.getKor()+"\t"+vo.getEng()+"\t"+vo.getMath()
 //							+"\t"+vo.getTot()+"\t"+vo.getAvg());
 
@@ -204,7 +205,39 @@ public class ScoreMgmUI {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 등록 -- list.dat파일에 ScoreVO Object 저장 
+	 */
+	public void registerObject() {
+		ScoreVO vo = new ScoreVO();
 
+		vo.setStuno(jt_stuno.getText());
+		vo.setName(jt_name.getText());
+		vo.setKor(Integer.parseInt(jt_kor.getText()));
+		vo.setEng(Integer.parseInt(jt_eng.getText()));
+		vo.setMath(Integer.parseInt(jt_eng.getText()));
+
+		try {
+			//new Object
+			f = new File("c:/dev/sist/objectlist.dat"); //파일생성 
+			if(f.exists()) { // 파일존재시  
+				fos =new FileOutputStream(f,true);
+				oos = new ObjectOutputStream(fos);
+				oos.writeObject(vo);
+			}else {
+				f.createNewFile();
+				fos =new FileOutputStream(f);
+				oos = new ObjectOutputStream(fos);
+				oos.writeObject(vo);
+			}
+			if(oos!=null)oos.close();
+			if(fos!= null)fos.close();
+				
+			JOptionPane.showMessageDialog(null, "저장완료");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * 취소
 	 */
@@ -256,8 +289,7 @@ public class ScoreMgmUI {
 	/**
 	 * File 로 저장된 리스트 불러오기
 	 */
-
-	public void listFile(File f) {
+	public void listFile() {
 		try {
 			File sistPath = new File("c:/dev/sist"); // 디렉토리 형태로 가지고온다.
 			File[] stuList = sistPath.listFiles();	//전역변수로 빼면 매번 가져와서 안됨
@@ -274,11 +306,11 @@ public class ScoreMgmUI {
 
 			if (stuList.length != 0) {
 				// 출력
-				for (File temp : stuList) {
-					fis = new FileInputStream(temp);
+				for (File f : stuList) {
+					fis = new FileInputStream(f);
 					dis = new DataInputStream(fis);
 					
-					ta_list.append(dis.readUTF() + "\t\t");
+					ta_list.append(dis.readUTF() + "\t");
 					ta_list.append(dis.readUTF() + "\t");
 					ta_list.append(dis.readInt() + "\t");
 					ta_list.append(dis.readInt() + "\t");
@@ -296,7 +328,54 @@ public class ScoreMgmUI {
 				JOptionPane.showMessageDialog(null, "데이터가 없습니다.");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * listObject - 직렬화된 object 형태로 저장된 파일을 불러오기 
+	 * @param f
+	 */
+	public void listObject() {
+		try {
+			File f = new File("c:/dev/sist/objectlist.dat"); // 
+			
+			jf_list = new JFrame("리스트 출력");
+			ta_list = new TextArea(200, 200);
+			ta_list.setFont(font);
+			ta_list.setEditable(false);
+			// ta_list.setEnabled(false);
+			ta_list.append("===== textarea 리스트 출력 =====\n");
+			ta_list.append("--------------------------------------------------------\n");
+			ta_list.append("학번\t\t이름\t국어\t영어\t수학\t총점\t평균\n");
+			ta_list.append("--------------------------------------------------------\n");
+			
+			if (f.length() != 0) {
+				// 출력
+				fis = new FileInputStream(f);
+				
+				while(fis.available() > 0) {
+					ois = new ObjectInputStream(fis);
+					ScoreVO vo = (ScoreVO)ois.readObject();
+					
+					ta_list.append(vo.getStuno() + "\t");
+					ta_list.append(vo.getName() + "\t");
+					ta_list.append(vo.getKor() + "\t");
+					ta_list.append(vo.getEng() + "\t");
+					ta_list.append(vo.getMath() + "\t");
+					ta_list.append(vo.getTot() + "\t");
+					ta_list.append(vo.getAvg() + "\n");
+				}
+				
+				jf_list.add(ta_list);
+				jf_list.setSize(500, 300);
+				jf_list.setLocation(400, 100);
+				jf_list.setVisible(true);
+				
+			} else {
+				JOptionPane.showMessageDialog(null, "데이터가 없습니다.");
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -319,12 +398,13 @@ public class ScoreMgmUI {
 			} else if (btnReset == obj) {
 				formReset();
 			} else if (btnList == obj) {
-				listFile(f);
+				listFile();
 			} else if (btnExit == obj) {
 				JOptionPane.showMessageDialog(null, "프로그램을 종료합니다");
 				System.exit(0);
 			}
 		}
+
 	}
 
 }// class
