@@ -31,7 +31,7 @@ import javax.swing.JTextField;
 public class testUI extends JFrame {
 	testUIProc proc = new testUIProc();
 	
-	JPanel titlepan, bodypan, buttonpan;
+	JPanel titlePan, bodypan, buttonpan;
 	JLabel jl_title;
 	JTextField jt_title;
 	JTextArea jta_body;
