@@ -20,18 +20,31 @@ public class EchoServerTest {
 		try {
 			System.out.println("=========서버 생성============");
 			ServerSocket server = new ServerSocket(7000);
-			Socket s= server.accept();
-			System.out.println("================클라이언트 접속완료==========");
 			
+
+			Socket s = server.accept();
+			System.out.println("================클라이언트 접속완료==========");
+
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			DataInputStream dis = new DataInputStream(s.getInputStream());
+
+			// //2.클라이언트에서 넘어온 데이터 수신
+			// String data = dis.readUTF();
+			// //3.클라이언트데이터를 받아서 다시 클라이언트에게 전송
+			// dos.writeUTF(data);
+			boolean flag = true;
 			
-//			//2.클라이언트에서 넘어온 데이터 수신
-//			String data = dis.readUTF();
-//			//3.클라이언트데이터를 받아서 다시 클라이언트에게 전송
-//			dos.writeUTF(data);
-			//2.3 클라이언트데이터 수신후 송신
-			dos.writeUTF(dis.readUTF());
+			while (flag) {
+				// 2.3 클라이언트데이터 수신후 송신
+				String str = dis.readUTF();
+				if(!str.equals("quit")||str.equals("exit")||str.equals("종료")) {
+					dos.writeUTF(str);
+				}else {
+					dos.writeUTF("quit");
+					flag = false;
+				}
+			}
+			System.out.println("채팅이 끊어졌습니다(서버 종료)!");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -20,8 +20,7 @@ public class ServerTest {
 			dos.writeUTF("환영합니다~~~");
 			System.out.println("1.서버 :메세지전송");
 			//4.서버:클라이언트 메세지 수신
-			dis
-			System.out.println();
+			System.out.println("4.클라이언트:"+dis.readUTF());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
