@@ -62,7 +62,7 @@ public class MgmSystemUI extends JFrame{
 		//표에 들어갈 데이터들.. 테이블 열 생성(table)
 		String[] colNames = new String[] {"학번", "이름", "학과","성별","생년월일"};
 		model = new DefaultTableModel(colNames, 0);
-		//delete
+		//delete 차후 삭제
 		String[] rowData = new String[]{"1", "ach", "cc","m","940813"};
 		String[] rowData2 = new String[]{"2", "aaa", "bb","f","970728"};
 		model.addRow(rowData);

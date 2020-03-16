@@ -61,6 +61,7 @@ public class ServiceThread extends Thread{
 		try {
 			for (ServiceThread st : MultiChatServer.sList) {
 				st.oos.writeObject(msg);
+				st.oos.flush();
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
