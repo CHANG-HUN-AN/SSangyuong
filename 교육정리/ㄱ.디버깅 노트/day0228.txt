@@ -1,0 +1,18 @@
+디버깅 노트 2/28일
+1.ArrayList 에서 데이터 한개남았을시 오류 -Que오류 
+->해결방법 Iterator 로 변환하여 사용
+
+2.데이터 값을 넘기고 받는 중 main ->Event ->Login 
+Event객체에  오버로딩된 생성자가 2개였고
+main의 주소값을 오버로딩안된 Event 기본생성자에 넘겨주어 
+Event객체에서 Login으로 main의 주소값을 넘겨주지못해 
+NUllPointError 
+->해결방법 주소의 넘겨지고 받는 연결고리에서 데이터값이 잘넘어가는지 확인한다.
+
+3.VO객체 vo 의 조건식 비교시 NullPointError
+객체의 주소 비교는 null인지 null이 아닌지로 비교를 해야함
+왜냐하면 만약 값이없다면 어떠한 비교도 할수 없다.
+ ex)
+MemberVo rvo = null;
+rvo.getText().equal("")->t/f 값이 Null이라 어떠한 비교도 못함
+->rvo==null ->true/false;

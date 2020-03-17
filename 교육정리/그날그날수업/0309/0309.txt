@@ -1,0 +1,15 @@
+예외처리---
+**시스템오류 - 자바의경우 Error/Exception 2개로 나눠짐
+1)에러(Error) - 물리적 발생,하드웨어~~~
+2)예외처리(Exception)  :차후 문제발생시 그때그때 수정
+- 개발자의 실수 (문장오류,메모리 오류)
+- 로직 구성의 오류
+- 사용자의 미숙함
+
+예외처리 종류--
+-Runtime Exception : 
+-문법오류로 런타임 시 예외처리가능
+**코드를 수정 ->best★
+ **try{}~catch(){}finally{}->Jvm에게 처리하도록 넘김
+- NUllpointException은 로직구성의 오류여서 예외처리 불능
+-Runtime Exception 이외의 모든 Exception;
