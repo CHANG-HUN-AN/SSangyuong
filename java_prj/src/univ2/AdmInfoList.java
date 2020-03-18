@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class MgmStdInfoList extends JFrame{
+public class AdmInfoList extends JFrame{
 	//Field
 	JPanel FormPane,titlePane,idPane,pwPane,namePane,majorPane,phonePane,genderPane,birthPane,buttonPane;
 	JLabel jl_title,jl_id,jl_pw,jl_name,jl_major,jl_phone,jl_gender,jl_birth;
@@ -25,7 +25,7 @@ public class MgmStdInfoList extends JFrame{
 	Font fontTitle = new Font("¸¼Àº °íµñ", Font.BOLD, 16);
 	Font font= new Font("¸¼Àº °íµñ", Font.BOLD, 12);
 	//Constructor
-	public MgmStdInfoList() {
+	public AdmInfoList() {
 		formStart();
 	}
 	//Method

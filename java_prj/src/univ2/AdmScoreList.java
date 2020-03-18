@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Dimension;
 
-public class MgmStdScoreList extends JFrame {
+public class AdmScoreList extends JFrame {
 
 	//Field
 	JPanel mainPane= new JPanel(new GridLayout(8,1));
@@ -45,7 +45,7 @@ public class MgmStdScoreList extends JFrame {
 	JScrollPane scoll;
 	
 	//Constructor
-	public MgmStdScoreList() {
+	public AdmScoreList() {
 		scoreFrame();
 	}
 

@@ -24,25 +24,25 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class MgmStdUI extends JFrame {
+public class AdmUI extends JFrame {
 
 	//Field
-	MgmStdInfo tab_stdInfo;
-	MgmStdScore tab_stdScore;
+	AdmInfo tab_stdInfo;
+	AdmScore tab_stdScore;
 //	JPanel mainPane;
 	JPanel jp_main;
 	JTabbedPane tabPane;
 	
 	// Constructor
-	public MgmStdUI() {
+	public AdmUI() {
 		mainFrame();
 	}
 
 	// Method
 	public void mainFrame() {
 		//tabPanel ø° jPanel »£√‚  
-		tab_stdInfo = new MgmStdInfo();
-		tab_stdScore = new MgmStdScore();
+		tab_stdInfo = new AdmInfo();
+		tab_stdScore = new AdmScore();
 		jp_main = new JPanel();
 		
 		tabPane = new JTabbedPane();

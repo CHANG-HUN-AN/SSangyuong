@@ -24,9 +24,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 
-public class MgmStdInfo extends JPanel{
+public class AdmInfo extends JPanel{
 	//Field
-	JPanel tab_main,tab_stdInfo,tab_score,jp_search;
+	JPanel jp_search;
 	Font font = new Font("맑은 고딕", Font.BOLD, 12);
 	
 	JTabbedPane adminPane;
@@ -38,7 +38,7 @@ public class MgmStdInfo extends JPanel{
 	JTable table;
 	DefaultTableModel model;
 	//Constructor
-	public MgmStdInfo() { 
+	public AdmInfo() { 
 		start();
 	}
 	//Method
@@ -51,21 +51,21 @@ public class MgmStdInfo extends JPanel{
 		//object create
 //		adminPane = new JTabbedPane();
 //		tab_main = new JPanel();
-		tab_stdInfo = new JPanel();
+//		tab_stdInfo = new JPanel();
 //		tab_score = new JPanel();
 		jp_search = new JPanel();
 		jl_search = new JLabel("검색>");
 		jcb_search = new JComboBox<String>();
 		jt_search = new JTextField(20);
 		btn_search = new JButton("검색");
-		//font add
+		//폰트 셋팅
 		jl_search.setFont(font);jcb_search.setFont(font);jt_search.setFont(font);btn_search.setFont(font);
 		//표에 들어갈 데이터들.. 테이블 열 생성(table)
 		String[] colNames = new String[] {"학번", "이름", "학과","성별","생년월일"};
 		//table 수정 불가
 		this.setEditable(colNames, 0);
 		
-		//delete 차후 삭제
+		//delete 임시 데이터 차후 삭제
 		String[] rowData = new String[]{"1", "ach", "cc","m","940813"};
 		String[] rowData2 = new String[]{"2", "aaa", "bb","f","970728"};
 		model.addRow(rowData);
@@ -76,11 +76,11 @@ public class MgmStdInfo extends JPanel{
 
 //		table.set(false);
 		sp_stdInfo = new JScrollPane(table); //scrollPanel add table;
-		//JComboBox Item list 
+		//콤보박스 목록 추가
 		jcb_search.addItem("이름");
 		jcb_search.addItem("학과");
-		//searchPanel add (jlable,jComboBox,jtextField,JButoon) SOUTH location
-		jp_search.add(jl_search);jp_search.add(jcb_search);jp_search.add(jt_search);jp_search.add(btn_search);
+		//검색패널에 부가적인거 추가
+//		jp_search.add(jl_search);jp_search.add(jcb_search);jp_search.add(jt_search);jp_search.add(btn_search);
 		//jpanel add scrollPanel,SearchPanel  @@CH 
 		add(sp_stdInfo,new BorderLayout().CENTER);
 		add(jp_search,new BorderLayout().SOUTH);
@@ -134,7 +134,7 @@ public class MgmStdInfo extends JPanel{
 			System.out.println(row);
 			if(erow == row) {
 				System.out.println(erow+" 째가 눌렸습니다");
-				new MgmStdInfoList();
+				new AdmInfoList();
 			}
 		}
 		public void mousePressed(MouseEvent e) { }

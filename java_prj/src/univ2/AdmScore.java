@@ -24,7 +24,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class MgmStdScore extends JPanel {
+public class AdmScore extends JPanel {
 
 	//Field
 //	JPanel contentPane = new JPanel(new GridLayout(8, 1)); 
@@ -48,7 +48,7 @@ public class MgmStdScore extends JPanel {
 	DefaultTableModel model;
 	
 	// Constructor
-	public MgmStdScore() {
+	public AdmScore() {
 		mainFrame();
 	}
 
@@ -159,7 +159,7 @@ public class MgmStdScore extends JPanel {
 			System.out.println(row);
 			if(erow == row) {
 				System.out.println(erow +"¹øÂ°");
-				new MgmStdScoreList();
+				new AdmScoreList();
 			}
 		}
 		public void mousePressed(MouseEvent e) { }

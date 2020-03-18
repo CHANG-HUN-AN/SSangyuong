@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class SYUJoin extends JFrame {
-	SYUnivMgmUI main;
+public class StdRegister extends JFrame {
+	MgmMain main;
 
 	JPanel joinPane, titlePane, idPane, pwPane, namePane, majorPane, phonePane, genderPane, birthPane, buttonPane;
 	JLabel jl_title, jl_id, jl_pw, jl_name, jl_major, jl_phone, jl_gender, jl_birth;
@@ -25,11 +25,11 @@ public class SYUJoin extends JFrame {
 	
 	public static Font font = new Font("¸¼Àº °íµñ", Font.BOLD, 12);
 
-	public SYUJoin() {
+	public StdRegister() {
 
 	}
 
-	public SYUJoin(SYUnivMgmUI main) {
+	public StdRegister(MgmMain main) {
 		this.main = main;
 		this.joinPane = main.JoinPane;
 	}

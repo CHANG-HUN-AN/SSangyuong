@@ -24,7 +24,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class SYUnivMgmUI extends JFrame {
+public class MgmMain extends JFrame {
+	//@@0318(ach) jpanel 에 수강신청탭 추가
+	StdRegCourse jp_couse;
 	// Field
 	JPanel JoinPane = new JPanel(new GridLayout(8, 1));
 	JPanel jp_main, jp_stu, jp_score;
@@ -62,7 +64,7 @@ public class SYUnivMgmUI extends JFrame {
 	public static Font font = new Font("맑은 고딕", Font.BOLD, 12);
 
 	// Constructor
-	public SYUnivMgmUI() {
+	public MgmMain() {
 		login();
 	}
 
@@ -138,9 +140,13 @@ public class SYUnivMgmUI extends JFrame {
 		addWindowListener(eventObject);
 		btnLogin.addActionListener(eventObject);
 		btnJoin.addActionListener(eventObject);
+		
 	}
 
 	public void showMain() {
+		//@@0318(ach) tab에 수강신청 추가
+		jp_couse = new StdRegCourse();
+		
 		jf_main = new JFrame();
 		mainPane = new JPanel();
 		jp_main = new JPanel();
@@ -260,6 +266,7 @@ public class SYUnivMgmUI extends JFrame {
 		tabPane.addTab("메인", jp_main);
 		tabPane.addTab("정보조회", jp_stu);
 		tabPane.addTab("성적조회", jp_score);
+		tabPane.addTab("수강신청", jp_couse);
 
 		jp_score.add(jp_info);
 		jp_score.add(scoll, BorderLayout.CENTER);
@@ -280,14 +287,16 @@ public class SYUnivMgmUI extends JFrame {
 		int width = (int) (scsize.getWidth() - fsize.getWidth()) / 2;
 		int height = (int) (scsize.getHeight() - fsize.getHeight()) / 2;
 
+		SYUnivMgmUIEvent eventObj = new SYUnivMgmUIEvent(this);
 		jf_main.setLocation(width, height);
 		jf_main.setVisible(true);
+		jf_main.addWindowListener(eventObj);
 	}
 
 	class SYUnivMgmUIEvent extends WindowAdapter implements ActionListener {
-		SYUnivMgmUI main;
+		MgmMain main;
 
-		public SYUnivMgmUIEvent(SYUnivMgmUI main) {
+		public SYUnivMgmUIEvent(MgmMain main) {
 			this.main = main;
 		}
 
@@ -307,7 +316,7 @@ public class SYUnivMgmUI extends JFrame {
 					tpass.setText("");
 				}
 			} else if (btnJoin == obj) {
-				new SYUJoin(main).join();
+				new StdRegister(main).join();
 			}
 		}
 	}

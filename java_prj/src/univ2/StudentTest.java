@@ -1,9 +1,10 @@
 package univ2;
 
-public class SYUnivMgmTest {
+public class StudentTest {
 
 	public static void main(String[] args) {
-		new SYUnivMgmUI();
+		new MgmMain();
 //		new MgmSystemUI();
+//		new StudentRegCourse();
 	}
 }
