@@ -12,10 +12,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -29,8 +32,13 @@ public class StdRegCourse extends JPanel{
 		JPanel topPane,bottomPane;
 		JScrollPane coursePane,myCoursePane;
 		JPanel titlePane,myTitlePane;
+		JPanel searchPane,btnPane;
 		JLabel jl_title, jl_mytitle;
 		JTable table,myTable;
+		JTextField jtf_search;
+		JButton btn_reg,btn_del,btn_allDel,btn_myCourse; 
+		JButton btn_search,btn_allSearch;
+		JComboBox<String> jcb_search;
 		DefaultTableModel data,myData;
 
 		//@0318 수강신청
@@ -41,16 +49,35 @@ public class StdRegCourse extends JPanel{
 
 		// Method
 		public void start() {
-			// default set
+		// default set
 //			setTitle("회원 명단 관리 프로그램");
 //			setDefaultCloseOperation(EXIT_ON_CLOSE);		
 //			setAlwaysOnTop(true);
-			//객체 생성
-			// object create @@ DefaultTableModel -->메소드로 실행하여 객체생성
-			/** table객체도DefaultTableModel 생성후 진행**/
-			 topPane = new JPanel(); bottomPane = new JPanel();
-			 titlePane= new JPanel();myTitlePane = new JPanel();
-			 jl_title=  new JLabel("수강신청"); jl_mytitle = new JLabel("나의 수강신청 목록");
+		// 객체 생성
+		// object create @@ DefaultTableModel -->메소드로 실행하여 객체생성
+		/** table객체도DefaultTableModel 생성후 진행 **/
+			topPane = new JPanel();
+			bottomPane = new JPanel();
+			titlePane = new JPanel();
+			myTitlePane = new JPanel();
+			searchPane = new JPanel();
+			btnPane = new JPanel();
+			jl_title = new JLabel("수강신청");
+			jl_mytitle = new JLabel("나의 수강신청 목록");
+			//버튼패널에 들어갈 컴포넌트
+			btn_reg = new JButton("수강신청");
+			btn_del = new JButton("삭제");
+			btn_allDel = new JButton("전체삭제");
+			btn_myCourse = new JButton("나의수강정보");
+			//검색패널에 들어갈 컴포넌트
+			jcb_search = new JComboBox<String>();
+			jtf_search = new JTextField(15);
+			btn_search = new JButton("검색");
+			btn_allSearch = new JButton("전체검색");
+			
+			//콤보박스에 리스트 추가
+			jcb_search.addItem("과목번호");
+			jcb_search.addItem("과목");
 			
 			// 표에 들어갈 데이터들.. 테이블 열 생성(table)
 			String[] colNames = new String[] { "과목번호", "과목이름", "학점", "담당교수" };
@@ -66,8 +93,9 @@ public class StdRegCourse extends JPanel{
 			myData.addRow(rowData2);
 			//
 			//폰트 적용
-			jl_title.setFont(titleFont);
-			jl_mytitle.setFont(titleFont);
+			jl_title.setFont(titleFont); jl_mytitle.setFont(titleFont);
+			btn_reg.setFont(font); btn_del.setFont(font); btn_allDel.setFont(font); btn_myCourse.setFont(font);
+			btn_search.setFont(font);btn_allSearch.setFont(font);
 			//디자인 레이블에 border 작업주기
 			jl_title.setLayout(new BorderLayout());
 			jl_title.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
@@ -81,22 +109,32 @@ public class StdRegCourse extends JPanel{
 			coursePane=new JScrollPane(table);
 			myCoursePane = new JScrollPane(myTable);
 			
-			//패널에 컴포넌트 부착 !! 패널안에 패널넣을때 패널의 레이아웃 지정안해주면 나중에 풀린다
+			//패널에 컴포넌트 부착 !! 패널안에 패널넣을때 패널의 레이아웃 지정안해주면 나중에 레아아웃이 생각한데로 나오지않음
 			titlePane.setLayout(new BorderLayout());
 			myTitlePane.setLayout(new BorderLayout());
 			titlePane.add(jl_title,new BorderLayout().NORTH);myTitlePane.add(jl_mytitle,new BorderLayout().NORTH);
 			titlePane.add(coursePane,new BorderLayout().CENTER);myTitlePane.add(myCoursePane,new BorderLayout().CENTER);
-
+			//버튼패널
+			btnPane.add(btn_reg);btnPane.add(btn_del);btnPane.add(btn_allDel);btnPane.add(btn_myCourse);
+			//검색리스트 버튼패널
+			searchPane.add(jcb_search);searchPane.add(jtf_search);
+			searchPane.add(btn_search);searchPane.add(btn_allSearch);
+			
 			//박스레이아웃으로 패널을 박스레이아웃형태로 담기                     //매개변수 부착점을 지정하고setLayout으로 또 설정해줘야되는게 이상하지만 구글링결과 이렇게사용카더라...
 			BoxLayout boxLayout =new BoxLayout(topPane, BoxLayout.Y_AXIS); //박스레이아웃 매개변수(부착될 패널, 중심축)
 			BoxLayout boxLayout2 =new BoxLayout(bottomPane, BoxLayout.Y_AXIS);
+//			BoxLayout boxLayout3 = new BoxLayout(btnPane, BoxLayout.X_AXIS);
 			topPane.setLayout(boxLayout);
 			bottomPane.setLayout(boxLayout2);
 			//패널을 상단과 하단으로 나눠서 붙이기
-			topPane.add(titlePane);
+			topPane.setLayout(new BorderLayout());
+			topPane.add(searchPane,BorderLayout.NORTH);
+			topPane.add(titlePane,BorderLayout.CENTER);
 			bottomPane.add(myTitlePane);
+			bottomPane.add(btnPane);
 			// this 에 최종 패널 붙이기
 			this.setLayout(new GridLayout(2,1));
+			
 			add(topPane);
 			add(bottomPane);
 			// JFrame visible

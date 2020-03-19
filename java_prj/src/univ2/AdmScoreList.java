@@ -22,17 +22,24 @@ import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Dimension;
 
+/**
+ * 관리자 로그인시 탭의 점수검색 > 상세정보
+ * @author user
+ */
 public class AdmScoreList extends JFrame {
-
+	//@@0319 ach 수정>> boxLayout으로 패널감싸기
 	//Field
-	JPanel mainPane= new JPanel(new GridLayout(8,1));
+	JPanel mainPane= new JPanel();//new GridLayout(8,1)
 	JPanel nonamePane= new JPanel(new GridLayout(1,4));
-	JPanel objectPane= new JPanel(new GridLayout(1,3));
+	JPanel objectPane= new JPanel();//new GridLayout(1,3)
 	JPanel tablePane= new JPanel(new GridLayout(1,3));
+	JPanel topPane,bottomPane;
 	JPanel jp_score;
 	JPanel titlePane,namePane,noPane
 	,majorPane,subPane,scorePane,gradePane,buttonPane;
@@ -52,6 +59,9 @@ public class AdmScoreList extends JFrame {
 	//Method
 	public void scoreFrame() {
 		//contentPane = new JPanel(new GridLayout(10, 1));
+		setTitle("SIST 대학교 학생 관리 프로그램 - 상세 성적");
+		topPane = new JPanel(); bottomPane = new JPanel();
+		
 		jp_score = new JPanel();
 		titlePane= new JPanel();
 		namePane = new JPanel();
@@ -112,12 +122,17 @@ public class AdmScoreList extends JFrame {
 		gradePane.add(Grade_Label);
 		gradePane.add(Grade_textField);
 	
-		mainPane.add(titlePane);
 		
-		mainPane.add(nonamePane);
-		nonamePane.add(noPane);
-		nonamePane.add(namePane);
-		mainPane.add(majorPane);
+		nonamePane.add(noPane);//0319
+		nonamePane.add(namePane);//0319 위치변경
+		
+		//상단패널 박스레이아웃
+		BoxLayout boxLayout =new BoxLayout(topPane, BoxLayout.Y_AXIS);
+		topPane.setLayout(boxLayout);
+		
+		topPane.add(titlePane);
+		topPane.add(nonamePane);
+		topPane.add(majorPane);
 
 		
 		String header[] = { "과목명", "성적", "등급" };
@@ -132,21 +147,32 @@ public class AdmScoreList extends JFrame {
 				{null, null, null},
 				{null, null, null},
 				{null, null, null} };
+		
 		scoreTable = new JTable(contents, header);
 		scoll = new JScrollPane(scoreTable);
-		add(mainPane, BorderLayout.CENTER);
 		mainPane.add(scoll, BorderLayout.CENTER);
 		
-		mainPane.add(objectPane);
-		objectPane.add(subPane);
+		
+		objectPane.add(subPane); //0319 위치변경
 		objectPane.add(scorePane);
 		objectPane.add(gradePane);
 		
-		mainPane.add(buttonPane);
 		buttonPane.add(Change_Button);
 		buttonPane.add(Cancel_Button);
 		
-		setTitle("SIST 대학교 학생 관리 프로그램 - 상세 성적");
+		//하단패널 박스패널로 변경 세로로 2개
+		BoxLayout boxLayout2 =new BoxLayout(bottomPane, BoxLayout.Y_AXIS);
+		bottomPane.setLayout(boxLayout2);
+		
+		bottomPane.add(objectPane);
+		bottomPane.add(buttonPane); //0319 위치변경
+		
+		setLayout(new GridLayout(3,1));
+		add(topPane);
+		add(mainPane);
+		add(bottomPane);
+		
+		
 		setSize(500,750);
 
 		Dimension fsize = getSize();
@@ -157,8 +183,8 @@ public class AdmScoreList extends JFrame {
 		setLocation(width, height);
 		setVisible(true);
 		
-		setContentPane(mainPane);
-		mainPane.setLayout(null);
+//		setContentPane(mainPane);
+//		mainPane.setLayout(null);
 	
 		Change_Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
