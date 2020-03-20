@@ -3,9 +3,23 @@ package Score_mgm_DB0319;
 import java.io.Serializable;
 
 public class ScoreVO implements Serializable{
+	int rno;
 	String stuno, name;
 	int kor, eng, math, tot, avg;
+	String sdate;
 	
+	public String getSdate() {
+		return sdate;
+	}
+	public void setSdate(String sdate) {
+		this.sdate = sdate;
+	}
+	public int getRno() {
+		return rno;
+	}
+	public void setRno(int rno) {
+		this.rno = rno;
+	}
 	public String getStuno() {
 		return stuno;
 	}

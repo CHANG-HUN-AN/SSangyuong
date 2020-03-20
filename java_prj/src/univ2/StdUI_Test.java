@@ -3,8 +3,7 @@ package univ2;
 public class StdUI_Test {
 
 	public static void main(String[] args) {
-		new StdUI();
-//		new StdInfo();
-//		new MgmSystemUI();
+		new Main_Login();
 	}
 }
+

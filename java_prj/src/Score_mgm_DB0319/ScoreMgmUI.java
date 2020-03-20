@@ -252,32 +252,14 @@ public class ScoreMgmUI {
 		vo.setEng(Integer.parseInt(jt_eng.getText()));
 		vo.setMath(Integer.parseInt(jt_eng.getText()));
 		
-		dao.getStatement();
+//		dao.getStatement();
 		int result = dao.getResultInsert(vo);
 		if(result !=0){
 			JOptionPane.showMessageDialog(null, "등록완료");
-//			dao.close();
+//			dao.close(); --2번째를 넣으면 오류발생 --기능구현에따라 위치가 달라진다
+			//이프로그램은 종료시에 dao가 끊기게 설정한다
 		};
-		try {
-			//new Object
-			f = new File("c:/dev/sist/objectlist.dat"); //파일생성 
-			if(f.exists()) { // 파일존재시  
-				fos =new FileOutputStream(f,true);
-				oos = new ObjectOutputStream(fos);
-				oos.writeObject(vo);
-			}else {
-				f.createNewFile();
-				fos =new FileOutputStream(f);
-				oos = new ObjectOutputStream(fos);
-				oos.writeObject(vo);
-			}
-			if(oos!=null)oos.close();
-			if(fos!= null)fos.close();
-				
-			JOptionPane.showMessageDialog(null, "저장완료");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 	/**
 	 * 취소
@@ -420,13 +402,55 @@ public class ScoreMgmUI {
 			e.printStackTrace();
 		}
 	}
+	 /*
+	* listDAO - 데이터베이스로 저장된 데이터를 불러오기
+	 */
+	public void listDAO() {
+		try {
+			jf_list = new JFrame("리스트 출력");
+			ta_list = new TextArea(200, 200);
+			ta_list.setFont(font);
+			ta_list.setEditable(false);
+			
+			ta_list.append("===== 성적관리 프로그램=====\n");
+			ta_list.append("--------------------------------------------------------\n");
+			ta_list.append("번호\t학번\t\t이름\t국어\t영어\t수학\t총점\t평균\t등록날짜\n");
+			ta_list.append("--------------------------------------------------------\n");
+			
+			ArrayList<ScoreVO> list =dao.getResultList();
+			
+			if (list.size() != 0) {
+				for(ScoreVO vo: list) {
+					ta_list.append(vo.getRno() + "\t");
+					ta_list.append(vo.getStuno() + "\t");
+					ta_list.append(vo.getName() + "\t");
+					ta_list.append(vo.getKor() + "\t");
+					ta_list.append(vo.getEng() + "\t");
+					ta_list.append(vo.getMath() + "\t");
+					ta_list.append(vo.getTot() + "\t");
+					ta_list.append(vo.getAvg() + "\t");
+					ta_list.append(vo.getSdate()+"\n");
 
+					jf_list.add(ta_list);
+					jf_list.setSize(600, 300);
+					jf_list.setLocation(400, 100);
+					jf_list.setVisible(true);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "데이터가 없습니다.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	// 이벤트 처리 클래스
 	class ScoreMgmUIEvent extends WindowAdapter implements ActionListener {
 
 		/** 윈도우 이벤트 처리 **/
 		public void windowClosing(WindowEvent e) {
 			JOptionPane.showMessageDialog(null, "프로그램을 종료합니다");
+			//dao 종료는 종료이벤트 발생시 실행
+			dao.close(); 
 			System.exit(0);
 		}
 
@@ -434,14 +458,16 @@ public class ScoreMgmUI {
 		public void actionPerformed(ActionEvent e) {
 			Object obj = e.getSource();
 			if (btnReg == obj || jt_math == obj) {
-				if (formCheck())
+				if (formCheck()) {
 					registerDAO();
+				}
 			} else if (btnReset == obj) {
 				formReset();
 			} else if (btnList == obj) {
-				listFile();
+				listDAO();
 			} else if (btnExit == obj) {
 				JOptionPane.showMessageDialog(null, "프로그램을 종료합니다");
+				dao.close();
 				System.exit(0);
 			}
 		}

@@ -1,7 +1,7 @@
 package univ2;
 
 /**
- * 관리자 통합 테스트
+ * 관리자 통합 테스트	
  * @author ach
  */
 public class admin_test {
@@ -11,5 +11,7 @@ public class admin_test {
 //		new MgmStdScore();
 //		new MgmSystemUI();
 		new AdmUI();
+//		new ProUI();
+		
 	}
 }

@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class ScoreDAO {
 	//field
@@ -46,7 +47,7 @@ public class ScoreDAO {
 	
 	public void getPreparedStatement(String sql) {
 		try {
-			stmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sql);
 			System.out.println("------------3단계 \n쿼리를 싣고 왔다갔다하는 문서의역활생성");
 		} catch (Exception e) {
 		}
@@ -81,7 +82,37 @@ public class ScoreDAO {
 		}
 		return result;
 	}
+	
 	//list
+	public ArrayList<ScoreVO> getResultList(){
+		ArrayList<ScoreVO> list = new ArrayList<ScoreVO>();
+	
+			String sql = "select rownum rno , stuno, name ,kor ,eng ,math, "
+					+ "to_char(sdate,'yyyy/mm/dd') as sdate "
+					+ " from (select * from score order By stuno asc)";
+			//삭제된 데이터역시 같이 가져와준다 db의 트랜잭션이 끝나지않아서 그런게 보임
+			//DB에서 commit을 통해서 데이터를 완전히 적용시켜준다.
+			getPreparedStatement(sql);
+		try {
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				ScoreVO vo = new ScoreVO();
+				vo.setRno(rs.getInt(1));
+				vo.setStuno(rs.getString(2));
+				vo.setName(rs.getString(3));
+				vo.setKor(rs.getInt(4));
+				vo.setEng(rs.getInt(5));
+				vo.setMath(rs.getInt(6));
+				vo.setSdate(rs.getString(7));
+				list.add(vo); //다가져왔는데 list에 아무것도 안보인다면 list.add를 주목하자 안적혀있는경우가 있다
+				//2번째문제: 마지막의 데이터만 계속해서 출력이 된다면 객체자체가 반복문
+				//안에 들어가있으면 마지막 데이터가 계속해서 나온다
+			}
+		} catch (Exception e) {
+		}
+		return list;
+	}
+	
 	//close
 	public void close() {
 		try {

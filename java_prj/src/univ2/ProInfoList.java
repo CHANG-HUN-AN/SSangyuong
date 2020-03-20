@@ -14,16 +14,18 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class AdmInfoList extends JFrame{
+public class ProInfoList extends JFrame{
 	//Field
 	JPanel FormPane,titlePane,idPane,pwPane,namePane,majorPane,phonePane,genderPane,birthPane,buttonPane;
 	JLabel jl_title,jl_id,jl_pw,jl_name,jl_major,jl_phone,jl_gender,jl_birth;
 	JTextField jt_id,jt_pw,jt_name,jt_major,jt_phone,jt_brith;
-	JButton btn_delete,btn_cancel;
+//	JButton btn_delete,btn_cancel;
 	ButtonGroup bg_gender;
 	JRadioButton male,female;
+	Font fontTitle = new Font("맑은 고딕", Font.BOLD, 16);
+	Font font= new Font("맑은 고딕", Font.BOLD, 12);
 	//Constructor
-	public AdmInfoList() {
+	public ProInfoList() {
 		formStart();
 	}
 	//Method
@@ -40,16 +42,16 @@ public class AdmInfoList extends JFrame{
 		jl_gender = new JLabel("성별"); 
 		jt_id = new JTextField(20); jt_pw = new JTextField(20); jt_name = new JTextField(20);
 		jt_major = new JTextField(20); jt_phone = new JTextField(20);
-		btn_delete = new JButton("삭제");btn_cancel = new JButton("취소");
+//		btn_delete = new JButton("삭제");btn_cancel = new JButton("취소");
 		male = new JRadioButton("남성");female = new JRadioButton("여성");
 		bg_gender = new ButtonGroup(); 
 		bg_gender.add(female);bg_gender.add(male);
 		
 		//set font
-		jl_title.setFont(AdmUI.FONTTITLE);
-		jl_id.setFont(AdmUI.FONT); jl_pw.setFont(AdmUI.FONT); jl_name.setFont(AdmUI.FONT); jl_major.setFont(AdmUI.FONT);
-		jl_phone.setFont(AdmUI.FONT); jl_gender.setFont(AdmUI.FONT); btn_delete.setFont(AdmUI.FONT);btn_cancel.setFont(AdmUI.FONT);
-		male.setFont(AdmUI.FONT);female.setFont(AdmUI.FONT);
+		jl_title.setFont(fontTitle);
+		jl_id.setFont(font); jl_pw.setFont(font); jl_name.setFont(font); jl_major.setFont(font);
+		jl_phone.setFont(font); jl_gender.setFont(font); //btn_delete.setFont(font);btn_cancel.setFont(font);
+		male.setFont(font);female.setFont(font);
 		//container add
 		titlePane.add(jl_title);
 		idPane.add(jl_id);idPane.add(jt_id);
@@ -59,7 +61,7 @@ public class AdmInfoList extends JFrame{
 		phonePane.add(jl_phone);phonePane.add(jt_phone);
 		genderPane.add(jl_gender);
 		genderPane.add(female);genderPane.add(male);
-		buttonPane.add(btn_delete);buttonPane.add(btn_cancel);
+//		buttonPane.add(btn_delete);buttonPane.add(btn_cancel);
 		
 		//layout 깨져서 패널하나 더 생성
 		FormPane.add(titlePane);
@@ -67,7 +69,7 @@ public class AdmInfoList extends JFrame{
 		FormPane.add(phonePane); FormPane.add(genderPane); 
 		
 		add(FormPane,BorderLayout.CENTER);
-		add(buttonPane,BorderLayout.SOUTH);
+//		add(buttonPane,BorderLayout.SOUTH);
 //		setLayout(new GridLayout(7,1));
 //		add(titlePanel); add(idPane); add(pwPane); add(namePane); add(majorPane);
 //		add(phonePane); add(genderPane);

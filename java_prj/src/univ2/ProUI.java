@@ -2,7 +2,6 @@ package univ2;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -25,27 +24,25 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class AdmUI extends JFrame {
+public class ProUI extends JFrame {
 
 	//Field
-	AdmInfo tab_stdInfo;
-	AdmScore tab_stdScore;
-	static Font FONT = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
-	static Font FONTTITLE = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
+	ProInfo tab_stdInfo;
+	ProScore tab_stdScore;
 //	JPanel mainPane;
 	JPanel jp_main;
 	JTabbedPane tabPane;
 	
 	// Constructor
-	public AdmUI() {
+	public ProUI() {
 		mainFrame();
 	}
 
 	// Method
 	public void mainFrame() {
 		//tabPanel ø° jPanel »£√‚  
-		tab_stdInfo = new AdmInfo();
-		tab_stdScore = new AdmScore();
+		tab_stdInfo = new ProInfo();
+		tab_stdScore = new ProScore();
 		jp_main = new JPanel();
 		
 		tabPane = new JTabbedPane();

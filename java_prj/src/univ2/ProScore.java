@@ -24,7 +24,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class AdmScore extends JPanel {
+public class ProScore extends JPanel {
 
 	//Field
 //	JPanel contentPane = new JPanel(new GridLayout(8, 1)); 
@@ -32,7 +32,7 @@ public class AdmScore extends JPanel {
 //	JPanel jp_main, jp_stu, jp_score;
 	JPanel jp_info, jp_result;
 	
-	JLabel jl_search;
+	JLabel jl_info, jl_sname, jl_smajor;
 	
 	JTextField jtf_name, jtf_major, jt_search;
 	JTextField Combobox_textField;
@@ -48,7 +48,7 @@ public class AdmScore extends JPanel {
 	DefaultTableModel model;
 	
 	// Constructor
-	public AdmScore() {
+	public ProScore() {
 		mainFrame();
 	}
 
@@ -59,11 +59,9 @@ public class AdmScore extends JPanel {
 
 		jp_info = new JPanel();
 		jp_result = new JPanel();
-		
-		jl_search = new JLabel("검색>");
+
 		combo = new JComboBox();
 		combo.setModel(new DefaultComboBoxModel(new String[] { "이름", "학번" }));
-		jp_result.add(jl_search);
 		jp_result.add(combo);
 
 		jt_search = new JTextField();
@@ -75,9 +73,7 @@ public class AdmScore extends JPanel {
 
 		jtf_name = new JTextField(5);
 		jtf_major = new JTextField(8);
-		
-		//폰트 설정
-		jl_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT); 
+
 		String[] colNames = new String[] { "학 번", "이 름", "학 과", "총 점" };
 		
 		String rowData[][] = {
@@ -147,7 +143,7 @@ public class AdmScore extends JPanel {
 			System.out.println(row);
 			if(erow == row) {
 				System.out.println(erow +"번째");
-				new AdmScoreList();
+				new ProScoreList();
 			}
 		}
 		public void mousePressed(MouseEvent e) { }

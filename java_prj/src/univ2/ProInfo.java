@@ -1,7 +1,6 @@
 package univ2;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -13,7 +12,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -24,16 +22,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 
-public class AdmInfo extends JPanel{
+public class ProInfo extends JPanel{
 	//Field
-	JPanel topPane,titlePane,jp_search;
-	JLabel jl_title;
+	JPanel jp_search;
+	Font font = new Font("맑은 고딕", Font.BOLD, 12);
+	
 	JTabbedPane adminPane;
 	JLabel jl_search;
 	JComboBox<String> jcb_search;
@@ -43,7 +39,7 @@ public class AdmInfo extends JPanel{
 	JTable table;
 	DefaultTableModel model;
 	//Constructor
-	public AdmInfo() { 
+	public ProInfo() { 
 		start();
 	}
 	//Method
@@ -54,20 +50,14 @@ public class AdmInfo extends JPanel{
 //		setAlwaysOnTop(true);
 		
 		//object create
-		titlePane = new JPanel();
-		topPane = new JPanel();
+
 		jp_search = new JPanel();
 		jl_search = new JLabel("검색>");
 		jcb_search = new JComboBox<String>();
 		jt_search = new JTextField(20);
 		btn_search = new JButton("검색");
-		jl_title = new JLabel("학생정보관리");
-		
 		//폰트 셋팅
-		jl_search.setFont(AdmUI.FONT);jcb_search.setFont(AdmUI.FONT);jt_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT);
-		//title에 border넣기
-		jl_title.setLayout(new BorderLayout());
-		titlePane.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
+		jl_search.setFont(font);jcb_search.setFont(font);jt_search.setFont(font);btn_search.setFont(font);
 		//표에 들어갈 데이터들.. 테이블 열 생성(table)
 		String[] colNames = new String[] {"학번", "이름", "학과","성별","생년월일"};
 		//table 수정 불가
@@ -80,23 +70,18 @@ public class AdmInfo extends JPanel{
 		model.addRow(rowData2);
 		//
 		table = new JTable(model);
+		
 
 //		table.set(false);
 		sp_stdInfo = new JScrollPane(table); //scrollPanel add table;
 		//콤보박스 목록 추가
 		jcb_search.addItem("이름");
 		jcb_search.addItem("학과");
-
-		
 		//검색패널에 부가적인거 추가
-		titlePane.add(jl_title);
 		jp_search.add(jl_search);jp_search.add(jcb_search);jp_search.add(jt_search);jp_search.add(btn_search);
-		//박스레이아웃으로 감싸기
-		BoxLayout boxLayout =new BoxLayout(topPane, BoxLayout.Y_AXIS);
-		topPane.setLayout(boxLayout);
-		topPane.add(titlePane,new BorderLayout().WEST);
-		topPane.add(sp_stdInfo);
-		add(topPane,new BorderLayout().CENTER);
+		//jpanel add scrollPanel,SearchPanel  @@CH 
+		
+		add(sp_stdInfo,new BorderLayout().CENTER);
 		add(jp_search);
 		
 //		//jtapPane tab add
@@ -146,7 +131,7 @@ public class AdmInfo extends JPanel{
 			System.out.println(row);
 			if(erow == row) {
 				System.out.println(erow+" 째가 눌렸습니다");
-				new AdmInfoList();
+				new ProInfoList();
 			}
 		}
 		public void mousePressed(MouseEvent e) { }
