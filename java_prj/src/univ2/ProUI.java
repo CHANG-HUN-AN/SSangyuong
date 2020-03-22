@@ -2,6 +2,7 @@ package univ2;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,8 @@ public class ProUI extends JFrame {
 	//Field
 	ProInfo tab_stdInfo;
 	ProScore tab_stdScore;
+	static Font FONT = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
+	static Font FONTTITLE = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
 //	JPanel mainPane;
 	JPanel jp_main;
 	JTabbedPane tabPane;
@@ -39,6 +42,9 @@ public class ProUI extends JFrame {
 	}
 
 	// Method
+	public void setTitle() {
+		
+	}
 	public void mainFrame() {
 		//tabPanel ø° jPanel »£√‚  
 		tab_stdInfo = new ProInfo();

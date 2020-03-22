@@ -42,6 +42,9 @@ public class AdmUI extends JFrame {
 	}
 
 	// Method
+	public void setTitle() {
+		
+	}
 	public void mainFrame() {
 		//tabPanel ø° jPanel »£√‚  
 		tab_stdInfo = new AdmInfo();

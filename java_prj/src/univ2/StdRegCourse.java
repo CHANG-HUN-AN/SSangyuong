@@ -127,12 +127,13 @@ public class StdRegCourse extends JPanel{
 			topPane.setLayout(boxLayout);
 			bottomPane.setLayout(boxLayout2);
 			//패널을 상단과 하단으로 나눠서 붙이기
-			topPane.setLayout(new BorderLayout());
-			topPane.add(searchPane,BorderLayout.NORTH);
-			topPane.add(titlePane,BorderLayout.CENTER);
+//			topPane.setLayout(new BorderLayout());
+			topPane.add(searchPane);
+			topPane.add(titlePane);
 			bottomPane.add(myTitlePane);
 			bottomPane.add(btnPane);
-			// this 에 최종 패널 붙이기
+
+			//Panel에 최종 패널 붙이기
 			this.setLayout(new GridLayout(2,1));
 			
 			add(topPane);

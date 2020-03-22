@@ -52,22 +52,23 @@ public class AdmInfo extends JPanel{
 //		setTitle("회원 명단 관리 프로그램");
 //		setDefaultCloseOperation(EXIT_ON_CLOSE);		
 //		setAlwaysOnTop(true);
+		UIset uiset = new UIset();
 		
 		//object create
-		titlePane = new JPanel();
 		topPane = new JPanel();
+		titlePane = new JPanel();
+		jl_title = new JLabel("학생정보관리");
 		jp_search = new JPanel();
 		jl_search = new JLabel("검색>");
 		jcb_search = new JComboBox<String>();
 		jt_search = new JTextField(20);
 		btn_search = new JButton("검색");
-		jl_title = new JLabel("학생정보관리");
+	
 		
 		//폰트 셋팅
 		jl_search.setFont(AdmUI.FONT);jcb_search.setFont(AdmUI.FONT);jt_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT);
 		//title에 border넣기
-		jl_title.setLayout(new BorderLayout());
-		titlePane.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
+//		titlePane.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
 		//표에 들어갈 데이터들.. 테이블 열 생성(table)
 		String[] colNames = new String[] {"학번", "이름", "학과","성별","생년월일"};
 		//table 수정 불가
@@ -80,8 +81,6 @@ public class AdmInfo extends JPanel{
 		model.addRow(rowData2);
 		//
 		table = new JTable(model);
-
-//		table.set(false);
 		sp_stdInfo = new JScrollPane(table); //scrollPanel add table;
 		//콤보박스 목록 추가
 		jcb_search.addItem("이름");
@@ -89,20 +88,19 @@ public class AdmInfo extends JPanel{
 
 		
 		//검색패널에 부가적인거 추가
-		titlePane.add(jl_title);
 		jp_search.add(jl_search);jp_search.add(jcb_search);jp_search.add(jt_search);jp_search.add(btn_search);
 		//박스레이아웃으로 감싸기
 		BoxLayout boxLayout =new BoxLayout(topPane, BoxLayout.Y_AXIS);
 		topPane.setLayout(boxLayout);
-		topPane.add(titlePane,new BorderLayout().WEST);
-		topPane.add(sp_stdInfo);
+		
+		//클래스를 별도로만들어서 title디자인 통합
+		titlePane = (JPanel)uiset.title(titlePane,jl_title,sp_stdInfo);
+		
+		topPane.add(titlePane,new BorderLayout().NORTH);
 		add(topPane,new BorderLayout().CENTER);
 		add(jp_search);
-		
-//		//jtapPane tab add
 
 		//JFrame visible
-//		add(adminPane);
 		setSize(500,600);
 		setVisible(true);
 		//location center

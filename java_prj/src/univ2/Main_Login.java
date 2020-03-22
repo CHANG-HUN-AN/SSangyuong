@@ -1,5 +1,6 @@
 package univ2;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,8 +25,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
-import univ2.Main_Register;
+import univ2.StdId;
+import univ2.StdUI;
 
 public class Main_Login extends JFrame {
    // Field
@@ -44,6 +48,12 @@ public class Main_Login extends JFrame {
    
    // Constructor
    public Main_Login() {
+//      try {
+//         UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
+//         JFrame.setDefaultLookAndFeelDecorated(true);
+//         showLogin();
+//      } catch (Exception e) {
+//      }
       showLogin();
    }
 
@@ -62,7 +72,7 @@ public class Main_Login extends JFrame {
       jl_limg = new JLabel(new ImageIcon("src/univ2/sist.jpg"));
       jl_title = new JLabel("\n쌍용대학교 학사관리 시스템");
       jl_title.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-      jl_id = new JLabel("아이디");
+      jl_id = new JLabel("아 이 디 ");
       jl_pass = new JLabel("비밀번호");
       jl_sid = new JLabel("아이디찾기");
       jl_spass = new JLabel("| 비밀번호찾기");
@@ -72,10 +82,23 @@ public class Main_Login extends JFrame {
 
       jr_stu = new JRadioButton("학생");
       jr_staff = new JRadioButton("관리자");
+      ButtonGroup user = new ButtonGroup();
 
       btnLogin = new JButton("로그인");
       btnJoin = new JButton("회원가입");
-
+//      btnLogin.updateUI();
+//      btnJoin.updateUI();
+      
+      btnLogin.setBorderPainted(false); // 버튼 테두리
+      btnLogin.setFocusPainted(false); // 버튼 클릭시 테두리
+      btnLogin.setBackground(new Color(126, 126, 126)); // 버튼 색
+      btnLogin.setForeground(Color.white); // 버튼 글자색
+      btnJoin.setBorderPainted(false);
+      btnJoin.setFocusPainted(false);
+      btnJoin.setBackground(new Color(126, 126, 126));
+      btnJoin.setForeground(Color.white);
+      
+      
       jl_id.setFont(font);
       jl_pass.setFont(font);
       jl_sid.setFont(font);
@@ -84,8 +107,10 @@ public class Main_Login extends JFrame {
       btnJoin.setFont(font);
       jr_stu.setFont(font);
       jr_staff.setFont(font);
-
+      
       // 패널에 라벨넣기
+      user.add(jr_stu);
+      user.add(jr_staff);
       jp_logo.add(jl_limg);
       jp_title.add(jl_title);
       jp_check.add(jr_stu);

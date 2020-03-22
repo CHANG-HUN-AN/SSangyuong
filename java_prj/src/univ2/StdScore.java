@@ -13,8 +13,8 @@ import javax.swing.JTextField;
 
 public class StdScore extends JPanel {
    // Field
-   JPanel jp_stuInfo, jp_result; // 학생정보, 총 점수 패널
-   JLabel jl_stuName, jl_stuMajor, jl_total, jl_avg;
+   JPanel jp_stuInfo, jp_result , titlePane,subPane; // 학생정보, 총 점수 패널 ,, 타이틀 부착패널
+   JLabel jl_title,jl_stuName, jl_stuMajor, jl_total, jl_avg;
    JTextField jtf_stuName, jtf_stuMajor, jtf_total, jtf_avg;
    JTable scoreTable;
    JScrollPane scoll;
@@ -28,8 +28,12 @@ public class StdScore extends JPanel {
    
    // Method
    public void scoreStart() {
+	  UIset uiset = new UIset();
       jp_stuInfo = new JPanel();
       jp_result = new JPanel();
+      titlePane = new JPanel();
+      subPane = new JPanel();
+      jl_title = new JLabel("나의 성적 조회");
       jl_stuName = new JLabel("이름");
       jl_stuMajor = new JLabel("학과");
       jl_total = new JLabel("총점");
@@ -58,10 +62,14 @@ public class StdScore extends JPanel {
       jp_result.add(jl_avg);
       jp_result.add(jtf_avg);
       
-      add(jp_stuInfo);
-      add(scoll, BorderLayout.CENTER);
-      add(jp_result);
+      subPane.setLayout(new BorderLayout());
+      subPane.add(jp_stuInfo,BorderLayout.NORTH);
+      subPane.add(scoll, BorderLayout.CENTER);
+      subPane.add(jp_result,BorderLayout.SOUTH);
       
+      titlePane=(JPanel)uiset.title(titlePane, jl_title, subPane);
+      add(titlePane);
+//      add(titlePane);
       setSize(600, 600);
       
       Dimension fsize = getSize();

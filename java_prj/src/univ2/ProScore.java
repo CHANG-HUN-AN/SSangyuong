@@ -14,12 +14,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -29,10 +27,11 @@ public class ProScore extends JPanel {
 	//Field
 //	JPanel contentPane = new JPanel(new GridLayout(8, 1)); 
 	JPanel mainPane;
-//	JPanel jp_main, jp_stu, jp_score;
+	JPanel titlePane;
 	JPanel jp_info, jp_result;
 	
-	JLabel jl_info, jl_sname, jl_smajor;
+	JLabel jl_title;
+	JLabel jl_search;
 	
 	JTextField jtf_name, jtf_major, jt_search;
 	JTextField Combobox_textField;
@@ -54,14 +53,19 @@ public class ProScore extends JPanel {
 
 	// Method
 	public void mainFrame() {
-		
+		UIset uiset = new UIset();
 		mainPane = new JPanel();
-
+		
+		titlePane = new JPanel();
+		
 		jp_info = new JPanel();
 		jp_result = new JPanel();
-
+		
+		jl_title = new JLabel("학생성적관리");
+		jl_search = new JLabel("검색>");
 		combo = new JComboBox();
 		combo.setModel(new DefaultComboBoxModel(new String[] { "이름", "학번" }));
+		jp_result.add(jl_search);
 		jp_result.add(combo);
 
 		jt_search = new JTextField();
@@ -73,7 +77,9 @@ public class ProScore extends JPanel {
 
 		jtf_name = new JTextField(5);
 		jtf_major = new JTextField(8);
-
+		
+		//폰트 설정
+		jl_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT); 
 		String[] colNames = new String[] { "학 번", "이 름", "학 과", "총 점" };
 		
 		String rowData[][] = {
@@ -93,11 +99,13 @@ public class ProScore extends JPanel {
 		table = new JTable(model);
 		scoll = new JScrollPane(table);
 		
-		mainPane.setLayout(new GridLayout(2, 1));
-		mainPane.add(scoll,BorderLayout.CENTER);
-		mainPane.add(jp_result);
+		titlePane.add(jl_title);
+		titlePane = (JPanel)uiset.title(titlePane,jl_title,scoll);
+		
+		mainPane.add(titlePane,BorderLayout.CENTER);
 
-		add(mainPane, BorderLayout.CENTER);
+		add(mainPane,BorderLayout.CENTER);
+		add(jp_result);
 		setSize(600, 600);
 		
 		Dimension fsize = getSize();
