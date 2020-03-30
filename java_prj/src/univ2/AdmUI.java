@@ -70,16 +70,14 @@ public class AdmUI extends JFrame {
 		//이벤트 리스너 선언
 		StudentScoreMainEvent eventObj = new StudentScoreMainEvent();
 		addWindowListener(eventObj);
-//		table.addMouseListener(eventObj);
 		addWindowListener(eventObj);
-//		btn_search.addActionListener(eventObj);
-//		jt_search.addActionListener(eventObj);
+
 	}
 
 	//액션 리스너 선언
 	class StudentScoreMainEvent extends WindowAdapter {
 		public void windowClosing(WindowEvent we) {
-			JOptionPane.showMessageDialog(null, "프로그램 종료");
+			JOptionPane.showMessageDialog(null, "프로그램 종료1");
 			System.exit(0);
 		}
 	} //End Action

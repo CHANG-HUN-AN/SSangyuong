@@ -14,7 +14,7 @@ public class AdminInfoDAO {
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	private String url = "jdbc:oracle:thin:@localhost:1521";
 	private String user = "System";
-	private String password = "root";
+	private String password = "oracle";
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -36,6 +36,7 @@ public class AdminInfoDAO {
 			e.printStackTrace();
 		}
 	}
+	
 	public Vector<StudentVO> getResultArrayList(String esql) {
 		Vector<StudentVO> list = new Vector<StudentVO>();
 		getPreparedStatement(esql);
@@ -116,6 +117,7 @@ public class AdminInfoDAO {
 		}
 		return list;
 	}
+	
 	//오버로딩
 	public Vector<Vector<String>> getResultVectorList(String sql,String where) {
 		Vector<Vector<String>> list = new Vector<Vector<String>>();
@@ -144,6 +146,30 @@ public class AdminInfoDAO {
 		}
 		return list;
 	}
+	//상세정보 검색DAO
+	public Vector<StudentVO> getDetailSearch() {
+		String sql = "select stdno,pw,sname,gender,ph,birth from student where stdno = ?";
+		Vector<StudentVO> list = new Vector<StudentVO>();
+		pstmt.setString(1, detailData);
+		getPreparedStatement(sql);
+		try {
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				StudentVO vo = new StudentVO();
+				vo.setStdno(rs.getString(1));
+				vo.setSname(rs.getString(2));
+				vo.setMname(rs.getString(3));
+				vo.setGender(rs.getString(4));
+				vo.setBirth(rs.getString(5));
+				list.add(vo);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	
 	public void close() {
 		try {

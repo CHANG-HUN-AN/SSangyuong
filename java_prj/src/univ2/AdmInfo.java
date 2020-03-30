@@ -32,6 +32,12 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 
+/**
+ * 0330 탭이동시 리스트close 
+ * 0330 close 를 어디다가 넣어야하는지
+ * 
+ * @author user
+ */
 public class AdmInfo extends JPanel{
 	//Field
 	JPanel topPane,titlePane,jp_search;
@@ -45,6 +51,7 @@ public class AdmInfo extends JPanel{
 	JTable table;
 	DefaultTableModel model;
 	AdminInfoDAO dao ;
+	Vector<Vector<String>> list;
 	static Vector<String> VCOLNAMES=new Vector<String>();
 	//Constructor
 	public AdmInfo() { 
@@ -78,10 +85,10 @@ public class AdmInfo extends JPanel{
 //		titlePane.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
 		this.setEditable(0);//이거외에 수정방법이 없다.
 		
-		//sql 데이터 불러오기
+		//sql 데이터 불러오기********
 		String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
 		AdminInfoDAO dao = new AdminInfoDAO();
-		Vector<Vector<String>> list = dao.getResultVectorList(sql);
+		list = dao.getResultVectorList(sql);
 		
 		for(Vector<String> vo :list) {
 			model.addRow(vo); //vector 형태를 열로 다 받아드릴수있다.(이중포문을 사용할필요가 없다)
@@ -120,7 +127,7 @@ public class AdmInfo extends JPanel{
 		int width = (int)(scsize.getWidth()-fsize.getWidth())/2;
 		int height =(int)(scsize.getHeight()-fsize.getHeight())/2;
 		setLocation(width,height);
-		dao.close();
+		
 		//eventListener 
 		MgmSystemUIEvent eventObj = new MgmSystemUIEvent();
 //		addWindowListener(eventObj);
@@ -155,19 +162,13 @@ public class AdmInfo extends JPanel{
 		VCOLNAMES.add("성별");
 		VCOLNAMES.add("생년월일");
 	}
-	public void SelectList() {
-		String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
-		AdminInfoDAO dao = new AdminInfoDAO();
-		Vector<Vector<String>> list = dao.getResultVectorList(sql);
-		
-		model.setDataVector(list,VCOLNAMES); //vector 형태를 열로 다 받아드릴수있다.(이중포문을 사용할필요가 없다)
-	}
 	
 	//inner	class
 	public class MgmSystemUIEvent extends WindowAdapter implements ActionListener,MouseListener{
 		//이벤트중에 탭이동시 dao .close 필요
 		public void windowClosing(WindowEvent we) {
-			System.out.println("종료");
+			System.out.println("종료1");
+			dao.close();
 			System.exit(0);
 		}
 		@Override
@@ -176,15 +177,14 @@ public class AdmInfo extends JPanel{
 			
 			if(obj == btn_search || obj == jt_search) {
 				int item = jcb_search.getSelectedIndex();
-				
+				//검색결과 없을시 보여주는 깡통데이터
 				Vector<Vector<String>> tempDataes = new Vector<Vector<String>>();
-				
 				
 				if(item==0) {//학번
 					String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO "
 							+ "AND STDNO = ? ";
 					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
-					Vector<Vector<String>> replaceData = replaceRow(sql);
+					Vector<Vector<String>> searchData = replaceRow(sql);
 //					for(StudentVO vo:replaceData) {
 //						vRowDataes.add(vo.getStdno());
 //						vRowDataes.add(vo.getSname());
@@ -193,9 +193,9 @@ public class AdmInfo extends JPanel{
 //						vRowDataes.add(vo.getBirth());
 //					}
 					if (vaildationCheck() == 1) {
-						if (replaceData.size() != 0) {
-							model.setDataVector(replaceData, VCOLNAMES);
-						} else if (replaceData.size() == 0) {
+						if (searchData.size() != 0) {
+							model.setDataVector(searchData, VCOLNAMES);
+						} else if (searchData.size() == 0) {
 							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
 							model.setDataVector(tempDataes, VCOLNAMES);
 						}
@@ -206,11 +206,11 @@ public class AdmInfo extends JPanel{
 					String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO "
 							+ "AND SNAME = ?";
 					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
-					Vector<Vector<String>> replaceData = replaceRow(sql);
+					Vector<Vector<String>> searchData = replaceRow(sql);
 					if (vaildationCheck() == 1) {
-						if (replaceData.size() != 0) {
-							model.setDataVector(replaceData, VCOLNAMES);
-						} else if (replaceData.size() == 0) {
+						if (searchData.size() != 0) {
+							model.setDataVector(searchData, VCOLNAMES);
+						} else if (searchData.size() == 0) {
 							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
 							model.setDataVector(tempDataes, VCOLNAMES);
 						}
@@ -221,11 +221,11 @@ public class AdmInfo extends JPanel{
 					String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO "
 							+ "AND MAJ.MNAME = ?";
 					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
-					Vector<Vector<String>> replaceData = replaceRow(sql);
+					Vector<Vector<String>> searchData = replaceRow(sql);
 					if (vaildationCheck() == 1) {
-						if (replaceData.size() != 0) {
-							model.setDataVector(replaceData, VCOLNAMES);
-						} else if (replaceData.size() == 0) {
+						if (searchData.size() != 0) {
+							model.setDataVector(searchData, VCOLNAMES);
+						} else if (searchData.size() == 0) {
 							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
 							model.setDataVector(tempDataes, VCOLNAMES);
 						}
@@ -236,7 +236,7 @@ public class AdmInfo extends JPanel{
 					System.out.println("항목오류");
 				}
 			}else if(obj ==btn_list) {
-				SelectList();
+				model.setDataVector(list,VCOLNAMES);
 			}
 		}
 		//mouseListener
@@ -246,11 +246,10 @@ public class AdmInfo extends JPanel{
 			JTable jtobj = (JTable)obj;
 			int erow = jtobj.getSelectedRow();
 			int row = table.getSelectedRow();
-			System.out.println(erow);
-			System.out.println(row);
+			int column = table.getSelectedColumn();
 			if(erow == row) {
-				System.out.println(erow+" 째가 눌렸습니다");
-				new AdmInfoList();
+				Object detailData = table.getValueAt(row, 0);
+				new AdmInfoList(detailData);
 			}
 		}
 		public void mousePressed(MouseEvent e) { }
@@ -263,9 +262,9 @@ public class AdmInfo extends JPanel{
 	public Vector<Vector<String>> replaceRow(String sql) {
 		
 		String where = jt_search.getText().trim();
-		Vector<Vector<String>> list = dao.getResultVOList(sql,where);
+		Vector<Vector<String>> searchlist = dao.getResultVOList(sql,where);
 		
-		return list;
+		return searchlist;
 	}
 	//유효성검사
 	public int vaildationCheck() {

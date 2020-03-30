@@ -27,8 +27,17 @@ public class AdmInfoList extends JFrame{
 	JButton btn_delete,btn_cancel;
 	ButtonGroup bg_gender;
 	JRadioButton male,female;
+	String detailData;
+	
+	int column = 0;
+	int row = 0;
 	//Constructor
 	public AdmInfoList() {
+		formStart();
+	}
+	//오버로딩
+	public AdmInfoList(Object detailData) {
+		this.detailData = (String)detailData;
 		formStart();
 	}
 	//Method
