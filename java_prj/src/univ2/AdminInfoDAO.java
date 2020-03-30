@@ -14,7 +14,7 @@ public class AdminInfoDAO {
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	private String url = "jdbc:oracle:thin:@localhost:1521";
 	private String user = "System";
-	private String password = "oracle";
+	private String password = "root";
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -147,20 +147,23 @@ public class AdminInfoDAO {
 		return list;
 	}
 	//상세정보 검색DAO
-	public Vector<StudentVO> getDetailSearch() {
-		String sql = "select stdno,pw,sname,gender,ph,birth from student where stdno = ?";
+	public Vector<StudentVO> getDetailSearch(String detailData) {
+		String sql = "select stdno,pw,sname,gender,ph,to_char(birth,'yyyy/mm/dd'),mname from student STU,MAJOR MAJ where STU.MAJORNO = MAJ.MAJORNO AND STDNO = ?";
 		Vector<StudentVO> list = new Vector<StudentVO>();
-		pstmt.setString(1, detailData);
-		getPreparedStatement(sql);
 		try {
+			getPreparedStatement(sql);
+			pstmt.setString(1,detailData);
 			rs = pstmt.executeQuery();
+			
 			while(rs.next()) {
 				StudentVO vo = new StudentVO();
 				vo.setStdno(rs.getString(1));
-				vo.setSname(rs.getString(2));
-				vo.setMname(rs.getString(3));
+				vo.setPw(rs.getString(2));
+				vo.setSname(rs.getString(3));
 				vo.setGender(rs.getString(4));
 				vo.setBirth(rs.getString(5));
+				vo.setPh(rs.getString(6));
+				vo.setMname(rs.getString(7));
 				list.add(vo);
 			}
 			

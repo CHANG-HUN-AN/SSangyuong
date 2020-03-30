@@ -137,7 +137,6 @@ public class AdmInfo extends JPanel{
 		jt_search.addActionListener(eventObj);
 		jcb_search.addActionListener(eventObj);
 		
-		dao.close();
 	}
 	
 	public void setEditable(int zero) {
@@ -154,6 +153,7 @@ public class AdmInfo extends JPanel{
 		    }
 		};
 	}
+	
 	//static 으로 생성된 컬럼vector에  컬럼명추가
 	public void getVectorColumn() {
 		VCOLNAMES.add("학번");
@@ -249,7 +249,7 @@ public class AdmInfo extends JPanel{
 			int column = table.getSelectedColumn();
 			if(erow == row) {
 				Object detailData = table.getValueAt(row, 0);
-				new AdmInfoList(detailData);
+				new AdmInfoList(detailData,dao);
 			}
 		}
 		public void mousePressed(MouseEvent e) { }
