@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -38,10 +40,12 @@ public class AdmInfo extends JPanel{
 	JLabel jl_search;
 	JComboBox<String> jcb_search;
 	JTextField jt_search;
-	JButton btn_search;
+	JButton btn_search,btn_list;
 	JScrollPane sp_stdInfo;
 	JTable table;
 	DefaultTableModel model;
+	AdminInfoDAO dao ;
+	static Vector<String> VCOLNAMES=new Vector<String>();
 	//Constructor
 	public AdmInfo() { 
 		start();
@@ -53,7 +57,8 @@ public class AdmInfo extends JPanel{
 //		setDefaultCloseOperation(EXIT_ON_CLOSE);		
 //		setAlwaysOnTop(true);
 		UIset uiset = new UIset();
-		
+		//컬럼명 추가
+		getVectorColumn();
 		//object create
 		topPane = new JPanel();
 		titlePane = new JPanel();
@@ -63,32 +68,38 @@ public class AdmInfo extends JPanel{
 		jcb_search = new JComboBox<String>();
 		jt_search = new JTextField(20);
 		btn_search = new JButton("검색");
-	
+		btn_list = new JButton("전체목록");
+		dao = new AdminInfoDAO();
+		
 		
 		//폰트 셋팅
-		jl_search.setFont(AdmUI.FONT);jcb_search.setFont(AdmUI.FONT);jt_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT);
+		jl_search.setFont(AdmUI.FONT);jcb_search.setFont(AdmUI.FONT);jt_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT);btn_list.setFont(AdmUI.FONT);
 		//title에 border넣기
 //		titlePane.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
-		//표에 들어갈 데이터들.. 테이블 열 생성(table)
-		String[] colNames = new String[] {"학번", "이름", "학과","성별","생년월일"};
-		//table 수정 불가
-		this.setEditable(colNames, 0);
+		this.setEditable(0);//이거외에 수정방법이 없다.
 		
-		//delete 임시 데이터 차후 삭제
-		String[] rowData = new String[]{"1", "ach", "cc","m","940813"};
-		String[] rowData2 = new String[]{"2", "aaa", "bb","f","970728"};
-		model.addRow(rowData);
-		model.addRow(rowData2);
-		//
+		//sql 데이터 불러오기
+		String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
+		AdminInfoDAO dao = new AdminInfoDAO();
+		Vector<Vector<String>> list = dao.getResultVectorList(sql);
+		
+		for(Vector<String> vo :list) {
+			model.addRow(vo); //vector 형태를 열로 다 받아드릴수있다.(이중포문을 사용할필요가 없다)
+		}
+		
 		table = new JTable(model);
 		sp_stdInfo = new JScrollPane(table); //scrollPanel add table;
+		table.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
+        table.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
 		//콤보박스 목록 추가
+		jcb_search.addItem("학번");
 		jcb_search.addItem("이름");
 		jcb_search.addItem("학과");
 
 		
 		//검색패널에 부가적인거 추가
-		jp_search.add(jl_search);jp_search.add(jcb_search);jp_search.add(jt_search);jp_search.add(btn_search);
+		jp_search.add(jl_search);jp_search.add(jcb_search);jp_search.add(jt_search);
+		jp_search.add(btn_search);jp_search.add(btn_list);
 		//박스레이아웃으로 감싸기
 		BoxLayout boxLayout =new BoxLayout(topPane, BoxLayout.Y_AXIS);
 		topPane.setLayout(boxLayout);
@@ -109,17 +120,52 @@ public class AdmInfo extends JPanel{
 		int width = (int)(scsize.getWidth()-fsize.getWidth())/2;
 		int height =(int)(scsize.getHeight()-fsize.getHeight())/2;
 		setLocation(width,height);
+		dao.close();
 		//eventListener 
 		MgmSystemUIEvent eventObj = new MgmSystemUIEvent();
 //		addWindowListener(eventObj);
 		table.addMouseListener(eventObj);
 		btn_search.addActionListener(eventObj);
+		btn_list.addActionListener(eventObj);
 		jt_search.addActionListener(eventObj);
+		jcb_search.addActionListener(eventObj);
+		
+		dao.close();
+	}
+	
+	public void setEditable(int zero) {
+//		String[] colNames = new String[] { "학번", "이름", "학과", "성별","생년월일" };
+		//table 수정 불가(오버로딩)
+		model = new DefaultTableModel(VCOLNAMES, zero) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        if (column >= 0) {
+		            return false;
+		        } else {
+		            return true;
+		        }
+		    }
+		};
+	}
+	//static 으로 생성된 컬럼vector에  컬럼명추가
+	public void getVectorColumn() {
+		VCOLNAMES.add("학번");
+		VCOLNAMES.add("이름");
+		VCOLNAMES.add("학과");
+		VCOLNAMES.add("성별");
+		VCOLNAMES.add("생년월일");
+	}
+	public void SelectList() {
+		String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
+		AdminInfoDAO dao = new AdminInfoDAO();
+		Vector<Vector<String>> list = dao.getResultVectorList(sql);
+		
+		model.setDataVector(list,VCOLNAMES); //vector 형태를 열로 다 받아드릴수있다.(이중포문을 사용할필요가 없다)
 	}
 	
 	//inner	class
-	class MgmSystemUIEvent extends WindowAdapter implements ActionListener,MouseListener{
-
+	public class MgmSystemUIEvent extends WindowAdapter implements ActionListener,MouseListener{
+		//이벤트중에 탭이동시 dao .close 필요
 		public void windowClosing(WindowEvent we) {
 			System.out.println("종료");
 			System.exit(0);
@@ -129,9 +175,69 @@ public class AdmInfo extends JPanel{
 			Object obj = ae.getSource();
 			
 			if(obj == btn_search || obj == jt_search) {
-				System.out.println("검색기능");
+				int item = jcb_search.getSelectedIndex();
+				
+				Vector<Vector<String>> tempDataes = new Vector<Vector<String>>();
+				
+				
+				if(item==0) {//학번
+					String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO "
+							+ "AND STDNO = ? ";
+					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
+					Vector<Vector<String>> replaceData = replaceRow(sql);
+//					for(StudentVO vo:replaceData) {
+//						vRowDataes.add(vo.getStdno());
+//						vRowDataes.add(vo.getSname());
+//						vRowDataes.add(vo.getMname());
+//						vRowDataes.add(vo.getGender());
+//						vRowDataes.add(vo.getBirth());
+//					}
+					if (vaildationCheck() == 1) {
+						if (replaceData.size() != 0) {
+							model.setDataVector(replaceData, VCOLNAMES);
+						} else if (replaceData.size() == 0) {
+							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
+							model.setDataVector(tempDataes, VCOLNAMES);
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
+					}
+				}else if (item ==1) {//이름
+					String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO "
+							+ "AND SNAME = ?";
+					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
+					Vector<Vector<String>> replaceData = replaceRow(sql);
+					if (vaildationCheck() == 1) {
+						if (replaceData.size() != 0) {
+							model.setDataVector(replaceData, VCOLNAMES);
+						} else if (replaceData.size() == 0) {
+							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
+							model.setDataVector(tempDataes, VCOLNAMES);
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
+					}
+				}else if(item ==2) {//학과
+					String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO "
+							+ "AND MAJ.MNAME = ?";
+					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
+					Vector<Vector<String>> replaceData = replaceRow(sql);
+					if (vaildationCheck() == 1) {
+						if (replaceData.size() != 0) {
+							model.setDataVector(replaceData, VCOLNAMES);
+						} else if (replaceData.size() == 0) {
+							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
+							model.setDataVector(tempDataes, VCOLNAMES);
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
+					}
+				}else{
+					System.out.println("항목오류");
+				}
+			}else if(obj ==btn_list) {
+				SelectList();
 			}
-			
 		}
 		//mouseListener
 		@Override
@@ -152,18 +258,23 @@ public class AdmInfo extends JPanel{
 		public void mouseEntered(MouseEvent e) { }
 		public void mouseExited(MouseEvent e) { }
 	}
-	//Method
-	public void setEditable(String colNames[], int zero) {
-		model = new DefaultTableModel(colNames, 0) {
-		    @Override
-		    public boolean isCellEditable(int row, int column) {
-		        if (column >= 0) {
-		            return false;
-		        } else {
-		            return true;
-		        }
-		    }
-		};
+	//--검색기능--
+	//method 중복되는 코드 -- sql입력받아서 VOlist메소드에 각 입력값전달 후 db에 접속하여 검색한결과를 다시 리턴 
+	public Vector<Vector<String>> replaceRow(String sql) {
+		
+		String where = jt_search.getText().trim();
+		Vector<Vector<String>> list = dao.getResultVOList(sql,where);
+		
+		return list;
 	}
+	//유효성검사
+	public int vaildationCheck() {
+		int result = 1;
+		if(jt_search.getText().equals("")) {
+			result = 0;
+		}
+		return result;
+	}
+
 	
 }

@@ -7,7 +7,7 @@ package univ2;
 public class Admin_test {
 
 	public static void main(String[] args) {
-//		new StudentScore();
+//		new StudentScore(); 
 //		new MgmStdScore();
 		
 //		new MgmSystemUI();
