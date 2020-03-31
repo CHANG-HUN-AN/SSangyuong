@@ -14,7 +14,7 @@ public class AdminInfoDAO {
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	private String url = "jdbc:oracle:thin:@localhost:1521";
 	private String user = "System";
-	private String password = "root";
+	private String password = "oracle";
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -161,8 +161,8 @@ public class AdminInfoDAO {
 				vo.setPw(rs.getString(2));
 				vo.setSname(rs.getString(3));
 				vo.setGender(rs.getString(4));
-				vo.setBirth(rs.getString(5));
-				vo.setPh(rs.getString(6));
+				vo.setPh(rs.getString(5));
+				vo.setBirth(rs.getString(6));
 				vo.setMname(rs.getString(7));
 				list.add(vo);
 			}

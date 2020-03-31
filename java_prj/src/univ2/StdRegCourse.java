@@ -2,7 +2,6 @@ package univ2;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,8 +27,8 @@ import javax.swing.table.DefaultTableModel;
 public class StdRegCourse extends JPanel{
 		// Field
 //		JPanel jp_search;
-		Font font = new Font("맑은 고딕", Font.BOLD, 12);
-		Font titleFont = new Font("맑은 고딕", Font.BOLD, 16);
+//		Font font = new Font("맑은 고딕", Font.BOLD, 12);
+//		Font titleFont = new Font("맑은 고딕", Font.BOLD, 16);
 		JPanel topPane,bottomPane;
 		JScrollPane coursePane,myCoursePane;
 		JPanel titlePane,myTitlePane;
@@ -40,7 +40,8 @@ public class StdRegCourse extends JPanel{
 		JButton btn_search,btn_allSearch;
 		JComboBox<String> jcb_search;
 		DefaultTableModel data,myData;
-
+		StdRegCourseDAO dao;
+		public static final Vector<String>COLUMNS = new Vector<String>();
 		//@0318 수강신청
 		// Constructor
 		public StdRegCourse() {
@@ -50,7 +51,7 @@ public class StdRegCourse extends JPanel{
 		// Method
 		public void start() {
 		// default set
-//			setTitle("회원 명단 관리 프로그램");
+//			setTitle("수강신청");
 //			setDefaultCloseOperation(EXIT_ON_CLOSE);		
 //			setAlwaysOnTop(true);
 		// 객체 생성
@@ -62,8 +63,8 @@ public class StdRegCourse extends JPanel{
 			myTitlePane = new JPanel();
 			searchPane = new JPanel();
 			btnPane = new JPanel();
-			jl_title = new JLabel("수강신청");
-			jl_mytitle = new JLabel("나의 수강신청 목록");
+			jl_title = new JLabel("과목조회");
+			jl_mytitle = new JLabel("수강 신청 내역");
 			//버튼패널에 들어갈 컴포넌트
 			btn_reg = new JButton("수강신청");
 			btn_del = new JButton("삭제");
@@ -74,28 +75,31 @@ public class StdRegCourse extends JPanel{
 			jtf_search = new JTextField(15);
 			btn_search = new JButton("검색");
 			btn_allSearch = new JButton("전체검색");
-			
+			dao = new StdRegCourseDAO();
 			//콤보박스에 리스트 추가
 			jcb_search.addItem("과목번호");
 			jcb_search.addItem("과목");
+			//COLUMN에 데이터 추가
+			setVectorColumn();
 			
 			// 표에 들어갈 데이터들.. 테이블 열 생성(table)
-			String[] colNames = new String[] { "과목번호", "과목이름", "학점", "담당교수" };
 			// table 수정 불가
-			this.setEditable(colNames, 0);
-			this.setEditable(colNames,0);
-			// delete 차후 삭제(임시데이터)
-			String[] rowData = new String[] { "1", "데이터베이스", "2",  "이비자" };
-			String[] rowData2 = new String[] { "2", "자바기초", "2",  "차미리" };
-			data.addRow(rowData);
-			data.addRow(rowData2);
-			myData.addRow(rowData);
-			myData.addRow(rowData2);
+			this.setEditable(0);
+			this.setEditable(0);
+			
+			Vector<Vector<String>> list = dao.getResultVector();
+			for(Vector<String> vo : list) {
+				data.addRow(vo);
+			}
+//			data.addRow(rowData);
+//			data.addRow(rowData2);
+//			myData.addRow(rowData);
+//			myData.addRow(rowData2);
 			//
 			//폰트 적용
-			jl_title.setFont(titleFont); jl_mytitle.setFont(titleFont);
-			btn_reg.setFont(font); btn_del.setFont(font); btn_allDel.setFont(font); btn_myCourse.setFont(font);
-			btn_search.setFont(font);btn_allSearch.setFont(font);
+			jl_title.setFont(StdUI.TITLEFONT); jl_mytitle.setFont(StdUI.TITLEFONT);
+			btn_reg.setFont(StdUI.FONT); btn_del.setFont(StdUI.FONT); btn_allDel.setFont(StdUI.FONT); btn_myCourse.setFont(StdUI.FONT);
+			btn_search.setFont(StdUI.FONT);btn_allSearch.setFont(StdUI.FONT);
 			//디자인 레이블에 border 작업주기
 			jl_title.setLayout(new BorderLayout());
 			jl_title.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
@@ -152,8 +156,17 @@ public class StdRegCourse extends JPanel{
 //			addWindowListener(eventObj);
 			table.addMouseListener(eventObj);
 			myTable.addMouseListener(eventObj);
+			btn_search.addActionListener(eventObj);
+			btn_allSearch.addActionListener(eventObj);
+			jtf_search.addActionListener(eventObj);
+			btn_myCourse.addActionListener(eventObj);
 		}
-
+		public void setVectorColumn() {
+			COLUMNS.add("과목번호");
+			COLUMNS.add("과목이름");
+			COLUMNS.add("학점");
+			COLUMNS.add("담당교수");
+		}
 		// inner class
 		class MgmSystemUIEvent extends WindowAdapter implements ActionListener, MouseListener {
 
@@ -165,29 +178,41 @@ public class StdRegCourse extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				Object obj = ae.getSource();
-//				if (obj == btn_search || obj == jt_search) {
-//					System.out.println("검색기능");
-//				}
+				if (obj == btn_search || obj == jtf_search) {
+					System.out.println("검색기능");
+				}else if(obj ==btn_allSearch) {
+					System.out.println("전체검색기능");
+				}else if (obj == btn_myCourse) {
+					new StdMyRegCourse();
+				}
 			}
 
 			// mouseListener
 			@Override
+			//mouse double 클릭에 넣어놔야함
 			public void mouseClicked(MouseEvent me) {
 				Object obj = me.getSource();
 				JTable jtobj = (JTable) obj;
-				int erow = jtobj.getSelectedRow();
+				int click_row = jtobj.getSelectedRow();
 				
-				if( obj == table ) {
-					int ta_row = table.getSelectedRow();
-					if (erow == ta_row) {
-						System.out.println("상단테이블의"+erow + " 째가 눌렸습니다");
-						table.clearSelection();
+				int ta_row = table.getSelectedRow();
+				if( obj == table ) { //주소검색 0331 마우스클릭시 이방법이 좀더 좋은거같아(adminInfo보다)
+					if (click_row == ta_row) {
+						System.out.println("상단테이블의"+ click_row + " 째가 눌렸습니다");
+						data.removeRow(click_row);
+						Vector<Object> vo = new Vector<Object>();
+						
+						for(int i=0 ;i<4;i++ ) {
+							vo.add(data.getValueAt(click_row, i));
+						}
+						myData.addRow(vo);
+						table.clearSelection(); //하나클릭시 선택해제
 						myTable.clearSelection();
 					}
 				}else if( obj == myTable ) {
 					int mt_row = myTable.getSelectedRow();
-					if (erow == mt_row) {
-						System.out.println("하단테이블의"+erow + " 째가 눌렸습니다");
+					if (click_row == mt_row) {
+						System.out.println("하단테이블의"+click_row + " 째가 눌렸습니다");
 						myTable.clearSelection();
 						table.clearSelection();
 					}
@@ -208,10 +233,10 @@ public class StdRegCourse extends JPanel{
 		}
 
 		// Method
-		public void setEditable(String colNames[], int zero) {
+		public void setEditable(int zero) {
 			
 			//수강신청 탭 수정 불가
-			data = new DefaultTableModel(colNames, 0) {
+			data = new DefaultTableModel(COLUMNS, 0) {
 				@Override
 				public boolean isCellEditable(int row, int column) {
 					if (column >= 0) {
@@ -222,7 +247,7 @@ public class StdRegCourse extends JPanel{
 				}
 			};
 			//나의 수강신청 목록 수정 불가
-			myData= new DefaultTableModel(colNames, 0) {
+			myData= new DefaultTableModel(COLUMNS, 0) {
 				@Override
 				public boolean isCellEditable(int row, int column) {
 					if (column >= 0) {

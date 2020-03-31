@@ -19,6 +19,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+/**
+ * 0331 1.JtextField 의 데이터가 선택이안되도록
+ * 0331 2.삭제 버튼클릭시 db에 데이터 삭제
+ * @author user
+ */
 public class AdmInfoList extends JFrame{
 	//Field
 	JPanel	FormPane,labelBoxPane,tfBoxPane;
@@ -166,7 +171,8 @@ public class AdmInfoList extends JFrame{
 			jt_major.setText(vo.getMname());
 			jt_phone.setText(vo.getPh());
 			jt_birth.setText(vo.getBirth());
-			if(vo.getBirth().equals("M")) {
+			
+			if(vo.getGender().equals("M")) {
 				male.setSelected(true);
 			}else {
 				female.setSelected(true);

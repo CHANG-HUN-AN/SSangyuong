@@ -42,8 +42,8 @@ public class StdUI extends JFrame {
 	StdInfo tab_stuInfo;
 	StdScore tab_stuScore;
 	StdRegCourse tab_stuReg;
-	public static Font font = new Font("맑은 고딕", Font.BOLD, 12);
-
+	public static Font FONT = new Font("맑은 고딕", Font.BOLD, 12);
+	public static Font TITLEFONT = new Font("맑은 고딕", Font.BOLD, 16);
 	JPanel JoinPane = new JPanel(new GridLayout(9, 1));
 
 	// Constructor
@@ -83,7 +83,7 @@ public class StdUI extends JFrame {
 		tabPane.addTab("정보 조회", tab_stuInfo);
 		tabPane.addTab("성적 조회", tab_stuScore);
 		tabPane.addTab("수강신청", tab_stuReg);
-		tabPane.setFont(font);
+		tabPane.setFont(FONT);
 
 		// tabPane.setSelectedIndex(1); // 실행될 때 기본으로 보여지는 탭
 

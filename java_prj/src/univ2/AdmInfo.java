@@ -33,8 +33,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * 0330 탭이동시 리스트close 
- * 0330 close 를 어디다가 넣어야하는지
+ * 0330 dao.close 는 최상위 프레임에 전역변수로 만들어놓고 객체생성은 각 패널에 생성
  * 
  * @author user
  */
@@ -57,6 +56,7 @@ public class AdmInfo extends JPanel{
 	public AdmInfo() { 
 		start();
 	}
+
 	//Method
 	public void start() {
 		//default set
@@ -65,7 +65,7 @@ public class AdmInfo extends JPanel{
 //		setAlwaysOnTop(true);
 		UIset uiset = new UIset();
 		//컬럼명 추가
-		getVectorColumn();
+		setVectorColumn();
 		//object create
 		topPane = new JPanel();
 		titlePane = new JPanel();
@@ -155,7 +155,7 @@ public class AdmInfo extends JPanel{
 	}
 	
 	//static 으로 생성된 컬럼vector에  컬럼명추가
-	public void getVectorColumn() {
+	public void setVectorColumn() {
 		VCOLNAMES.add("학번");
 		VCOLNAMES.add("이름");
 		VCOLNAMES.add("학과");

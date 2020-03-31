@@ -53,8 +53,5 @@ public class UIset {
 		obj = titlePane;
 		return obj;
 	}
-	public void boxLayout(JComponent panel,JComponent jlabel1,JComponent jlabel2,JComponent jlabel3,
-			JComponent jlabel4,JComponent jlabel5,JComponent jlabel6,JComponent jlabel7) {
-		
-	}
+
 }
