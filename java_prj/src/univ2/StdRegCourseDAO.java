@@ -49,11 +49,8 @@ public class StdRegCourseDAO {
 			while(rs.next()) {
 				Vector<String> vo = new Vector<String>();
 				int colCount = rsmd.getColumnCount()+1;
-				for(int i =0; i<colCount;i++) {
-					vo.add(rs.getString(1));
-					vo.add(rs.getString(2));
-					vo.add(rs.getString(3));
-					vo.add(rs.getString(4));
+				for(int i =1; i<colCount;i++) {
+					vo.add(rs.getString(i));
 				}
 				list.add(vo);
 			}
@@ -73,12 +70,10 @@ public class StdRegCourseDAO {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			while(rs.next()) {
 				Vector<String> vo = new Vector<String>();
-				int colCount = rsmd.getColumnCount()+1;
-				for(int i =0; i<colCount;i++) {
-					vo.add(rs.getString(1));
-					vo.add(rs.getString(2));
-					vo.add(rs.getString(3));
-					vo.add(rs.getString(4));
+				int colCount = rsmd.getColumnCount()+1;  
+				for(int i =1; i<colCount;i++) {
+					vo.add(rs.getString(i));
+					
 				}
 				list.add(vo);
 			}
@@ -100,16 +95,13 @@ public class StdRegCourseDAO {
 			rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			while(rs.next()) {
-				Vector<String> vo2 = new Vector<String>();
-				int colCount = rsmd.getColumnCount()+1;
+				Vector<String> vo = new Vector<String>();
+				int colCount = rsmd.getColumnCount()+1;//colum은 4개닌까 5개맞지
 //				System.out.println(colCount);
-				for(int i =0; i<colCount;i++) {
-					vo2.add(rs.getString(1));
-					vo2.add(rs.getString(2));
-					vo2.add(rs.getString(3));
-					vo2.add(rs.getString(4));
+				for(int i =1; i<colCount;i++) {
+					vo.add(rs.getString(i));
 				}
-				list.add(vo2);
+				list.add(vo);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
