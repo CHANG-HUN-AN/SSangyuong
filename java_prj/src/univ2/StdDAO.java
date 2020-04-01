@@ -8,9 +8,9 @@ import java.sql.ResultSet;
 public class StdDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";//211.63.89.213
 	private String user = "SYSTEM";
-	private String pass = "oracle";
+	private String pass = "oracle";//oracle
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;

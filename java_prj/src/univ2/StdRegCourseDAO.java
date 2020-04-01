@@ -11,7 +11,7 @@ import java.util.Vector;
 public class StdRegCourseDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";//211.63.89.213
 	private String user = "System";
 	private String password = "oracle";
 	Connection conn;
@@ -100,15 +100,16 @@ public class StdRegCourseDAO {
 			rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			while(rs.next()) {
-				Vector<String> vo = new Vector<String>();
+				Vector<String> vo2 = new Vector<String>();
 				int colCount = rsmd.getColumnCount()+1;
+//				System.out.println(colCount);
 				for(int i =0; i<colCount;i++) {
-					vo.add(rs.getString(1));
-					vo.add(rs.getString(2));
-					vo.add(rs.getString(3));
-					vo.add(rs.getString(4));
+					vo2.add(rs.getString(1));
+					vo2.add(rs.getString(2));
+					vo2.add(rs.getString(3));
+					vo2.add(rs.getString(4));
 				}
-				list.add(vo);
+				list.add(vo2);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();

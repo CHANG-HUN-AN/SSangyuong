@@ -49,6 +49,9 @@ public class StdUI extends JFrame {
 	JPanel JoinPane = new JPanel(new GridLayout(9, 1));
 
 	// Constructor
+//	public StdUI() {//0401(n) 테스트용도 
+//		mainStart();
+//	}
 	public StdUI(String uid) {
 		try {
 			this.uid = uid;
