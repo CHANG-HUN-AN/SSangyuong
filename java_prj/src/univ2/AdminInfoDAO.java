@@ -12,7 +12,7 @@ import java.util.Vector;
 public class AdminInfoDAO {
 	//Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521";
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";
 	private String user = "System";
 	private String password = "oracle";
 	Connection conn;
@@ -37,26 +37,26 @@ public class AdminInfoDAO {
 		}
 	}
 	
-	public Vector<StudentVO> getResultArrayList(String esql) {
-		Vector<StudentVO> list = new Vector<StudentVO>();
-		getPreparedStatement(esql);
-		try {
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				StudentVO vo = new StudentVO();
-				vo.setStdno(rs.getString(1));
-				vo.setSname(rs.getString(2));
-				vo.setMname(rs.getString(3));
-				vo.setGender(rs.getString(4));
-				vo.setBirth(rs.getString(5));
-				list.add(vo);
-			}
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
+//	public Vector<StudentVO> getResultArrayList(String esql) {
+//		Vector<StudentVO> list = new Vector<StudentVO>();
+//		getPreparedStatement(esql);
+//		try {
+//			rs = pstmt.executeQuery();
+//			while(rs.next()) {
+//				StudentVO vo = new StudentVO();
+//				vo.setStdno(rs.getString(1));
+//				vo.setSname(rs.getString(2));
+//				vo.setMname(rs.getString(3));
+//				vo.setGender(rs.getString(4));
+//				vo.setBirth(rs.getString(5));
+//				list.add(vo);
+//			}
+//			
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return list;
+//	}
 	//volist 오버로딩
 	public Vector<Vector<String>> getResultVOList(String esql,String where) {
 		Vector<Vector<String>> list = new Vector<Vector<String>>();
@@ -147,16 +147,16 @@ public class AdminInfoDAO {
 		return list;
 	}
 	//상세정보 검색DAO
-	public Vector<StudentVO> getDetailSearch(String detailData) {
+	public Vector<AdminStdVO> getDetailSearch(String detailData) {
 		String sql = "select stdno,pw,sname,gender,ph,to_char(birth,'yyyy/mm/dd'),mname from student STU,MAJOR MAJ where STU.MAJORNO = MAJ.MAJORNO AND STDNO = ?";
-		Vector<StudentVO> list = new Vector<StudentVO>();
+		Vector<AdminStdVO> list = new Vector<AdminStdVO>();
 		try {
 			getPreparedStatement(sql);
 			pstmt.setString(1,detailData);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				StudentVO vo = new StudentVO();
+				AdminStdVO vo = new AdminStdVO();
 				vo.setStdno(rs.getString(1));
 				vo.setPw(rs.getString(2));
 				vo.setSname(rs.getString(3));

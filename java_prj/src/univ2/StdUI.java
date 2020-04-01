@@ -25,6 +25,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class StdUI extends JFrame {
 	// Field
 	private static final int MAX = 5;
+	
+	static String uid;
 
 	JPanel mainPane, menuPane, imgPane, showPane;
 	JButton btnInfo, btnScore, btnExit;
@@ -43,12 +45,14 @@ public class StdUI extends JFrame {
 	StdScore tab_stuScore;
 	StdRegCourse tab_stuReg;
 	public static Font FONT = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
-	public static Font TITLEFONT = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 16);
+	public static Font TITLEFONT = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
 	JPanel JoinPane = new JPanel(new GridLayout(9, 1));
 
 	// Constructor
-	public StdUI() {
+	public StdUI(String uid) {
 		try {
+			this.uid = uid;
+//			System.out.println("»Æ¿Œ222" + uid);
 			// ∏ﬁ≈ª
 //			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
@@ -69,8 +73,12 @@ public class StdUI extends JFrame {
 	}
 
 	// Method
+//	public void mainStart(String uid) {
+//		
+//	}
 	public void mainStart() {
 		// jf_main = new JFrame(); // ∏ﬁ¿Œ
+//		System.out.println("»Æ¿Œ111" + uid);
 		tab_stuInfo = new StdInfo();
 		tab_stuScore = new StdScore();
 		tab_stuReg = new StdRegCourse();

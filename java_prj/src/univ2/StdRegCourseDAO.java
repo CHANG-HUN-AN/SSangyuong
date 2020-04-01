@@ -11,7 +11,7 @@ import java.util.Vector;
 public class StdRegCourseDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521";
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";
 	private String user = "System";
 	private String password = "oracle";
 	Connection conn;
@@ -69,6 +69,34 @@ public class StdRegCourseDAO {
 				"WHERE Q.SUBNO = SUB.SUBNO";
 		try {
 			getPreparedStatement(sql);
+			rs = pstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			while(rs.next()) {
+				Vector<String> vo = new Vector<String>();
+				int colCount = rsmd.getColumnCount()+1;
+				for(int i =0; i<colCount;i++) {
+					vo.add(rs.getString(1));
+					vo.add(rs.getString(2));
+					vo.add(rs.getString(3));
+					vo.add(rs.getString(4));
+				}
+				list.add(vo);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	//오버로딩 조건에따라 다른sql문 받기
+	public Vector<Vector<String>> getResultVector(String esql,String where){
+		Vector<Vector<String>> list	= new Vector<Vector<String>>();
+		String sql = esql;
+		try {
+			getPreparedStatement(sql);
+			
+			//매핑
+			pstmt.setString(1, where);
+			
 			rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			while(rs.next()) {

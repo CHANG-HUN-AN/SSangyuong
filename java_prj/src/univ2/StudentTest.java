@@ -6,7 +6,7 @@ public class StudentTest {
 //		new MgmMain();
 		
 		new Main_Login();
-		new StdUI();
+//		new StdUI();
 //		new MgmSystemUI();
 //		new StudentRegCourse();
 	}

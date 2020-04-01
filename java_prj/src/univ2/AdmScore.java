@@ -2,7 +2,6 @@ package univ2;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -22,17 +22,14 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import univ2.AdmInfo.MgmSystemUIEvent;
+
 public class AdmScore extends JPanel {
 
-	//Field
-//	JPanel contentPane = new JPanel(new GridLayout(8, 1)); 
-	JPanel mainPane;
-	JPanel titlePane;
-	JPanel jp_info, jp_result;
-	
-	JLabel jl_title;
-	JLabel jl_search;
-	
+	// Field
+	JPanel mainPane, titlePane, jp_info, jp_result;
+	JLabel jl_title, jl_search;
+
 	JTextField jtf_name, jtf_major, jt_search;
 	JTextField Combobox_textField;
 
@@ -40,21 +37,27 @@ public class AdmScore extends JPanel {
 	JTable table;
 
 //	JTabbedPane tabPane;
-	JComboBox combo;
+	JComboBox<String> combo, jcb_search;
 	JScrollPane scoll;
-	JButton btn_search;
+	JButton btn_search,btn_list;
 
 	DefaultTableModel model;
+
+	AdmScoreDAO dao; // DAO
+	Vector<Vector<String>> list; // List
+	static Vector<String> COLNAME = new Vector<String>(); // Column
 	
 	// Constructor
 	public AdmScore() {
 		mainFrame();
 	}
-
+	
 	// Method
 	public void mainFrame() {
 		UIset uiset = new UIset();
 		mainPane = new JPanel();
+		//컬럼명 추가
+		getVectorColumn();
 		
 		titlePane = new JPanel();
 		
@@ -63,41 +66,59 @@ public class AdmScore extends JPanel {
 		
 		jl_title = new JLabel("학생성적관리");
 		jl_search = new JLabel("검색>");
-		combo = new JComboBox();
-		combo.setModel(new DefaultComboBoxModel(new String[] { "이름", "학번" }));
+		jcb_search = new JComboBox<String>();
+		jcb_search = new JComboBox<String>();
+		//combo = new JComboBox();
+		//combo.setModel(new DefaultComboBoxModel(new String[] { "이름", "학번" }));
 		jp_result.add(jl_search);
-		jp_result.add(combo);
+		jp_result.add(jcb_search);
+		//jp_result.add(combo);
 
+		
 		jt_search = new JTextField();
 		jp_result.add(jt_search);
 		jt_search.setColumns(10);
 
+		
 		JButton btn_search = new JButton("검 색");
 		jp_result.add(btn_search);
-
+		btn_list = new JButton("전체성적");
+		jp_result.add(btn_list);
+		
 		jtf_name = new JTextField(5);
 		jtf_major = new JTextField(8);
 		
+		//Combo
+		
+		//DAO score? info? 
+		dao = new AdmScoreDAO();
+		
 		//폰트 설정
 		jl_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT); 
-		String[] colNames = new String[] { "학 번", "이 름", "학 과", "총 점" };
+
+		//수정 설정
+		this.setEditable(0);
 		
-		String rowData[][] = {
-				{ "001", "홍길동", "컴퓨터공학", "300" }, 
-				{ "002", "김길동", "컴퓨터공학", "260" },
-				{ "003", "임길동", "컴퓨터공학", "180" }, 
-				{ "004", "성길동", "생명공학", "200" }, 
-				{ "005", "주길동", "생명공학", "340" } };
+		//SQL 호출
+		String sql = "SELECT STDNO,SNAME,MNAME ,TRUNC(SCORE,1) " + 
+				"FROM (SELECT C.STDNO,SNAME,AVG(SCORE) SCORE,MAJORNO " + 
+				"FROM SCORE C, STUDENT T " + 
+				"  WHERE C.STDNO = T.STDNO " + 
+				"  GROUP BY C.STDNO,SNAME,MAJORNO) Q, MAJOR M " + 
+				"  WHERE Q.MAJORNO = M.MAJORNO ";
+		AdmScoreDAO dao = new AdmScoreDAO();
+		Vector<Vector<String>> list = dao.getResultVectorList(sql);
 		
-		DefaultTableModel model = new DefaultTableModel(rowData,colNames){
-			@Override
-			public boolean isCellEditable(int row, int column) {  //수정, 입력 불가
-				return false;
-			}
-		};
+		for(Vector<String> vo:list) {
+			model.addRow(vo);
+		}
 		
 		table = new JTable(model);
 		scoll = new JScrollPane(table);
+		
+		//콤보박스 목록 추가
+		jcb_search.addItem("학번");
+		jcb_search.addItem("이름");
 		
 		titlePane.add(jl_title);
 		titlePane = (JPanel)uiset.title(titlePane,jl_title,scoll);
@@ -114,17 +135,53 @@ public class AdmScore extends JPanel {
 		int height = (int) (scsize.getHeight() - fsize.getHeight()) / 2;
 		setLocation(width, height);
 		setVisible(true);
+		dao.close();
 		
 		//이벤트 리스너 선언
 		StudentScoreMainEvent eventObj = new StudentScoreMainEvent();
-//		addWindowListener(eventObj);
 		table.addMouseListener(eventObj);
-		
 		btn_search.addActionListener(eventObj);
 		jt_search.addActionListener(eventObj);
-	}
+		btn_list.addActionListener(eventObj);
+		jcb_search.addActionListener(eventObj);
+	}//End mainFrame
+	
+	
+	public void setEditable(int zero) {
+		model = new DefaultTableModel(COLNAME,zero){
+			@Override
+			public boolean isCellEditable(int row, int column) {  //수정, 입력 불가
+				if(column >= 0) {
+					return false;
+				}else {
+					return true;
+				}
+			}
+		};
+	}//End setEdit
+	
+	public void getVectorColumn() {
+		COLNAME.add("학번");
+		COLNAME.add("이름");
+		COLNAME.add("학과");
+		COLNAME.add("평균");
+	}//End V_Column
+	
+	//전체 성적 보기
+	public void SelectList() {
+		String sql = "SELECT STDNO,SNAME,MNAME ,TRUNC(SCORE,1) " + 
+				"FROM (SELECT C.STDNO,SNAME,AVG(SCORE) SCORE,MAJORNO " + 
+				"FROM SCORE C, STUDENT T " + 
+				"  WHERE C.STDNO = T.STDNO " + 
+				"  GROUP BY C.STDNO,SNAME,MAJORNO) Q, MAJOR M " + 
+				"  WHERE Q.MAJORNO = M.MAJORNO ";		
+		AdmScoreDAO dao = new AdmScoreDAO();
+		Vector<Vector<String>> list = dao.getResultVectorList(sql);	
+		model.setDataVector(list,COLNAME); 
+	}//End SelectList
 
-	//액션 리스너 선언
+	
+	//Action Listener!
 	class StudentScoreMainEvent extends WindowAdapter implements ActionListener, MouseListener {
 		public void windowClosing(WindowEvent we) {
 			JOptionPane.showMessageDialog(null, "프로그램 종료");
@@ -132,33 +189,103 @@ public class AdmScore extends JPanel {
 		}
 
 		public StudentScoreMainEvent() {
-		
-		}
 
+		}
+		@Override
 		public void actionPerformed(ActionEvent ae) {
 			Object obj = ae.getSource();
-			if(obj == btn_search || obj == jt_search) {
-				System.out.println("검색기능");
-			}
-		}
-		
+			if (obj == btn_search || obj == jt_search) {
+				int item = jcb_search.getSelectedIndex();
+				Vector<Vector<String>> tempDataes = new Vector<Vector<String>>();
+				
+				//학번으로 검색 할 때
+				if(item==0) { 
+					String sql = "SELECT STDNO,SNAME,MNAME ,TRUNC(SCORE,1) " + 
+							"FROM (SELECT C.STDNO,SNAME,AVG(SCORE) SCORE,MAJORNO " + 
+							"FROM SCORE C, STUDENT T " + 
+							"  WHERE C.STDNO = T.STDNO " + 
+							"  GROUP BY C.STDNO,SNAME,MAJORNO) Q, MAJOR M " + 
+							"  WHERE Q.MAJORNO = M.MAJORNO " +
+							" AND STDNO = ? ";
+					Vector<Vector<String>> replaceData = replaceRow(sql);
+					if (vaildationCheck() == 1) {
+						if (replaceData.size() != 0) {
+							model.setDataVector(replaceData, COLNAME);
+						} else if (replaceData.size() == 0) {
+							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
+							model.setDataVector(tempDataes, COLNAME);
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
+					}	
+					//이름으로 검색 할 때
+				}else if (item ==1) {
+					String sql = "SELECT STDNO,SNAME,MNAME ,TRUNC(SCORE,1) " + 
+							"FROM (SELECT C.STDNO,SNAME,AVG(SCORE) SCORE,MAJORNO " + 
+							"FROM SCORE C, STUDENT T " + 
+							"WHERE C.STDNO = T.STDNO " + 
+							"GROUP BY C.STDNO,SNAME,MAJORNO) Q, MAJOR M " + 
+							"WHERE Q.MAJORNO = M.MAJORNO " +
+							"AND SNAME = ? ";
+					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
+					Vector<Vector<String>> replaceData = replaceRow(sql);
+					if (vaildationCheck() == 1) {
+						if (replaceData.size() != 0) {
+							model.setDataVector(replaceData, COLNAME);
+						} else if (replaceData.size() == 0) {
+							JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
+							model.setDataVector(tempDataes, COLNAME);
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
+					}
+				}else{
+					System.out.println("항목오류");
+					}
+				}else if(obj ==btn_list) {
+					SelectList();
+			}//End If 
+		}//End Action Performed
+
 		public void mouseClicked(MouseEvent me) {
 			Object obj = me.getSource();
-			JTable jt_obj = (JTable)obj;
+			JTable jt_obj = (JTable) obj;
 			int erow = jt_obj.getSelectedRow();
 			int row = table.getSelectedRow();
 			System.out.println(erow);
 			System.out.println(row);
-			if(erow == row) {
-				System.out.println(erow +"번째");
-				new AdmScoreList();
+			if (erow == row) {
+				Object detailData = table.getValueAt(row, 0);
+				new AdmScoreList(detailData,dao);
 			}
+		}//End CLicked
+		
+		public void mousePressed(MouseEvent e) {
 		}
-		public void mousePressed(MouseEvent e) { }
-		public void mouseReleased(MouseEvent e) { }
-		public void mouseEntered(MouseEvent e) { }
-		public void mouseExited(MouseEvent e) { } 
+		public void mouseReleased(MouseEvent e) {
+		}
+		public void mouseEntered(MouseEvent e) {
+		}
+		public void mouseExited(MouseEvent e) {
+		}
+	} // End Action
+	
+	//--검색기능--
+		//method 중복되는 코드 -- sql입력받아서 VOlist메소드에 각 입력값전달 후 db에 접속하여 검색한결과를 다시 리턴 
+		public Vector<Vector<String>> replaceRow(String sql) {
+			String where = jt_search.getText().trim();
+			Vector<Vector<String>> list = dao.getResultVOList(sql,where);
+			return list;
+		}
 		
-		
-	} //End Action
-} //End Class 
+		//유효성검사
+		public int vaildationCheck() {
+			int result = 1;
+			if(jt_search.getText().equals("")) {
+				result = 0;
+			}
+			return result;
+		}
+	
+	
+} // End Class

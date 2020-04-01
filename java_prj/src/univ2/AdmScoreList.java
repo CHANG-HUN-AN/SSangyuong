@@ -18,9 +18,17 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
+import univ2.AdminInfoDAO;
+import univ2.AdminStdVO;
+//import univ_0330.AdmInfoList.BtnEvent;
+
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 
 import javax.swing.BoxLayout;
@@ -30,10 +38,8 @@ import java.awt.Dimension;
 
 /**
  * 관리자 로그인시 탭의 점수검색 > 상세정보
- * @author user
  */
 public class AdmScoreList extends JFrame {
-	//@@0319 ach 수정>> boxLayout으로 패널감싸기
 	//Field
 	JPanel mainPane= new JPanel();//new GridLayout(8,1)
 	JPanel nonamePane= new JPanel(new GridLayout(1,4));
@@ -43,19 +49,35 @@ public class AdmScoreList extends JFrame {
 	JPanel jp_score;
 	JPanel titlePane,namePane,noPane
 	,majorPane,subPane,scorePane,gradePane,buttonPane;
-	
+	JButton btn_rename, btn_cancel;
 	JTextField Num_textField,Name_textField
 				,major_textField,Subject_textField
 				,Score_textField,Grade_textField;
 	
+	String detailData;
+	
+	int column = 0;
+	int row = 0;
+	
 	JTable scoreTable;
 	JScrollPane scoll;
+	
+	//리스트
+	AdmScoreDAO dao;
+	Vector<Vector<String>> list; // List
+	static Vector<String> COLNAME_LIST = new Vector<String>(); // Column
 	
 	//Constructor
 	public AdmScoreList() {
 		scoreFrame();
 	}
-
+	//오버로딩
+		public AdmScoreList(Object detailData,AdmScoreDAO dao) {
+			this.detailData = (String)detailData;
+			this.dao = dao;
+			scoreFrame();
+		}
+		
 	//Method
 	public void scoreFrame() {
 		//contentPane = new JPanel(new GridLayout(10, 1));
@@ -87,14 +109,14 @@ public class AdmScoreList extends JFrame {
 		Score_textField = new JTextField(5);
 		Grade_textField = new JTextField(5);
 		
-		JButton Change_Button = new JButton("수 정");
-		JButton Cancel_Button = new JButton("취 소");
+		JButton btn_rename = new JButton("수 정");
+		JButton btn_cancel = new JButton("취 소");
 		
 		Label_name.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		Label_no.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		Label_major.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		Change_Button.setFont(new Font("나눔고딕", Font.BOLD, 18));
-		Cancel_Button.setFont(new Font("나눔고딕", Font.BOLD, 18));
+		btn_rename.setFont(new Font("나눔고딕", Font.BOLD, 18));
+		btn_cancel.setFont(new Font("나눔고딕", Font.BOLD, 18));
 		Subject_Label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		Score_Label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		Grade_Label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -133,32 +155,18 @@ public class AdmScoreList extends JFrame {
 		topPane.add(titlePane);
 		topPane.add(nonamePane);
 		topPane.add(majorPane);
-
 		
-		String header[] = { "과목명", "성적", "등급" };
-		String contents[][] = { 
-				{"국어", "80", "B"},
-				{"영어", "50", "C"},
-				{"수학", "40", "C"},
-				{"사회", "80", "B"},
-				{"과학", "100", "A"},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null} };
-		
-		scoreTable = new JTable(contents, header);
+		//scoreTable = new JTable(contents, header);
 		scoll = new JScrollPane(scoreTable);
 		mainPane.add(scoll, BorderLayout.CENTER);
-		
+			
 		
 		objectPane.add(subPane); //0319 위치변경
 		objectPane.add(scorePane);
 		objectPane.add(gradePane);
 		
-		buttonPane.add(Change_Button);
-		buttonPane.add(Cancel_Button);
+		buttonPane.add(btn_rename);
+		buttonPane.add(btn_cancel);
 		
 		//하단패널 박스패널로 변경 세로로 2개
 		BoxLayout boxLayout2 =new BoxLayout(bottomPane, BoxLayout.Y_AXIS);
@@ -172,6 +180,9 @@ public class AdmScoreList extends JFrame {
 		add(mainPane);
 		add(bottomPane);
 		
+		// db의 리스트 달기
+		scoreInfo();
+		scoreList();
 		
 		setSize(500,750);
 
@@ -185,10 +196,59 @@ public class AdmScoreList extends JFrame {
 		
 //		setContentPane(mainPane);
 //		mainPane.setLayout(null);
-	
-		Change_Button.addActionListener(new ActionListener() {
+		// event 핸들러
+		BtnEvent eventObj = new BtnEvent();
+		addWindowListener(eventObj);
+		btn_cancel.addActionListener(eventObj);
+		btn_rename.addActionListener(eventObj);
+		
+		btn_rename.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+	}//End ScoreFrame
+	
+	
+	//개인 정보란
+	public void scoreInfo() {
+		Vector<AdminStdVO> list = new Vector<AdminStdVO>();
+		list = dao.getDetailScoreInfo(detailData);
+		for(AdminStdVO vo : list) {
+			Num_textField.setText(vo.getStdno());
+			Name_textField.setText(vo.getSname());
+			major_textField.setText(vo.getMname());
+		}
 	}
-}
+	
+	//점수 테이블
+	public void scoreList() {
+		
+	}
+	
+	
+	
+	
+	public class BtnEvent extends WindowAdapter implements ActionListener {
+		@Override
+		public void windowClosing(WindowEvent we) {
+			dispose(); // 새로운프레임종료
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			Object obj = ae.getSource();
+
+			if (obj == btn_cancel) {
+				System.out.println("취소합니다");
+				dispose();
+			} else if (obj == btn_rename) {
+				System.out.println("수정합니다.");
+			}
+		}
+
+	}
+	
+	
+	
+}//End class 

@@ -162,9 +162,9 @@ public class AdmInfoList extends JFrame{
 	}
 	
 	public void detailList() {
-		Vector<StudentVO> list = new Vector<StudentVO>();
+		Vector<AdminStdVO> list = new Vector<AdminStdVO>();
 		list = dao.getDetailSearch(detailData);
-		for(StudentVO vo : list) {
+		for(AdminStdVO vo : list) {
 			jt_id.setText(vo.getStdno());
 			jt_pw.setText(vo.getPw());
 			jt_name.setText(vo.getSname());

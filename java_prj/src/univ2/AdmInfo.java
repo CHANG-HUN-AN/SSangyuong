@@ -33,7 +33,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * 0330 dao.close 는 최상위 프레임에 전역변수로 만들어놓고 객체생성은 각 패널에 생성
+ * 0330 dao.close 는 최상위 프레임(AdmUI)에 전역변수로 만들어놓고 객체생성은 각 패널에 생성
  * 
  * @author user
  */
@@ -87,7 +87,7 @@ public class AdmInfo extends JPanel{
 		
 		//sql 데이터 불러오기********
 		String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
-		AdminInfoDAO dao = new AdminInfoDAO();
+//		AdminInfoDAO dao = new AdminInfoDAO();
 		list = dao.getResultVectorList(sql);
 		
 		for(Vector<String> vo :list) {
@@ -167,7 +167,7 @@ public class AdmInfo extends JPanel{
 	public class MgmSystemUIEvent extends WindowAdapter implements ActionListener,MouseListener{
 		//이벤트중에 탭이동시 dao .close 필요
 		public void windowClosing(WindowEvent we) {
-			System.out.println("종료1");
+			System.out.println("종료");
 			dao.close();
 			System.exit(0);
 		}
