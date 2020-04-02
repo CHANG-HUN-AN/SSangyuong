@@ -13,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
@@ -28,13 +29,10 @@ public class StdInfo extends JPanel{
 			buttonPane;
 	JTabbedPane infoTab, scoreTab;
 	JLabel jl_title, jl_img, jl_name, jl_pass, jl_major, jl_no, jl_phone, jl_gender, jl_birth;
-	JTextField jt_name, jt_major, jt_no, jt_gender, jt_pass, jt_phone, jt_birth;
+	JTextField jt_name, jt_major, jt_no, jt_pass, jt_phone, jt_birth;
 	JRadioButton jrb_female, jrb_male;
 	JButton jb_save, jb_reset;
 
-	public static Font font = new Font("맑은 고딕", Font.BOLD, 12);
-	public static Font titleFont = new Font("맑은 고딕", Font.BOLD,20); 
-	
 	StdDAO dao;
 	StdVO vo;
 	
@@ -70,16 +68,16 @@ public class StdInfo extends JPanel{
 		jl_gender = new JLabel("성별: ");
 		jl_birth = new JLabel("생년월일: ");
 
-//		jrb_female = new JRadioButton("여자");
-//		jrb_male = new JRadioButton("남자");
-//		ButtonGroup gr_gender = new ButtonGroup();
+		jrb_female = new JRadioButton("여자");
+		jrb_male = new JRadioButton("남자");
+		ButtonGroup gr_gender = new ButtonGroup();
 
 		jt_major = new JTextField(20);
 		jt_no = new JTextField(20);
 		jt_name = new JTextField(20);
 		jt_pass = new JTextField(20);
 		jt_phone = new JTextField(20);
-		jt_gender = new JTextField(15);
+//		jt_gender = new JTextField(15);
 		jt_birth = new JTextField(20);
 		
 		// 출력하기
@@ -89,20 +87,29 @@ public class StdInfo extends JPanel{
 		jt_name.setText(vo.getSname());
 		jt_pass.setText(vo.getPw());
 		jt_phone.setText(vo.getPh());
-		jt_gender.setText(vo.getGender());
+//		jt_gender.setText(vo.getGender());
+		if (vo.getGender().equals("M")) {
+			jrb_male.setSelected(true);
+		} else {
+			jrb_female.setSelected(true);
+		}
 		jt_birth.setText(vo.getBirth());
+		
+		// 입력 제한
+		jt_major.setEditable(false);
+		jt_no.setEditable(false);
 		
 		jb_save = new JButton("저장");
 		jb_reset = new JButton("취소");
 
-		jl_title.setFont(titleFont);
-		jl_name.setFont(font);
-		jl_major.setFont(font);
-		jl_pass.setFont(font);
-		jl_no.setFont(font);
-		jl_phone.setFont(font);
-		jl_gender.setFont(font);
-		jl_birth.setFont(font);
+		jl_title.setFont(StdUI.TITLEFONT);
+		jl_name.setFont(StdUI.FONT);
+		jl_major.setFont(StdUI.FONT);
+		jl_pass.setFont(StdUI.FONT);
+		jl_no.setFont(StdUI.FONT);
+		jl_phone.setFont(StdUI.FONT);
+		jl_gender.setFont(StdUI.FONT);
+		jl_birth.setFont(StdUI.FONT);
 
 		//setborder를 통해 타이틀 생성 compoundBorder( ouside , insideborder에 색주기)
 		jl_title.setLayout(new BorderLayout());
@@ -120,15 +127,15 @@ public class StdInfo extends JPanel{
 		passPane.add(jt_pass);
 		phonePane.add(jl_phone);
 		phonePane.add(jt_phone);
-//		genderPane.setBorder(new CompoundBorder(new EmptyBorder(0, 4,0, 60), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
-//		gr_gender.add(jrb_female);
-//		gr_gender.add(jrb_male);
+		genderPane.setBorder(new CompoundBorder(new EmptyBorder(0, 4,0, 60), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
+		gr_gender.add(jrb_female);
+		gr_gender.add(jrb_male);
 		genderPane.add(jl_gender);
-	    genderPane.add(jt_gender);
-//		genderPane.add(spacePane);
-//		spacePane.setBorder(new CompoundBorder(new EmptyBorder(0, 35, 0,0 ), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
-//		genderPane.add(jrb_female);
-//		genderPane.add(jrb_male);
+//	    genderPane.add(jt_gender);
+		genderPane.add(spacePane);
+		spacePane.setBorder(new CompoundBorder(new EmptyBorder(0, 35, 0,0 ), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
+		genderPane.add(jrb_female);
+		genderPane.add(jrb_male);
 		birthPane.add(jl_birth);
 		birthPane.add(jt_birth);
 		buttonPane.add(jb_save);
@@ -163,15 +170,39 @@ public class StdInfo extends JPanel{
 		
 		// 이벤트 리스너
 		StdInfoEvent eventObj = new StdInfoEvent();
+		jb_save.addActionListener(eventObj);
+		jb_reset.addActionListener(eventObj);
 		
 	}
 	
 	class StdInfoEvent implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			Object obj = ae.getSource();
+			if(jb_save == obj) {
+				stdUpdate();
+			} else if(jb_reset == obj){
+				System.out.println("취소 버튼");
+			}
 		}
 	}// StdInfoEvent class
 	
-	
+	public void stdUpdate() {
+		// 수정할 데이터(PW, SNAME, PH, BIRTH)
+		StdVO uvo = new StdVO();
+		uvo.setPw(jt_pass.getText());
+		uvo.setSname(jt_name.getText());
+		uvo.setPh(jt_phone.getText());
+		uvo.setBirth(jt_birth.getText());
+		
+		// 수정할 학번 uvo에 추가
+		uvo.setStdno(StdUI.uid);
+		
+		int result = dao.stdInfoUpdate(uvo);
+		
+		if(result != 0) {
+			JOptionPane.showMessageDialog(null, "수정 완료");
+		}
+		
+	}
 	
 }

@@ -11,3 +11,4 @@ public class StudentTest {
 //		new StudentRegCourse();
 	}
 }
+

@@ -25,15 +25,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  * 상단테이블 하단테이블에서 데이터이동시 테이블에 포커싱해주기
- *  4/1 정보검색후 전체검색시 하단테이블로빠진 데이터까지 같이 들어오는 문제(중복데이터)
- *  4/1(n) 로그인후 >> 검색시 resultset>>>의 metadata의 getColum값이 5로
- *  연속해서 vo객체에 값을 넣어줘서 컬럼의 수가 늘어나는 문제
+ *  4/1 정보검색후 전체검색시 하단테이블로빠진 데이터까지 같이 들어오는 문제(중복데이터) -->완료 (상위프레임에서 두번 실행하는문제)
  * @author dksck
  */
 public class StdRegCourse extends JPanel{
-	public static final Vector<String>COLNAMES = new Vector<String>();
+	public static  Vector<String> COLNAMES =new Vector<String>();	
 	public static final Vector<String>COLNAMES2 = new Vector<String>();	
 	// Field
 		JPanel topPane,bottomPane;
@@ -50,15 +49,21 @@ public class StdRegCourse extends JPanel{
 		StdRegCourseDAO dao;
 		Vector<Vector<String>> list;
 		Object DupliDataNO = null;
+		String uid= StdUI.uid;
 		
 		//@0318 수강신청
 		// Constructor
 		public StdRegCourse() {
 			//COLUMN에 데이터 추가
-			setVectorColumn();
-			setVectorColumn2();
 			start();
 		}
+//		public StdRegCourse(Vector<String> COLNAMES) {
+////			for(String str : COLNAMES) {
+////				System.out.print("3.수강신청 생성자에서 객체 가져왔을때"+str + "\t\n");
+////			}
+//			this.COLNAMES = COLNAMES;
+//			start();
+//		}
 
 		// Method
 		public void start() {
@@ -97,7 +102,12 @@ public class StdRegCourse extends JPanel{
 			//콤보박스에 리스트 추가
 			jcb_search.addItem("과목번호");
 			jcb_search.addItem("과목");
+			jcb_search.addItem("담당교수");
 			
+			setVectorColumn();
+//			for(String str : COLNAMES2) {
+//				System.out.println(str+ "\t");
+//			}
 			// table 수정 불가 및 표에 들어갈 데이터들.. 테이블 열 생성(table)
 			this.setEditable(0);
 			
@@ -105,6 +115,7 @@ public class StdRegCourse extends JPanel{
 			for(Vector<String> vo : list) {
 				data.addRow(vo);
 			}
+			
 			//폰트 적용
 			jl_title.setFont(StdUI.TITLEFONT); jl_mytitle.setFont(StdUI.TITLEFONT);
 			btn_reg.setFont(StdUI.FONT); btn_del.setFont(StdUI.FONT); btn_allDel.setFont(StdUI.FONT); btn_myCourse.setFont(StdUI.FONT);
@@ -167,6 +178,8 @@ public class StdRegCourse extends JPanel{
 			myTable.addMouseListener(eventObj);
 			btn_search.addActionListener(eventObj);
 			btn_allSearch.addActionListener(eventObj);
+			btn_allDel.addActionListener(eventObj);
+			btn_del.addActionListener(eventObj);
 			jtf_search.addActionListener(eventObj);
 			btn_myCourse.addActionListener(eventObj);
 		}
@@ -177,16 +190,20 @@ public class StdRegCourse extends JPanel{
 			COLNAMES.add("학점");
 			COLNAMES.add("담당교수");
 		}
-		public void setVectorColumn2() {
-			COLNAMES2.add("과목2번호");
-			COLNAMES2.add("과목2이름");
-			COLNAMES2.add("학점2");
-			COLNAMES2.add("담당2교수");
+		//새로운 전체데이터 가져오기
+		public Vector<Vector<String>> getNewDataSource() {
+			Vector<Vector<String>> list = new Vector<Vector<String>>();
+			list = dao.getResultVector();
+			for(Vector<String> vo : list) {
+				data.addRow(vo);
+			}
+			return list;
 		}
+		
 		// inner class
 		class MgmSystemUIEvent extends WindowAdapter implements ActionListener, MouseListener {
 			//field
-			
+			Object mouseObj;
 			public void windowClosing(WindowEvent we) {
 				System.out.println("종료");
 				System.exit(0);
@@ -205,10 +222,11 @@ public class StdRegCourse extends JPanel{
 						if (vaildationCheck() == 1) { //유효성검사후 데이터 가져오기
 							Vector<Vector<String>> searchData = replaceRow(sql);
 							if (searchData.size() != 0) {
-								data.setDataVector(searchData, COLNAMES2);
+								
+								data.setDataVector(searchData, COLNAMES);
 							} else if (searchData.size() == 0) {
 								JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
-								data.setDataVector(tempDataes, COLNAMES2);
+								data.setDataVector(tempDataes, COLNAMES);
 							}
 						} else {
 							JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
@@ -220,10 +238,10 @@ public class StdRegCourse extends JPanel{
 						if (vaildationCheck() == 1) { //유효성검사후 데이터 가져오기
 							Vector<Vector<String>> searchData = replaceRow(sql);
 							if (searchData.size() != 0) {
-								data.setDataVector(searchData, COLNAMES2);
+								data.setDataVector(searchData, COLNAMES);
 							} else if (searchData.size() == 0) {
 								JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
-								data.setDataVector(tempDataes, COLNAMES2);
+								data.setDataVector(tempDataes, COLNAMES);
 							}
 						} else {
 							JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
@@ -235,51 +253,87 @@ public class StdRegCourse extends JPanel{
 						if (vaildationCheck() == 1) { //유효성검사후 데이터 가져오기
 							Vector<Vector<String>> searchData = replaceRow(sql);
 							if (searchData.size() != 0) {
-								data.setDataVector(searchData, COLNAMES2);
+								data.setDataVector(searchData, COLNAMES);
 							} else if (searchData.size() == 0) {
 								JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
-								data.setDataVector(tempDataes, COLNAMES2);
+								data.setDataVector(tempDataes, COLNAMES);
 							}
 						} else {
 							JOptionPane.showMessageDialog(null, "검색하실 데이터를 입력해주세요");
 						}
 					}
-				}else if(obj ==btn_allSearch) {
-					System.out.println("전체검색기능");
-					data.setDataVector(list, COLNAMES);
+				}else if(obj ==btn_allSearch) { //전체검색기능
+					data.setDataVector(getNewDataSource(), COLNAMES);
 				}else if (obj == btn_myCourse) {
-					new StdMyRegCourse();
+					new StdMyRegCourse(uid);
+				}else if (obj ==btn_del) { //하단테이블 삭제
+					int mt_row = myTable.getSelectedRow();
+					myData.removeRow(mt_row);
+					table.clearSelection(); // 하나클릭시 선택해제
+					myTable.clearSelection();
+				}else if (obj == btn_allDel) { //하단테이블 전체삭제
+					Vector<Vector<String>> tempDataes = new Vector<Vector<String>>();
+					myData.setDataVector(tempDataes, COLNAMES);
 				}
-				
 			}
 
 			// mouseListener
 			@Override
 			//mouse double 클릭에 넣어놔야함
 			public void mouseClicked(MouseEvent me) {
-				Object obj = me.getSource();
+				mouseObj = me.getSource();
 				
 				if(me.getClickCount() == 2) {
-					JTable jtobj = (JTable) obj;
+					JTable jtobj = (JTable) mouseObj;
 					Vector<Object> vo = new Vector<Object>();
 					int click_row = jtobj.getSelectedRow();
 					int ta_row = table.getSelectedRow();
 					
-					if( obj == table ) { //주소검색 0331 마우스클릭시 이방법이 좀더 좋은거같아(adminInfo보다)
+					if( mouseObj == table ) { //주소검색 0331 마우스클릭시 이방법이 좀더 좋은거같아(adminInfo보다)
 						if (click_row == ta_row) {//두개를나눈이유는 상단테이블 클릭시 하단이랑 같이눌려서
 							if(myData.getRowCount()<5) { //유효성체크
 								for (int i = 0; i < 4; i++) {
 									vo.add(data.getValueAt(click_row, i));
 								}
-								myData.addRow(vo);
-								data.removeRow(click_row);
-								table.clearSelection(); // 하나클릭시 선택해제
-								myTable.clearSelection();
+								//상위테이블의 컬럼이 중복되는 문제
+								String topNo= (String)data.getValueAt(click_row, 0);
+								int myDataRowCount =myData.getRowCount();
+								System.out.println("mydata의 로우수"+myDataRowCount);
+								Vector<String>tempVO = new Vector<String>();
+								boolean flag =true;
+								if(myDataRowCount != 0) {
+									for(int i =0 ; i<myDataRowCount;i++) {
+										String myDataNO=(String)myData.getValueAt(i,0);
+										if(myDataNO!=null){
+											System.out.println("myData에있는 학번"+myDataNO);
+											tempVO.add(myDataNO);
+										}
+									}
+								}else {
+									tempVO.add("0000");
+								}
+
+								for(String str:tempVO) {
+									System.out.println("임시데이터 vo넣어둔 str"+str);
+									if(!topNo.equals(str)) {
+										flag =true;
+									}else{
+										JOptionPane.showMessageDialog(null, "오류");
+										flag = false;
+									}
+								}
+								if(flag=true) {
+									myData.addRow(vo);
+									data.removeRow(click_row);
+									table.clearSelection(); // 하나클릭시 선택해제
+									myTable.clearSelection();
+								}
+
 							}else {
 								JOptionPane.showMessageDialog(null, "15학점이상 수강하실수 없습니다");
-							}
-						}
-					}else if( obj == myTable ) { //하단테이블을 눌르면 빼지고 위에테이블에 생기는구조로
+							}//else if
+						}//if
+					}else if( mouseObj == myTable ) { //하단테이블을 눌르면 빼지고 위에테이블에 생기는구조로
 						int mt_row = myTable.getSelectedRow();
 						if (click_row == mt_row) {
 							System.out.println("하단테이블의"+click_row + " 째가 눌렸습니다");
@@ -290,10 +344,10 @@ public class StdRegCourse extends JPanel{
 							myData.removeRow(click_row);
 							myTable.clearSelection();
 							table.clearSelection();
-						}
-					}
-				}
-			}
+						}//if
+					}//if~else
+				}//if_더블클릭
+			} //event MouseClick
 
 			public void mousePressed(MouseEvent e) {
 			}

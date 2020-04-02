@@ -22,6 +22,7 @@ public class BoardTest {
 			switch(menu) { //값이 상수인경우 switch 사용
 			case 1: new BoardWrite(scan,dao); break;
 			case 2: new BoardList(dao);break;
+			case 3: new BoardUpdate(scan,dao).update();break; //다양한방법으로 호출함
 			default:
 			}
 		

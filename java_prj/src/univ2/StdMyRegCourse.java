@@ -42,10 +42,12 @@ public class StdMyRegCourse extends JFrame{
 		JButton btn_del,btn_allDel,btn_cancel;
 		DefaultTableModel data;
 		static Vector<String> COLNAMES = new Vector<String>();
+		String uid;
 		//@0318 수강신청
 		// Constructor
-		public StdMyRegCourse() {
+		public StdMyRegCourse(String uid) {
 			setTitle("나의 수강신청 목록");
+			this.uid =uid;
 			start();
 		}
 
@@ -70,10 +72,14 @@ public class StdMyRegCourse extends JFrame{
 			// table 수정 불가
 			this.setEditable(0);
 			// delete 차후 삭제(임시데이터)
-			String[] rowData = new String[] { "1", "데이터베이스", "2",  "이비자" };
-			String[] rowData2 = new String[] { "2", "자바기초", "2",  "차미리" };
-			data.addRow(rowData);
-			data.addRow(rowData2);
+			StdRegCourseListDAO dao = new StdRegCourseListDAO(uid); 
+			Vector<Vector<String>>list = dao.getMyRegisterList();
+			
+//			String[] rowData = new String[] { "1", "데이터베이스", "2",  "이비자" };
+//			String[] rowData2 = new String[] { "2", "자바기초", "2",  "차미리" };
+			for(Vector<String> vo : list) {
+				data.addRow(vo);
+			}
 
 			//
 			//폰트 적용

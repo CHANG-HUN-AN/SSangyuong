@@ -59,6 +59,7 @@ public class StdRegCourseDAO {
 		}
 		return list;
 	}
+	
 	public Vector<Vector<String>> getResultVector(String sql){
 		Vector<Vector<String>> list	= new Vector<Vector<String>>();
 		sql="SELECT SUB.SUBNO,SUBNAME,CREDIT,PNAME " + 
@@ -73,7 +74,6 @@ public class StdRegCourseDAO {
 				int colCount = rsmd.getColumnCount()+1;  
 				for(int i =1; i<colCount;i++) {
 					vo.add(rs.getString(i));
-					
 				}
 				list.add(vo);
 			}
@@ -108,6 +108,7 @@ public class StdRegCourseDAO {
 		}
 		return list;
 	}
+	
 
 	
 }

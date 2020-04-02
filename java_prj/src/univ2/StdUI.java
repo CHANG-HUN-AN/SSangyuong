@@ -45,7 +45,7 @@ public class StdUI extends JFrame {
 	StdScore tab_stuScore;
 	StdRegCourse tab_stuReg;
 	public static Font FONT = new Font("¸¼Àº °íµñ", Font.BOLD, 12);
-	public static Font TITLEFONT = new Font("¸¼Àº °íµñ", Font.BOLD, 12);
+	public static Font TITLEFONT = new Font("¸¼Àº °íµñ", Font.BOLD, 20);
 	JPanel JoinPane = new JPanel(new GridLayout(9, 1));
 
 	// Constructor

@@ -271,7 +271,7 @@ public class Main_Login extends JFrame {
 		if (result == 1) {
 			JOptionPane.showMessageDialog(null, "로그인 성공");
 			setVisible(false);
-			new StdUI(uid).mainStart();
+			new StdUI(uid);
 
 		} else if (result == 0) {
 			JOptionPane.showMessageDialog(null, "로그인 실패, 패스워드가 다름");
@@ -292,7 +292,7 @@ public class Main_Login extends JFrame {
 		if (result == 1) {
 			JOptionPane.showMessageDialog(null, "로그인 성공");
 			setVisible(false);
-			new ProUI().mainFrame();
+			new ProUI();
 
 		} else if (result == 0) {
 			JOptionPane.showMessageDialog(null, "로그인 실패, 패스워드가 다름");
@@ -316,7 +316,7 @@ public class Main_Login extends JFrame {
 				// 로그인성공 : id,pass 동일
 				JOptionPane.showMessageDialog(null, "로그인 성공");
 				setVisible(false);
-				new AdmUI().mainFrame();
+				new AdmUI();
 			} else {
 				// 로그인 실패 : id 동일, pass 다름
 				JOptionPane.showMessageDialog(null, "로그인 실패, 패스워드가 다름");

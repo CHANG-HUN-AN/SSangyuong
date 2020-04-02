@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Vector;
 
 public class StdDAO {
 	// Field
@@ -95,6 +97,7 @@ public class StdDAO {
 				"from student s, major m " + 
 				"where s.majorno = m.majorno " + 
 				"and stdno = '" + stdno + "'";
+		// REGEXP_REPLACE(PH, '(.{3})(.+)(.{4})', '\\1-\\2-\\3') // 연락처 하이픈 추가
 		getPreparedStatement(sql);
 		try {
 			rs = pstmt.executeQuery();
@@ -112,6 +115,71 @@ public class StdDAO {
 		}
 		
 		return vo;
+	}
+	
+	public int stdInfoUpdate(StdVO uvo) {
+		int result = 0;
+		
+		try {
+			String sql = "UPDATE STUDENT SET PW = ?, SNAME = ?, PH = ?, BIRTH = ? WHERE STDNO = ?";
+			getPreparedStatement(sql);
+			
+			pstmt.setString(1, uvo.getPw());
+			pstmt.setString(2, uvo.getSname());
+			pstmt.setString(3, uvo.getPh());
+			pstmt.setString(4, uvo.getBirth());
+			pstmt.setString(5, uvo.getStdno());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public StdVO stdScore(String stdno) {
+		StdVO vo = new StdVO();
+		String sql = "SELECT SNAME, MNAME, STDNO FROM STUDENT S, MAJOR M WHERE S.MAJORNO = M.MAJORNO AND STDNO = '" + stdno + "'";
+		getPreparedStatement(sql);
+		try {
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				vo.setSname(rs.getString(1));
+				vo.setMname(rs.getString(2));
+				vo.setStdno(rs.getString(3));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return vo;
+	}
+	
+	public Vector<Vector<String>> getResultVectorList(String sql){
+		Vector<Vector<String>> list = new Vector<Vector<String>>();
+		getPreparedStatement(sql);
+		try {
+			rs = pstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+		
+			while(rs.next()) {
+				Vector<String> vo = new Vector<String>();
+				int colCount = rsmd.getColumnCount()+1;
+				for(int i =1; i<colCount; i++) {
+					vo.add(rs.getString(1));
+					vo.add(rs.getString(2));
+					vo.add(rs.getString(3));
+					vo.add(rs.getString(4));
+				}
+				list.add(vo);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	

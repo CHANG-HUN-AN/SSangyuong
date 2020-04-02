@@ -98,6 +98,7 @@ public class AdmInfo extends JPanel{
 		sp_stdInfo = new JScrollPane(table); //scrollPanel add table;
 		table.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
         table.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
+        table.setDragEnabled(false);
 		//콤보박스 목록 추가
 		jcb_search.addItem("학번");
 		jcb_search.addItem("이름");
