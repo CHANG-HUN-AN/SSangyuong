@@ -1,5 +1,6 @@
 package univ2;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,14 +26,14 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class StdUI extends JFrame {
 	// Field
 	private static final int MAX = 5;
-	
+
 	static String uid;
 
 	JPanel mainPane, menuPane, imgPane, showPane;
 	JButton btnInfo, btnScore, btnExit;
 
-	JPanel jp_logo, jp_title, jp_check, jp_id, jp_pass, jp_button;
-	JLabel jl_limg, jl_title, jl_id, jl_pass;
+	JPanel jp_text, jp_img, jp_logo, jp_title, jp_check, jp_id, jp_pass, jp_button;
+	JLabel jl_main, jl_img, jl_text, jl_limg, jl_title, jl_id, jl_pass;
 	JTextField tid;
 	JPasswordField tpass;
 	JRadioButton jr_stu, jr_staff;
@@ -45,26 +46,21 @@ public class StdUI extends JFrame {
 	StdScore tab_stuScore;
 	StdRegCourse tab_stuReg;
 	public static Font FONT = new Font("¸¼Àº °íµñ", Font.BOLD, 12);
-<<<<<<< Upstream, based on origin/master
-	public static Font TITLEFONT = new Font("¸¼Àº °íµñ", Font.BOLD, 20);
-=======
-<<<<<<< HEAD
 	public static Font TITLEFONT = new Font("¸¼Àº °íµñ", Font.BOLD, 12);
 	public static Font TITFONT = new Font("¸¼Àº °íµñ", Font.BOLD, 14);
-=======
-	public static Font TITLEFONT = new Font("¸¼Àº °íµñ", Font.BOLD, 20);
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 	JPanel JoinPane = new JPanel(new GridLayout(9, 1));
+
+	StdDAO dao;
+	StdVO vo;
 
 	// Constructor
 //	public StdUI() {//0401(n) Å×½ºÆ®¿ëµµ 
-//		mainStart();
 //	}
 	public StdUI(String uid) {
 		try {
 			this.uid = uid;
-//			System.out.println("È®ÀÎ222" + uid);
+			dao = new StdDAO();
+			vo = new StdVO();
 			// ¸ÞÅ»
 //			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
@@ -75,11 +71,13 @@ public class StdUI extends JFrame {
 //		            break;
 //		        }
 //		    }
+			
 			// À©µµ¿ì
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			mainStart();
 		} catch (Exception e) {
 			// If Nimbus is not available, you can set the GUI to another look and feel.
+			e.printStackTrace();
 		}
 
 	}
@@ -89,16 +87,30 @@ public class StdUI extends JFrame {
 //		
 //	}
 	public void mainStart() {
+		vo = dao.stdInfoList(uid);
+		jl_text = new JLabel(vo.getSname() + "´Ô È¯¿µÇÕ´Ï´Ù !");
+		jl_img = new JLabel(new ImageIcon("src/univ2/stdicon.png"));
+		
 		// jf_main = new JFrame(); // ¸ÞÀÎ
 //		System.out.println("È®ÀÎ111" + uid);
 		tab_stuInfo = new StdInfo();
 		tab_stuScore = new StdScore();
-		tab_stuReg = new StdRegCourse();
+		tab_stuReg = new StdRegCourse(vo,dao);
+
+		jp_main = new JPanel(new GridLayout(3, 1));
+		jp_text = new JPanel();
+		jp_img = new JPanel();
+
+
+		jp_text.add(jl_text);
+		jp_img.add(jl_img);
 		
-		jp_main = new JPanel();
+		jp_main.add(jp_text, BorderLayout.NORTH);
+		jp_main.add(jp_img, BorderLayout.CENTER);
+
+		jl_text.setFont(TITFONT);
 
 		tabPane = new JTabbedPane();
-
 		tabPane.addTab("HOME", jp_main);
 		tabPane.addTab("Á¤º¸ Á¶È¸", tab_stuInfo);
 		tabPane.addTab("¼ºÀû Á¶È¸", tab_stuScore);

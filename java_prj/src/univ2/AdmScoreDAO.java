@@ -13,15 +13,7 @@ import univ2.AdminStdVO;
 public class AdmScoreDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-<<<<<<< Upstream, based on origin/master
-	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";// 211.63.89.213
-=======
-<<<<<<< HEAD
 	private String url = "jdbc:oracle:thin:@119.194.84.127:1521";// 211.63.89.213
-=======
-	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";// 211.63.89.213
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 	private String user = "System";
 	private String password = "oracle";// oracle
 
@@ -159,7 +151,6 @@ public class AdmScoreDAO {
 				vo.setSname(rs.getString(2));
 				vo.setMname(rs.getString(3));
 				list.add(vo);
-<<<<<<< HEAD
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,8 +196,6 @@ public class AdmScoreDAO {
 		}
 	}
 
-<<<<<<< Upstream, based on origin/master
-=======
 	//업데이트
 		public int adminUpdate(AdminStdVO avo) {
 			int result = 0;
@@ -225,59 +214,8 @@ public class AdmScoreDAO {
 			
 			} catch (Exception e) {
 				e.printStackTrace();
-=======
->>>>>>> refs/remotes/origin/master
 			}
-<<<<<<< HEAD
 			return result;
-=======
-		} catch (Exception e) {
-			e.printStackTrace();
->>>>>>> refs/remotes/origin/master
 		}
-<<<<<<< HEAD
-=======
-		return list;
-	}
 
-	// 상세성적 성적 테이블 DAO
-	public Vector<Vector<String>> getDetailScoreList(String sql, String where) {
-		Vector<Vector<String>> list = new Vector<Vector<String>>();
-		getPreparedStatement(sql);
-		try {
-			pstmt.setString(1, where);
-			rs = pstmt.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-
-			while (rs.next()) {
-				Vector<String> vo = new Vector<String>();
-				int colCount = rsmd.getColumnCount() + 1;
-				for (int i = 1; i < colCount; i++) {
-					vo.add(rs.getString(i));
-
-				}
-				list.add(vo);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
-
-	public void close() {
-		try {
-			if (rs != null)
-				rs.close();
-			if (pstmt != null)
-				pstmt.close();
-			if (conn != null)
-				conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
->>>>>>> refs/remotes/origin/master
-
->>>>>>> 85ee785 @rebase
 }// End class

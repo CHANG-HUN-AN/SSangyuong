@@ -55,9 +55,9 @@ public class Main_Login extends JFrame {
 //			showLogin();
 //		} catch (Exception e) {
 //		}
-		showLogin();
 		sdao = new StdDAO();
 		pdao = new ProDAO();
+		showLogin();
 	}
 
 	// Method

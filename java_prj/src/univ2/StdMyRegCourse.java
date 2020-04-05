@@ -11,12 +11,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,14 +28,13 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * 0331 나의수강정보가 수강조회프레임을 가려서 오른쪽으로 위치조정
+ * 0331 나의수강정보가 수강조회프레임을 가려서 오른쪽으로 위치조정--x
+ * 0403 dataRowCount 가 없을때 오류
  * @author user
  */
 public class StdMyRegCourse extends JFrame{
 		// Field
 //		JPanel jp_search;
-//		Font font = new Font("맑은 고딕", Font.BOLD, 12);
-//		Font titleFont = new Font("맑은 고딕", Font.BOLD, 16);
 		JPanel topPane;
 		JScrollPane coursePane;
 		JPanel titlePane,btnPane;
@@ -43,37 +44,17 @@ public class StdMyRegCourse extends JFrame{
 		DefaultTableModel data;
 		static Vector<String> COLNAMES = new Vector<String>();
 		String uid;
-<<<<<<< Upstream, based on origin/master
-=======
-<<<<<<< HEAD
 		StdMyRegCourseDAO dao;
 		static int MyCourseCredit;
-=======
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 		//@0318 수강신청
 		// Constructor
-<<<<<<< Upstream, based on origin/master
-		public StdMyRegCourse(String uid) {
-=======
-<<<<<<< HEAD
 		public StdMyRegCourse() {
 		
 		}
 		public StdMyRegCourse(String uid,Vector<String> COLNAMES) {
-=======
-		public StdMyRegCourse(String uid) {
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 			setTitle("나의 수강신청 목록");
 			this.uid =uid;
-<<<<<<< Upstream, based on origin/master
-=======
-<<<<<<< HEAD
 			this.COLNAMES = COLNAMES;
-=======
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 			start();
 		}
 
@@ -93,16 +74,14 @@ public class StdMyRegCourse extends JFrame{
 			btn_del = new JButton("삭제");
 			btn_allDel = new JButton("전체삭제");
 			btn_cancel = new JButton("취소");
-			getColNames();
+			//객체생성가능 차후붙이기 setModel(),setViewPortView()
+			table = new JTable();
+			coursePane=new JScrollPane();
+//			getColNames();
 			// 표에 들어갈 데이터들.. 테이블 열 생성(table)
 			// table 수정 불가
+			
 			this.setEditable(0);
-<<<<<<< Upstream, based on origin/master
-			// delete 차후 삭제(임시데이터)
-			StdRegCourseListDAO dao = new StdRegCourseListDAO(uid); 
-			Vector<Vector<String>>list = dao.getMyRegisterList();
-=======
-<<<<<<< HEAD
 			// 본인의 수강신청 리스트 출력
 			dao = new StdMyRegCourseDAO(uid); 
 			ArrayList<StdRegCourseVO> list = dao.getVoMyRegisterList();
@@ -122,29 +101,7 @@ public class StdMyRegCourse extends JFrame{
 //				System.out.println(vo.size());
 //				data.addRow(vo);
 //			}
->>>>>>> 85ee785 @rebase
 			
-<<<<<<< Upstream, based on origin/master
-//			String[] rowData = new String[] { "1", "데이터베이스", "2",  "이비자" };
-//			String[] rowData2 = new String[] { "2", "자바기초", "2",  "차미리" };
-			for(Vector<String> vo : list) {
-				data.addRow(vo);
-			}
-
-=======
-=======
-			// delete 차후 삭제(임시데이터)
-			StdRegCourseListDAO dao = new StdRegCourseListDAO(uid); 
-			Vector<Vector<String>>list = dao.getMyRegisterList();
-			
-//			String[] rowData = new String[] { "1", "데이터베이스", "2",  "이비자" };
-//			String[] rowData2 = new String[] { "2", "자바기초", "2",  "차미리" };
-			for(Vector<String> vo : list) {
-				data.addRow(vo);
-			}
-
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 			//
 			//폰트 적용
 			jl_title.setFont(StdUI.TITLEFONT); 
@@ -156,8 +113,8 @@ public class StdMyRegCourse extends JFrame{
 			
 			//j테이블에 데이터 부착 jtable.add(model) 이 부착이 안됨 
 			//JScrollPane 역시 초기화시 붙여줘야함
-			table = new JTable(data);
-			coursePane=new JScrollPane(table);
+			table.setModel(data);
+			coursePane.setViewportView(table);
 			
 			//패널에 컴포넌트 부착 !! 패널안에 패널넣을때 패널의 레이아웃 지정안해주면 나중에 레아아웃이 생각한데로 나오지않음
 			titlePane.setLayout(new BorderLayout());
@@ -192,19 +149,19 @@ public class StdMyRegCourse extends JFrame{
 			setLocation(width, height);
 			// eventListener
 			MgmSystemUIEvent eventObj = new MgmSystemUIEvent();
-//			addWindowListener(eventObj);
+			addWindowListener(eventObj);
 			table.addMouseListener(eventObj);
+			btn_del.addActionListener(eventObj);
+			btn_allDel.addActionListener(eventObj);
+			btn_cancel.addActionListener(eventObj);
 		}
-		public void getColNames() {
-			COLNAMES.add("과목번호");
-			COLNAMES.add("과목이름");
-			COLNAMES.add("학점");
-			COLNAMES.add("담당교수");
-		}
+
 		
 		// inner class
 		class MgmSystemUIEvent extends WindowAdapter implements ActionListener, MouseListener {
-
+			//filed
+			String subNo;
+			
 			public void windowClosing(WindowEvent we) {
 				System.out.println("종료");
 				dispose();
@@ -213,9 +170,36 @@ public class StdMyRegCourse extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				Object obj = ae.getSource();
-//				if (obj == btn_search || obj == jt_search) {
-//					System.out.println("검색기능");
-//				}
+				if(obj == btn_cancel) {
+					System.out.println("종료");
+					dispose();
+				}else if (obj == btn_del) {//삭제버튼 시 데이터 삭제
+					System.out.println("삭제기능"); //confrim yes 0 no 1
+					int confirm=JOptionPane.showConfirmDialog(null, "정말 삭제하시겠습니까?","삭제",JOptionPane.YES_NO_OPTION);
+					if(confirm == 0) {
+						int result = dao.getMyRegDelete(subNo);
+						
+						setEditable(0);
+						getMyListShow();
+		 				
+						table.setModel(data);
+						if(result != 0)  JOptionPane.showMessageDialog(null, "삭제실패");
+						else JOptionPane.showMessageDialog(null, "삭제성공");
+					}
+				}else if (obj == btn_allDel) {
+					System.out.println("삭제기능"); //confrim yes 0 no 1
+					int confirm=JOptionPane.showConfirmDialog(null, "정말 삭제하시겠습니까?","삭제",JOptionPane.YES_NO_OPTION);
+					if(confirm == 0) {
+						int result = dao.getMyRegDelete();
+						
+						setEditable(0);
+						getMyListShow();
+		 				
+						table.setModel(data);
+						if(result != 0)JOptionPane.showMessageDialog(null, "전체삭제성공 처음부터 다시 수강신청해주세요"); //성공시 update 한 쿼리수를 가져옴 
+						else JOptionPane.showMessageDialog(null, "전체삭제실패");
+					}
+				}
 			}
 
 			// mouseListener
@@ -224,15 +208,23 @@ public class StdMyRegCourse extends JFrame{
 				Object obj = me.getSource();
 				JTable jtobj = (JTable) obj;
 				int erow = jtobj.getSelectedRow();
-	
-				if (obj == table) {
-					int ta_row = table.getSelectedRow();
-					if (erow == ta_row) {
-						System.out.println("상단테이블의" + erow + " 째가 눌렸습니다");
-						table.clearSelection();
+				int ta_row = table.getSelectedRow();
+				subNo = (String)data.getValueAt(erow, 0);
+				
+				if(me.getClickCount() ==2) { //떠브르 클릭시 삭제
+					int confirm=JOptionPane.showConfirmDialog(null, "정말 삭제하시겠습니까?","삭제해볼래?",JOptionPane.YES_NO_OPTION);
+					if(confirm ==0) {
+						if (erow == ta_row) {
+							int result = dao.getMyRegDelete(subNo);
+							setEditable(0);
+							getMyListShow();
+							if(result == 1) JOptionPane.showMessageDialog(null, "삭제성공");
+							else JOptionPane.showMessageDialog(null, "삭제실패");
+							table.clearSelection();
+						}
 					}
 				}
-			}
+				}
 			
 
 			public void mousePressed(MouseEvent e) {
@@ -250,7 +242,6 @@ public class StdMyRegCourse extends JFrame{
 
 		// Method
 		public void setEditable(int zero) {
-			
 			//수강신청 탭 수정 불가
 			data = new DefaultTableModel(COLNAMES, zero) {
 				@Override
@@ -262,6 +253,23 @@ public class StdMyRegCourse extends JFrame{
 					}
 				}
 			};
+		}
+		//리스트 출력
+		private void getMyListShow() {
+			dao = new StdMyRegCourseDAO(uid); 
+			Vector<Vector<String>>list = dao.getMyRegisterList();
+//			DefaultTableModel data = new DefaultTableModel();
+			for(Vector<String> vo : list) {
+				System.out.println(vo);
+				data.addRow(vo);
+			}
+//			return data;
+		}
+		
+		 public int getMyListRowCount() {
+			StdMyRegCourse stdObj = new StdMyRegCourse();
+			int rowCount = stdObj.data.getRowCount(); //dataRowCount 가 없을때 오류
+			return rowCount;
 		}
 	}
 

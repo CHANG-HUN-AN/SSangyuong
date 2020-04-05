@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -29,13 +30,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * 상단테이블 하단테이블에서 데이터이동시 테이블에 포커싱해주기
  *  4/1 정보검색후 전체검색시 하단테이블로빠진 데이터까지 같이 들어오는 문제(중복데이터) -->완료 (상위프레임에서 두번 실행하는문제)
-<<<<<<< Upstream, based on origin/master
-=======
-<<<<<<< HEAD
  *  4/3 15학점미만 9학점이상의 조건성립시 수강신청
-=======
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
  * @author dksck
  */
 public class StdRegCourse extends JPanel{
@@ -55,35 +50,23 @@ public class StdRegCourse extends JPanel{
 		DefaultTableModel data,myData;
 		StdRegCourseDAO dao;
 		Vector<Vector<String>> list;
-<<<<<<< Upstream, based on origin/master
-		Object DupliDataNO = null;
-		String uid= StdUI.uid;
-=======
-<<<<<<< HEAD
 		StdVO stdVo ;StdDAO stdDao; String term;
 		String uid = StdUI.uid;
 //		StdMyRegCourse myList;
-=======
-		Object DupliDataNO = null;
-		String uid= StdUI.uid;
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 		
+		//학기에 맞게 리스트출력하기위해 만든 객체
+//		StdVO stdVo ;
+//		StdDAO stdDao ;
+//		String term ;
 		//@0318 수강신청
 		// Constructor
 		public StdRegCourse() {
 			//COLUMN에 데이터 추가
-<<<<<<< Upstream, based on origin/master
-=======
-<<<<<<< HEAD
 //			start();
 		}
 		public StdRegCourse(StdVO stdVo,StdDAO stdDao) {
 			this.stdVo =stdVo;
 			this.stdDao = stdDao;
-=======
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 			start();
 		}
 //		public StdRegCourse(Vector<String> COLNAMES) {
@@ -127,7 +110,6 @@ public class StdRegCourse extends JPanel{
 			myTable = new JTable();
 			coursePane=new JScrollPane();
 			myCoursePane = new JScrollPane();
-			
 			//콤보박스에 리스트 추가
 			jcb_search.addItem("과목번호");
 			jcb_search.addItem("과목");
@@ -139,8 +121,10 @@ public class StdRegCourse extends JPanel{
 //			}
 			// table 수정 불가 및 표에 들어갈 데이터들.. 테이블 열 생성(table)
 			this.setEditable(0);
+			term = stdVo.getTerm();
+			System.out.println(term);
+			list = dao.getVectorList(term);
 			
-			list = dao.getResultVector();
 			for(Vector<String> vo : list) {
 				data.addRow(vo);
 			}
@@ -155,8 +139,7 @@ public class StdRegCourse extends JPanel{
 			jl_mytitle.setLayout(new BorderLayout());
 			jl_mytitle.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
 			
-			//j테이블에 데이터 부착 jtable.add(model) 이 부착이 안됨 -->setModel로 가능
-
+			//j테이블에 데이터모델 부착 jtable.add(model) 이 부착이 안됨 -->setModel로 가능
 			table.setModel(data);
 			myTable.setModel(myData);
 			coursePane.setViewportView(table);
@@ -207,13 +190,7 @@ public class StdRegCourse extends JPanel{
 			myTable.addMouseListener(eventObj);
 			btn_search.addActionListener(eventObj);
 			btn_allSearch.addActionListener(eventObj);
-<<<<<<< Upstream, based on origin/master
-=======
-<<<<<<< HEAD
 			btn_reg.addActionListener(eventObj);
-=======
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 			btn_allDel.addActionListener(eventObj);
 			btn_del.addActionListener(eventObj);
 			jtf_search.addActionListener(eventObj);
@@ -226,25 +203,11 @@ public class StdRegCourse extends JPanel{
 			COLNAMES.add("학점");
 			COLNAMES.add("담당교수");
 		}
-<<<<<<< Upstream, based on origin/master
-=======
-<<<<<<< HEAD
 		
->>>>>>> 85ee785 @rebase
 		//새로운 전체데이터 가져오기
 		public Vector<Vector<String>> getNewDataSource() {
 			Vector<Vector<String>> list = new Vector<Vector<String>>();
-<<<<<<< Upstream, based on origin/master
-			list = dao.getResultVector();
-=======
 			list = dao.getVectorList(term);
-=======
-		//새로운 전체데이터 가져오기
-		public Vector<Vector<String>> getNewDataSource() {
-			Vector<Vector<String>> list = new Vector<Vector<String>>();
-			list = dao.getResultVector();
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 			for(Vector<String> vo : list) {
 				data.addRow(vo);
 			}
@@ -273,14 +236,6 @@ public class StdRegCourse extends JPanel{
 						if (vaildationCheck() == 1) { //유효성검사후 데이터 가져오기
 							Vector<Vector<String>> searchData = replaceRow(sql);
 							if (searchData.size() != 0) {
-<<<<<<< Upstream, based on origin/master
-								
-=======
-<<<<<<< HEAD
-=======
-								
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 								data.setDataVector(searchData, COLNAMES);
 							} else if (searchData.size() == 0) {
 								JOptionPane.showMessageDialog(null, "검색결과 데이터가 존재하지 않습니다");
@@ -323,22 +278,31 @@ public class StdRegCourse extends JPanel{
 				}else if(obj ==btn_allSearch) { //전체검색기능
 					data.setDataVector(getNewDataSource(), COLNAMES);
 				}else if (obj == btn_myCourse) {
-<<<<<<< Upstream, based on origin/master
-					new StdMyRegCourse(uid);
-=======
-<<<<<<< HEAD
 					 new StdMyRegCourse(uid,COLNAMES);
->>>>>>> 85ee785 @rebase
 				}else if (obj ==btn_del) { //하단테이블 삭제
 					int mt_row = myTable.getSelectedRow();
+					Vector<Object> vo = getVectoraddRowData(mt_row,data); //삭제된 데이터행값구해서 상단테이블에부착
+					data.addRow(vo);
 					myData.removeRow(mt_row);
 					table.clearSelection(); // 하나클릭시 선택해제
 					myTable.clearSelection();
 				}else if (obj == btn_allDel) { //하단테이블 전체삭제
 					Vector<Vector<String>> tempDataes = new Vector<Vector<String>>();
+					Vector<StdRegCourseVO> list ;
+					int dataColumCount = myTable.getColumnCount();
+					int dataRowCount = myTable.getRowCount();
+					
+					list = dao.getArrVoList(dataRowCount, myData);
+					
+					for(StdRegCourseVO vo : list) {
+						String subno = vo.getSubno();
+						String subname = vo.getSubname();
+						String criedit = vo.getCredit();
+						String professor = vo.getProfessor();
+						String[] tempList = {subno, subname,criedit,professor};
+						data.addRow(tempList);
+					}
 					myData.setDataVector(tempDataes, COLNAMES);
-<<<<<<< Upstream, based on origin/master
-=======
 				}else if(obj == btn_reg) {
 					Vector<String> subjectNO = new Vector<String>();
 					int row = myData.getRowCount();
@@ -355,18 +319,6 @@ public class StdRegCourse extends JPanel{
 					}else {
 						JOptionPane.showMessageDialog(null, "이미 15학점 이상 수강신청하였습니다");
 					}
-=======
-					new StdMyRegCourse(uid);
-				}else if (obj ==btn_del) { //하단테이블 삭제
-					int mt_row = myTable.getSelectedRow();
-					myData.removeRow(mt_row);
-					table.clearSelection(); // 하나클릭시 선택해제
-					myTable.clearSelection();
-				}else if (obj == btn_allDel) { //하단테이블 전체삭제
-					Vector<Vector<String>> tempDataes = new Vector<Vector<String>>();
-					myData.setDataVector(tempDataes, COLNAMES);
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 				}
 			}
 
@@ -378,45 +330,32 @@ public class StdRegCourse extends JPanel{
 				
 				if(me.getClickCount() == 2) {
 					JTable jtobj = (JTable) mouseObj;
-<<<<<<< Upstream, based on origin/master
-					Vector<Object> vo = new Vector<Object>();
-=======
-<<<<<<< HEAD
 					Vector<Object> vo ;
-=======
-					Vector<Object> vo = new Vector<Object>();
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 					int click_row = jtobj.getSelectedRow();
 					int ta_row = table.getSelectedRow();
+					int dataCloumCount = table.getColumnCount();
 					
 					if( mouseObj == table ) { //주소검색 0331 마우스클릭시 이방법이 좀더 좋은거같아(adminInfo보다)
 						if (click_row == ta_row) {//두개를나눈이유는 상단테이블 클릭시 하단이랑 같이눌려서
 							if(myData.getRowCount()<5) { //유효성체크
-								for (int i = 0; i < 4; i++) {
-									vo.add(data.getValueAt(click_row, i));
-								}
+								vo = getVectoraddRowData(click_row,data);
 								//상위테이블의 컬럼이 중복되는 문제
 								String topNo= (String)data.getValueAt(click_row, 0);
 								int myDataRowCount =myData.getRowCount();
-								System.out.println("mydata의 로우수"+myDataRowCount);
 								Vector<String>tempVO = new Vector<String>();
 								boolean flag =true;
 								if(myDataRowCount != 0) {
 									for(int i =0 ; i<myDataRowCount;i++) {
 										String myDataNO=(String)myData.getValueAt(i,0);
 										if(myDataNO!=null){
-											System.out.println("myData에있는 학번"+myDataNO);
 											tempVO.add(myDataNO);
 										}
 									}
 								}else {
 									tempVO.add("0000");
 								}
-<<<<<<< HEAD
 
 								for(String str:tempVO) {
-									System.out.println("임시데이터 vo넣어둔 str"+str);
 									if(!topNo.equals(str)) {
 										flag =true;
 									}else{
@@ -430,46 +369,6 @@ public class StdRegCourse extends JPanel{
 									table.clearSelection(); // 하나클릭시 선택해제
 									myTable.clearSelection();
 								}
-<<<<<<< Upstream, based on origin/master
-
-=======
-=======
-								//상위테이블의 컬럼이 중복되는 문제
-								String topNo= (String)data.getValueAt(click_row, 0);
-								int myDataRowCount =myData.getRowCount();
-								System.out.println("mydata의 로우수"+myDataRowCount);
-								Vector<String>tempVO = new Vector<String>();
-								boolean flag =true;
-								if(myDataRowCount != 0) {
-									for(int i =0 ; i<myDataRowCount;i++) {
-										String myDataNO=(String)myData.getValueAt(i,0);
-										if(myDataNO!=null){
-											System.out.println("myData에있는 학번"+myDataNO);
-											tempVO.add(myDataNO);
-										}
-									}
-								}else {
-									tempVO.add("0000");
-								}
-
-								for(String str:tempVO) {
-									System.out.println("임시데이터 vo넣어둔 str"+str);
-									if(!topNo.equals(str)) {
-										flag =true;
-									}else{
-										JOptionPane.showMessageDialog(null, "오류");
-										flag = false;
-									}
-								}
-								if(flag=true) {
-									myData.addRow(vo);
-									data.removeRow(click_row);
-									table.clearSelection(); // 하나클릭시 선택해제
-									myTable.clearSelection();
-								}
-
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 							}else {
 								JOptionPane.showMessageDialog(null, "15학점이상 수강하실수 없습니다");
 							}//else if
@@ -478,9 +377,7 @@ public class StdRegCourse extends JPanel{
 						int mt_row = myTable.getSelectedRow();
 						if (click_row == mt_row) {
 							System.out.println("하단테이블의"+click_row + " 째가 눌렸습니다");
-							for (int i = 0; i < 4; i++) {
-								vo.add(myData.getValueAt(click_row, i));
-							}
+							vo = getVectoraddRowData(click_row, myData);
 							data.addRow(vo);
 							myData.removeRow(click_row);
 							myTable.clearSelection();
@@ -542,9 +439,28 @@ public class StdRegCourse extends JPanel{
 		public Vector<Vector<String>> replaceRow(String sql) {
 
 			String where = jtf_search.getText();
-			Vector<Vector<String>> searchlist = dao.getResultVector(sql, where);
+			Vector<Vector<String>> searchlist = dao.getVectorList(sql, where);
 
 			return searchlist;
+		}
+		public int getMyRegCourseCrdit() {
+			StdMyRegCourseDAO dao = new StdMyRegCourseDAO(uid); 
+			ArrayList<StdRegCourseVO> list = dao.getVoMyRegisterList();
+			int MyCourseCredit=0;
+			for(StdRegCourseVO vo :list) {
+				String credit = vo.credit;
+				MyCourseCredit += Integer.parseInt(credit);
+			}
+			return MyCourseCredit;
+		}
+		//삭제후 상단테이블에 추가
+		public Vector<Object> getVectoraddRowData(int clickRow,DefaultTableModel data){
+			Vector<Object> vo = new Vector<Object>();
+			int dataCloumCount = table.getColumnCount();
+			for (int i = 0; i < dataCloumCount; i++) {
+				vo.add(data.getValueAt(clickRow, i));
+			}
+			return vo;
 		}
 	}
 

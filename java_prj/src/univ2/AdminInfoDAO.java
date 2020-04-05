@@ -12,9 +12,9 @@ import java.util.Vector;
 public class AdminInfoDAO {
 	//Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";//211.63.89.213
+	private String url = "jdbc:oracle:thin:@localhost:1521";//211.63.89.213
 	private String user = "System";
-	private String password = "oracle";//oracle
+	private String password = "root";//oracle
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -69,20 +69,9 @@ public class AdminInfoDAO {
 				Vector<String> vo = new Vector<String>();
 				int colCount = rsmd.getColumnCount()+1;
 				for(int i =1; i<colCount; i++) {
-					vo.add(rs.getString(1));
-					vo.add(rs.getString(2));
-					vo.add(rs.getString(3));
-					vo.add(rs.getString(4));
-					vo.add(rs.getString(5));
+					vo.add(rs.getString(i));
 				}
 				list.add(vo);
-//				StudentVO vo = new StudentVO();
-//				vo.setStdno(rs.getString(1));
-//				vo.setSname(rs.getString(2));
-//				vo.setMname(rs.getString(3));
-//				vo.setGender(rs.getString(4));
-//				vo.setBirth(rs.getString(5));
-//				list.add(vo); -->VECTOR 의 2차원배열로 데이터출력이가능 VO객체사용이 안된다.
 			}
 			
 		}catch (Exception e) {
@@ -91,11 +80,12 @@ public class AdminInfoDAO {
 		return list;
 	}
 	
-	public Vector<Vector<String>> getResultVectorList(String sql) {
+	public Vector<Vector<String>> getResultVectorList() {
 		Vector<Vector<String>> list = new Vector<Vector<String>>();
-		getPreparedStatement(sql);
+		String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
 		try {
 			
+			getPreparedStatement(sql);
 			rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 		
@@ -103,11 +93,7 @@ public class AdminInfoDAO {
 				Vector<String> vo = new Vector<String>();
 				int colCount = rsmd.getColumnCount()+1;
 				for(int i =1; i<colCount; i++) {
-					vo.add(rs.getString(1));
-					vo.add(rs.getString(2));
-					vo.add(rs.getString(3));
-					vo.add(rs.getString(4));
-					vo.add(rs.getString(5));
+					vo.add(rs.getString(i));
 				}
 				list.add(vo);
 			}
@@ -132,11 +118,7 @@ public class AdminInfoDAO {
 				Vector<String> vo = new Vector<String>();
 				int colCount = rsmd.getColumnCount()+1;
 				for(int i =1; i<colCount; i++) {
-					vo.add(rs.getString(1));
-					vo.add(rs.getString(2));
-					vo.add(rs.getString(3));
-					vo.add(rs.getString(4));
-					vo.add(rs.getString(5));
+					vo.add(rs.getString(i));
 				}
 				list.add(vo);
 			}
@@ -172,7 +154,21 @@ public class AdminInfoDAO {
 		}
 		return list;
 	}
-	
+	//상세정보에서 삭제 
+	public int getInfoListDel(String stdNo) {
+		int result = 0;
+		String sql = " delete from student where stdno = ? ";
+		try {
+			getPreparedStatement(sql);
+			//매핑
+			pstmt.setString(1,stdNo);
+			result = pstmt.executeUpdate(); //성공시 1
+			System.out.println(result);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	public void close() {
 		try {

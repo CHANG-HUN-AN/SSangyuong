@@ -34,7 +34,6 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  * 0330 dao.close 는 최상위 프레임(AdmUI)에 전역변수로 만들어놓고 객체생성은 각 패널에 생성
- * 
  * @author user
  */
 public class AdmInfo extends JPanel{
@@ -77,51 +76,45 @@ public class AdmInfo extends JPanel{
 		btn_search = new JButton("검색");
 		btn_list = new JButton("전체목록");
 		dao = new AdminInfoDAO();
-		
+		//테이블,스크롤팬 객체생성
+		table = new JTable(model);
+		sp_stdInfo = new JScrollPane(table); //scrollPanel add table;
 		
 		//폰트 셋팅
 		jl_search.setFont(AdmUI.FONT);jcb_search.setFont(AdmUI.FONT);jt_search.setFont(AdmUI.FONT);btn_search.setFont(AdmUI.FONT);btn_list.setFont(AdmUI.FONT);
 		//title에 border넣기
 //		titlePane.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
-		this.setEditable(0);//이거외에 수정방법이 없다.
 		
-		//sql 데이터 불러오기********
-		String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
+		this.setEditable(0);
+		
 //		AdminInfoDAO dao = new AdminInfoDAO();
-		list = dao.getResultVectorList(sql);
+		list = dao.getResultVectorList();
 		
 		for(Vector<String> vo :list) {
 			model.addRow(vo); //vector 형태를 열로 다 받아드릴수있다.(이중포문을 사용할필요가 없다)
 		}
-		
-		table = new JTable(model);
-		sp_stdInfo = new JScrollPane(table); //scrollPanel add table;
+		//테이블에 모델추가 -->스크롤펜에 테이블추가
+		table.setModel(model);
+		sp_stdInfo.setViewportView(table);		
 		table.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
         table.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
         table.setDragEnabled(false);
-<<<<<<< Upstream, based on origin/master
-=======
-<<<<<<< HEAD
         
-=======
->>>>>>> refs/remotes/origin/master
->>>>>>> 85ee785 @rebase
 		//콤보박스 목록 추가
 		jcb_search.addItem("학번");
 		jcb_search.addItem("이름");
 		jcb_search.addItem("학과");
-
 		
 		//검색패널에 부가적인거 추가
 		jp_search.add(jl_search);jp_search.add(jcb_search);jp_search.add(jt_search);
 		jp_search.add(btn_search);jp_search.add(btn_list);
+		
 		//박스레이아웃으로 감싸기
 		BoxLayout boxLayout =new BoxLayout(topPane, BoxLayout.Y_AXIS);
 		topPane.setLayout(boxLayout);
 		
 		//클래스를 별도로만들어서 title디자인 통합
 		titlePane = (JPanel)uiset.title(titlePane,jl_title,sp_stdInfo);
-		
 		topPane.add(titlePane,new BorderLayout().NORTH);
 		add(topPane,new BorderLayout().CENTER);
 		add(jp_search);
@@ -144,11 +137,9 @@ public class AdmInfo extends JPanel{
 		btn_list.addActionListener(eventObj);
 		jt_search.addActionListener(eventObj);
 		jcb_search.addActionListener(eventObj);
-		
 	}
 	
 	public void setEditable(int zero) {
-//		String[] colNames = new String[] { "학번", "이름", "학과", "성별","생년월일" };
 		//table 수정 불가(오버로딩)
 		model = new DefaultTableModel(VCOLNAMES, zero) {
 		    @Override
@@ -193,13 +184,6 @@ public class AdmInfo extends JPanel{
 							+ "AND STDNO = ? ";
 					//vector<StudentVo>형태로 데이터 표출이안되서 -->2차원배열 Vector<Vector<String>>형으로 다시 넣어줌
 					Vector<Vector<String>> searchData = replaceRow(sql);
-//					for(StudentVO vo:replaceData) {
-//						vRowDataes.add(vo.getStdno());
-//						vRowDataes.add(vo.getSname());
-//						vRowDataes.add(vo.getMname());
-//						vRowDataes.add(vo.getGender());
-//						vRowDataes.add(vo.getBirth());
-//					}
 					if (vaildationCheck() == 1) {
 						if (searchData.size() != 0) {
 							model.setDataVector(searchData, VCOLNAMES);

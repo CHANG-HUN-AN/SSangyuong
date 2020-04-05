@@ -25,6 +25,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ *04/5 교수데이터에서 비밀번호를 따로 주기
+ * @author dksck
+ */
 public class ProUI extends JFrame {
 
 	//Field
@@ -40,11 +44,7 @@ public class ProUI extends JFrame {
 	public ProUI() {
 		mainFrame();
 	}
-
-	// Method
-	public void setTitle() {
-		
-	}
+	
 	public void mainFrame() {
 		//tabPanel 에 jPanel 호출  
 		tab_stdInfo = new ProInfo();
@@ -54,8 +54,9 @@ public class ProUI extends JFrame {
 		tabPane = new JTabbedPane();
 		
 		tabPane.addTab("HOME", jp_main);
-		tabPane.addTab("학생 정보 관리", tab_stdInfo);
-		tabPane.addTab("학생 성적 관리", tab_stdScore);
+		
+		tabPane.addTab("교수 - 학생 정보 관리", tab_stdInfo);
+		tabPane.addTab("교수 - 학생 성적 관리", tab_stdScore);
 
 		add(tabPane);
 		setSize(600, 600);
@@ -72,8 +73,6 @@ public class ProUI extends JFrame {
 		addWindowListener(eventObj);
 //		table.addMouseListener(eventObj);
 		addWindowListener(eventObj);
-//		btn_search.addActionListener(eventObj);
-//		jt_search.addActionListener(eventObj);
 	}
 
 	//액션 리스너 선언

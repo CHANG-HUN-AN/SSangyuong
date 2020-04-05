@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 public class AdmUI extends JFrame {
@@ -40,12 +41,21 @@ public class AdmUI extends JFrame {
 	public AdmUI() {
 		mainFrame();
 	}
-
+	
 	// Method
 	public void setTitle() {
 		
 	}
 	public void mainFrame() {
+		
+		//Look & Feel 
+		try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+			//UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
+			//UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			} catch (Exception e) {}
+		
 		//tabPanel 에 jPanel 호출  
 		tab_stdInfo = new AdmInfo();
 		tab_stdScore = new AdmScore();
@@ -57,6 +67,7 @@ public class AdmUI extends JFrame {
 		tabPane.addTab("학생 정보 관리", tab_stdInfo);
 		tabPane.addTab("학생 성적 관리", tab_stdScore);
 
+		
 		add(tabPane);
 		setSize(600, 600);
 		
@@ -77,7 +88,7 @@ public class AdmUI extends JFrame {
 	//액션 리스너 선언
 	class StudentScoreMainEvent extends WindowAdapter {
 		public void windowClosing(WindowEvent we) {
-			JOptionPane.showMessageDialog(null, "프로그램 종료1");
+			JOptionPane.showMessageDialog(null, "프로그램 종료");
 			System.exit(0);
 		}
 	} //End Action

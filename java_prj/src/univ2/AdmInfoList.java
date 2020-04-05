@@ -15,12 +15,13 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /**
- * 0331 1.JtextField 의 데이터가 선택이안되도록
+ * 0331 1.JtextField 의 데이터가 선택이안되도록 -->완료
  * 0331 2.삭제 버튼클릭시 db에 데이터 삭제
  * @author user
  */
@@ -122,7 +123,9 @@ public class AdmInfoList extends JFrame{
 //		add(titlePanel); add(idPane); add(pwPane); add(namePane); add(majorPane);
 //		add(phonePane); add(genderPane);
 //		add(buttonPane);
-		
+		//입력제한
+		jt_id.setEditable(false);
+		jt_pw.setEditable(false);
 		//db의 리스트 달기
 		detailList();
 		//JFrame visible
@@ -147,6 +150,7 @@ public class AdmInfoList extends JFrame{
 		public void windowClosing(WindowEvent we) {
 			dispose(); //새로운프레임종료
 		}
+		
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			Object obj = ae.getSource();
@@ -155,8 +159,21 @@ public class AdmInfoList extends JFrame{
 				System.out.println("취소합니다");
 				dispose();
 			}else if(obj == btn_delete) {
-				System.out.println("삭제합니다.");
-			}
+				String subNo = jt_id.getText().trim();
+				//confrim yes 0 no 1
+				int confirm = JOptionPane.showConfirmDialog(null, "정말삭제하시겠습니까?","삭제",JOptionPane.YES_NO_OPTION);
+				
+				if(confirm == 0) {
+					int result = dao.getInfoListDel(subNo);
+					
+					if(result != 1) {
+						JOptionPane.showMessageDialog(null, "삭제실패");
+					}else {
+						JOptionPane.showMessageDialog(null, "삭제성공");
+						dispose();
+					}
+				}
+			}//end 
 		}
 		
 	}

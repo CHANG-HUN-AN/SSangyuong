@@ -6,7 +6,7 @@ public class AdminStdVO {
 	String stdno,pw,sname,gender,ph,birth,term,majorno;
 	String mname,tname;
 	String subname,score,grade,proname; //임시 스코어리스트 
-
+	String scoreid;
 	public String getMname() {
 		return mname;
 	}
@@ -117,6 +117,14 @@ public class AdminStdVO {
 
 	public void setProname(String proname) {
 		this.proname = proname;
+	}
+
+	public String getScoreid() {
+		return scoreid;
+	}
+
+	public void setScoreid(String scoreid) {
+		this.scoreid = scoreid;
 	}
 	
 }
