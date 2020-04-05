@@ -25,8 +25,16 @@ import javax.swing.table.DefaultTableModel;
 import univ2.AdmInfo.MgmSystemUIEvent;
 
 /**
+<<<<<<< Upstream, based on origin/master
  * 0402 검색기능(버튼) 클릭시 검색이 안됨
  * 0402 검색된 리스트가 정렬되지 않음
+=======
+<<<<<<< HEAD
+=======
+ * 0402 검색기능(버튼) 클릭시 검색이 안됨
+ * 0402 검색된 리스트가 정렬되지 않음
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
  * @author user
  */
 public class AdmScore extends JPanel {
@@ -51,7 +59,16 @@ public class AdmScore extends JPanel {
 	AdmScoreDAO dao; // DAO
 	Vector<Vector<String>> list; // List
 	static Vector<String> COLNAME = new Vector<String>(); // Column
+<<<<<<< Upstream, based on origin/master
 	static Vector<String> COLNAME_LIST = new Vector<String>(); 
+=======
+<<<<<<< HEAD
+	static Vector<String> COLNAME_LIST = new Vector<String>();
+
+=======
+	static Vector<String> COLNAME_LIST = new Vector<String>(); 
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 	// Constructor
 	public AdmScore() {
 		mainFrame();
@@ -74,11 +91,26 @@ public class AdmScore extends JPanel {
 		jl_search = new JLabel("검색>");
 		jcb_search = new JComboBox<String>();
 		jcb_search = new JComboBox<String>();
+<<<<<<< Upstream, based on origin/master
 		// combo = new JComboBox();
 		// combo.setModel(new DefaultComboBoxModel(new String[] { "이름", "학번" }));
+=======
+<<<<<<< HEAD
+=======
+		// combo = new JComboBox();
+		// combo.setModel(new DefaultComboBoxModel(new String[] { "이름", "학번" }));
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 		jp_result.add(jl_search);
 		jp_result.add(jcb_search);
+<<<<<<< Upstream, based on origin/master
 		// jp_result.add(combo);
+=======
+<<<<<<< HEAD
+=======
+		// jp_result.add(combo);
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 
 		jt_search = new JTextField();
 		jp_result.add(jt_search);
@@ -92,9 +124,18 @@ public class AdmScore extends JPanel {
 		jtf_name = new JTextField(5);
 		jtf_major = new JTextField(8);
 
+<<<<<<< Upstream, based on origin/master
 		// Combo
 
 		// DAO score? info?
+=======
+<<<<<<< HEAD
+=======
+		// Combo
+
+		// DAO score? info?
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 		dao = new AdmScoreDAO();
 
 		// 폰트 설정
@@ -251,7 +292,15 @@ public class AdmScore extends JPanel {
 			System.out.println(row);
 			if (erow == row) {
 				Object detailData = table.getValueAt(row, 0);
+<<<<<<< Upstream, based on origin/master
 				new AdmScoreList(detailData,COLNAME_LIST);
+=======
+<<<<<<< HEAD
+				new AdmScoreList(detailData, COLNAME_LIST);
+=======
+				new AdmScoreList(detailData,COLNAME_LIST);
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 			}
 		}// End CLicked
 
@@ -269,9 +318,34 @@ public class AdmScore extends JPanel {
 	} // End Action
 
 	public void ColumnList() {
+<<<<<<< Upstream, based on origin/master
 		for(String str : COLNAME_LIST) {
+=======
+<<<<<<< HEAD
+		for (String str : COLNAME_LIST) {
+=======
+		for(String str : COLNAME_LIST) {
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 			System.out.println(str);
 		}
+<<<<<<< Upstream, based on origin/master
+=======
+<<<<<<< HEAD
+		COLNAME_LIST.add("성적코드");
+>>>>>>> 85ee785 @rebase
+		COLNAME_LIST.add("과목명");
+		COLNAME_LIST.add("성적");
+		COLNAME_LIST.add("등급");
+		COLNAME_LIST.add("담당교수");
+		
+	}// End V_Column
+<<<<<<< Upstream, based on origin/master
+	
+	
+=======
+
+=======
 		COLNAME_LIST.add("과목명");
 		COLNAME_LIST.add("성적");
 		COLNAME_LIST.add("등급");
@@ -280,6 +354,8 @@ public class AdmScore extends JPanel {
 	}// End V_Column
 	
 	
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 	// --검색기능--
 	// method 중복되는 코드 -- sql입력받아서 VOlist메소드에 각 입력값전달 후 db에 접속하여 검색한결과를 다시 리턴
 	public Vector<Vector<String>> replaceRow(String sql) {

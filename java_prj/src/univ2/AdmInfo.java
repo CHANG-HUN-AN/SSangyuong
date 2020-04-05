@@ -99,6 +99,13 @@ public class AdmInfo extends JPanel{
 		table.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
         table.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
         table.setDragEnabled(false);
+<<<<<<< Upstream, based on origin/master
+=======
+<<<<<<< HEAD
+        
+=======
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 		//콤보박스 목록 추가
 		jcb_search.addItem("학번");
 		jcb_search.addItem("이름");

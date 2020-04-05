@@ -43,11 +43,37 @@ public class StdMyRegCourse extends JFrame{
 		DefaultTableModel data;
 		static Vector<String> COLNAMES = new Vector<String>();
 		String uid;
+<<<<<<< Upstream, based on origin/master
+=======
+<<<<<<< HEAD
+		StdMyRegCourseDAO dao;
+		static int MyCourseCredit;
+=======
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 		//@0318 수강신청
 		// Constructor
+<<<<<<< Upstream, based on origin/master
 		public StdMyRegCourse(String uid) {
+=======
+<<<<<<< HEAD
+		public StdMyRegCourse() {
+		
+		}
+		public StdMyRegCourse(String uid,Vector<String> COLNAMES) {
+=======
+		public StdMyRegCourse(String uid) {
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 			setTitle("나의 수강신청 목록");
 			this.uid =uid;
+<<<<<<< Upstream, based on origin/master
+=======
+<<<<<<< HEAD
+			this.COLNAMES = COLNAMES;
+=======
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 			start();
 		}
 
@@ -71,6 +97,42 @@ public class StdMyRegCourse extends JFrame{
 			// 표에 들어갈 데이터들.. 테이블 열 생성(table)
 			// table 수정 불가
 			this.setEditable(0);
+<<<<<<< Upstream, based on origin/master
+			// delete 차후 삭제(임시데이터)
+			StdRegCourseListDAO dao = new StdRegCourseListDAO(uid); 
+			Vector<Vector<String>>list = dao.getMyRegisterList();
+=======
+<<<<<<< HEAD
+			// 본인의 수강신청 리스트 출력
+			dao = new StdMyRegCourseDAO(uid); 
+			ArrayList<StdRegCourseVO> list = dao.getVoMyRegisterList();
+			for(StdRegCourseVO vo :list) {
+				String subno= vo.getSubno();
+				String subname = vo.getSubname();
+				String credit = vo.getCredit();
+				String pname = vo.getPname();
+				System.out.println("나의수강목록:"+subno+" "+subname+" "+credit+" "+pname);
+				String [] tempvo = {subno,subname,credit,pname};
+				data.addRow(tempvo);
+				MyCourseCredit += Integer.parseInt(credit);
+			}
+//			Vector<Vector<String>>list = dao.getMyRegisterList();
+//			
+//			for(Vector<String> vo : list) {
+//				System.out.println(vo.size());
+//				data.addRow(vo);
+//			}
+>>>>>>> 85ee785 @rebase
+			
+<<<<<<< Upstream, based on origin/master
+//			String[] rowData = new String[] { "1", "데이터베이스", "2",  "이비자" };
+//			String[] rowData2 = new String[] { "2", "자바기초", "2",  "차미리" };
+			for(Vector<String> vo : list) {
+				data.addRow(vo);
+			}
+
+=======
+=======
 			// delete 차후 삭제(임시데이터)
 			StdRegCourseListDAO dao = new StdRegCourseListDAO(uid); 
 			Vector<Vector<String>>list = dao.getMyRegisterList();
@@ -81,6 +143,8 @@ public class StdMyRegCourse extends JFrame{
 				data.addRow(vo);
 			}
 
+>>>>>>> refs/remotes/origin/master
+>>>>>>> 85ee785 @rebase
 			//
 			//폰트 적용
 			jl_title.setFont(StdUI.TITLEFONT); 
