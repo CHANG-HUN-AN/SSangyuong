@@ -34,11 +34,14 @@ public class StdScore extends JPanel {
 
 	// Constructor
 	public StdScore() {
-		dao = new StdDAO();
-		vo = new StdVO();
+	}
+
+	public StdScore(StdVO vo, StdDAO dao) {
+		this.vo = vo;
+		this.dao = dao;
 		scoreStart();
 	}
-	
+
 	// Method
 	public void scoreStart() {
 		jp_stuInfo = new JPanel();
@@ -140,23 +143,30 @@ public class StdScore extends JPanel {
 			sum += vo.getScore();
 			creditSum += vo.getCredit();
 
-			switch (vo.getGrade()) {
-			case "A":
+			if (grade.equals("A") || grade.equals("a")) {
 				allSum += credit * 4.5;
-				break;
-			case "B":
+			} else if (grade.equals("B") || grade.equals("b")) {
 				allSum += credit * 3.5;
-				break;
-			case "C":
+			} else if (grade.equals("C") || grade.equals("c")) {
 				allSum += credit * 2.5;
-				break;
-			case "D":
+			} else if (grade.equals("D") || grade.equals("d")) {
 				allSum += credit * 1.5;
-				break;
-			case "F":
+			} else if (grade.equals("F") || grade.equals("f")) {
 				allSum += credit * 0;
-				break;
 			}
+
+//			switch (vo.getGrade()) {
+//			case "A": allSum += credit * 4.5; break;
+//			case "a": allSum += credit * 4.5; break;
+//			case "B": allSum += credit * 3.5; break;
+//			case "b": allSum += credit * 3.5; break;
+//			case "C": allSum += credit * 2.5; break;
+//			case "c": allSum += credit * 2.5; break;
+//			case "D": allSum += credit * 1.5; break;
+//			case "d": allSum += credit * 1.5; break;
+//			case "F": allSum += credit * 0; break;
+//			case "f": allSum += credit * 0; break;
+//			}
 		}
 		jtf_total.setText(String.valueOf((double) sum / subCnt)); // 평균
 		jtf_avg.setText(String.valueOf((double) allSum / creditSum)); // 평균학점 | 소수점 아래 두자리까지 표시하고 싶은데 방법 못찾음

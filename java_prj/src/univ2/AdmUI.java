@@ -1,30 +1,18 @@
 package univ2;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.table.DefaultTableModel;
 
 public class AdmUI extends JFrame {
 
@@ -32,6 +20,8 @@ public class AdmUI extends JFrame {
 	AdmInfo tab_stdInfo;
 	AdmScore tab_stdScore;
 	static Font FONT = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
+	static Font add1_FONT = new Font("∏º¿∫ ∞ÌµÒ",Font.BOLD,20);
+	static Font add2_FONT = new Font("∏º¿∫ ∞ÌµÒ",Font.BOLD,20);
 	static Font FONTTITLE = new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 12);
 //	JPanel mainPane;
 	JPanel jp_main;
@@ -39,6 +29,12 @@ public class AdmUI extends JFrame {
 	
 	// Constructor
 	public AdmUI() {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			mainFrame();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		mainFrame();
 	}
 	
@@ -48,13 +44,19 @@ public class AdmUI extends JFrame {
 	}
 	public void mainFrame() {
 		
-		//Look & Feel 
-		try {
-			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
-			//UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
-			//UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
-			JFrame.setDefaultLookAndFeelDecorated(true);
-			} catch (Exception e) {}
+//		//Look & Feel 
+//		try {
+//			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+//			//UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
+//			//UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
+//			JFrame.setDefaultLookAndFeelDecorated(true);
+//			} catch (Exception e) {}
+		
+		String imgPath = "src/univ2/Adm.png";
+		ImageIcon originIcon = new ImageIcon(imgPath);
+		Image originImg = originIcon.getImage();
+		Image changedImg = originImg.getScaledInstance(370, 380, Image.SCALE_SMOOTH);
+		ImageIcon Icon = new ImageIcon(changedImg);
 		
 		//tabPanel ø° jPanel »£√‚  
 		tab_stdInfo = new AdmInfo();

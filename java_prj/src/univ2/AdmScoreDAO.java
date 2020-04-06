@@ -1,5 +1,6 @@
 package univ2;
 
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +14,7 @@ import univ2.AdminStdVO;
 public class AdmScoreDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@119.194.84.127:1521";// 211.63.89.213
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";// 211.63.89.213
 	private String user = "System";
 	private String password = "oracle";// oracle
 
@@ -217,5 +218,26 @@ public class AdmScoreDAO {
 			}
 			return result;
 		}
+		
+	//학생 추가
+		public int adminAdd(AdminStdVO avo,String majorno) {
+			int result = 0;
+			try {
+			String sql ="INSERT INTO STD (STDNO,PW,SNAME,GENDER,PH,BIRTH,TERM,MAJORNO) VALUES \r\n " + 
+					"(SEQU_STD.NEXTVAL,'0000','0','0','0',to_date('01/01/01','RR/MM/DD'),'S11',?) ";
+			getPreparedStatement(sql);
+			
+			System.out.println("학생 추가");
+			pstmt.setString(1,majorno);
+			
+			result = pstmt.executeUpdate();
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return result;
+		}
+
+		
 
 }// End class

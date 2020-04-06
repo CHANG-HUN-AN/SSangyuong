@@ -30,7 +30,7 @@ import javax.swing.table.DefaultTableModel;
  * @author dksck
  */
 public class ProUI extends JFrame {
-
+	static  String PID ;
 	//Field
 	ProInfo tab_stdInfo;
 	ProScore tab_stdScore;
@@ -40,14 +40,23 @@ public class ProUI extends JFrame {
 	JPanel jp_main;
 	JTabbedPane tabPane;
 	
+	ProDAO dao;
+	ProVO vo;
+	
 	// Constructor
 	public ProUI() {
+		mainFrame();
+	}
+	public ProUI(String pid) {
+		PID = pid;
+		dao = new ProDAO();
+		vo = new ProVO();
 		mainFrame();
 	}
 	
 	public void mainFrame() {
 		//tabPanel ø° jPanel »£√‚  
-		tab_stdInfo = new ProInfo();
+		tab_stdInfo = new ProInfo(PID);
 		tab_stdScore = new ProScore();
 		jp_main = new JPanel();
 		

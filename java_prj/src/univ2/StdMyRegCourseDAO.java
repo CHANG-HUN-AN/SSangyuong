@@ -12,9 +12,9 @@ import java.util.Vector;
 public class StdMyRegCourseDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521";// 211.63.89.213
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";// 211.63.89.213
 	private String user = "System";
-	private String password = "root";//oracle
+	private String password = "oracle";//oracle
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;

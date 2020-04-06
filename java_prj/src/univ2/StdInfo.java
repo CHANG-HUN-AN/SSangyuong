@@ -22,7 +22,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-public class StdInfo extends JPanel{
+public class StdInfo extends JPanel {
 	// Field
 	JPanel centerPane;
 	JPanel infoPane, titlePane, namePane, passPane, majorPane, noPane, phonePane, genderPane, spacePane, birthPane,
@@ -35,11 +35,14 @@ public class StdInfo extends JPanel{
 
 	StdDAO dao;
 	StdVO vo;
-	
+
 	// Constructor
 	public StdInfo() {
-		dao = new StdDAO();
-		vo = new StdVO();
+	}
+
+	public StdInfo(StdVO vo, StdDAO dao) {
+		this.vo = vo;
+		this.dao = dao;
 		infoStart();
 	}
 
@@ -58,7 +61,7 @@ public class StdInfo extends JPanel{
 		spacePane = new JPanel();
 		birthPane = new JPanel();
 		buttonPane = new JPanel();
-		
+
 		jl_title = new JLabel("학생 정보 조회");
 		jl_major = new JLabel("학과: ");
 		jl_no = new JLabel("학번: ");
@@ -79,7 +82,7 @@ public class StdInfo extends JPanel{
 		jt_phone = new JTextField(20);
 //		jt_gender = new JTextField(15);
 		jt_birth = new JTextField(20);
-		
+
 		// 출력하기
 		vo = dao.stdInfoList(StdUI.uid);
 		jt_major.setText(vo.getMname());
@@ -94,11 +97,11 @@ public class StdInfo extends JPanel{
 			jrb_female.setSelected(true);
 		}
 		jt_birth.setText(vo.getBirth());
-		
+
 		// 입력 제한
 		jt_major.setEditable(false);
 		jt_no.setEditable(false);
-		
+
 		jb_save = new JButton("저장");
 		jb_reset = new JButton("취소");
 
@@ -111,11 +114,11 @@ public class StdInfo extends JPanel{
 		jl_gender.setFont(StdUI.FONT);
 		jl_birth.setFont(StdUI.FONT);
 
-		//setborder를 통해 타이틀 생성 compoundBorder( ouside , insideborder에 색주기)
+		// setborder를 통해 타이틀 생성 compoundBorder( ouside , insideborder에 색주기)
 		jl_title.setLayout(new BorderLayout());
-		jl_title.setBorder(new CompoundBorder(new EmptyBorder(8, 4, 4, 4), new MatteBorder(0, 0, 0, 0,Color.BLACK)));
+		jl_title.setBorder(new CompoundBorder(new EmptyBorder(8, 4, 4, 4), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
 		titlePane.setBorder(new CompoundBorder(new EmptyBorder(4, 150, 8, 150), new MatteBorder(1, 1, 1, 1, Color.BLACK)));
-		
+
 		titlePane.add(jl_title);
 		majorPane.add(jl_major);
 		majorPane.add(jt_major);
@@ -127,20 +130,21 @@ public class StdInfo extends JPanel{
 		passPane.add(jt_pass);
 		phonePane.add(jl_phone);
 		phonePane.add(jt_phone);
-		genderPane.setBorder(new CompoundBorder(new EmptyBorder(0, 4,0, 60), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
+		genderPane
+				.setBorder(new CompoundBorder(new EmptyBorder(0, 4, 0, 60), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
 		gr_gender.add(jrb_female);
 		gr_gender.add(jrb_male);
 		genderPane.add(jl_gender);
 //	    genderPane.add(jt_gender);
 		genderPane.add(spacePane);
-		spacePane.setBorder(new CompoundBorder(new EmptyBorder(0, 35, 0,0 ), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
+		spacePane.setBorder(new CompoundBorder(new EmptyBorder(0, 35, 0, 0), new MatteBorder(0, 0, 0, 0, Color.BLACK)));
 		genderPane.add(jrb_female);
 		genderPane.add(jrb_male);
 		birthPane.add(jl_birth);
 		birthPane.add(jt_birth);
 		buttonPane.add(jb_save);
 		buttonPane.add(jb_reset);
-		
+
 		infoPane.add(titlePane);
 		infoPane.add(majorPane);
 		infoPane.add(noPane);
@@ -150,14 +154,14 @@ public class StdInfo extends JPanel{
 		infoPane.add(genderPane);
 		infoPane.add(birthPane);
 		infoPane.add(buttonPane);
-		
-		//박스 레이아웃 을 통해 infopane 패널을 담아서 묶어주고 진행  
+
+		// 박스 레이아웃 을 통해 infopane 패널을 담아서 묶어주고 진행
 		this.setLayout(new BorderLayout());
-		BoxLayout boxLayout =new BoxLayout(centerPane, BoxLayout.Y_AXIS);
+		BoxLayout boxLayout = new BoxLayout(centerPane, BoxLayout.Y_AXIS);
 		centerPane.setLayout(boxLayout);
 		centerPane.add(infoPane);
 		add(centerPane);
-		
+
 		setSize(600, 600);
 
 		Dimension fsize = getSize();
@@ -167,25 +171,25 @@ public class StdInfo extends JPanel{
 
 		setLocation(width, height);
 		setVisible(true);
-		
+
 		// 이벤트 리스너
 		StdInfoEvent eventObj = new StdInfoEvent();
 		jb_save.addActionListener(eventObj);
 		jb_reset.addActionListener(eventObj);
-		
+
 	}
-	
+
 	class StdInfoEvent implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			Object obj = ae.getSource();
-			if(jb_save == obj) {
+			if (jb_save == obj) {
 				stdUpdate();
-			} else if(jb_reset == obj){
+			} else if (jb_reset == obj) {
 				System.out.println("취소 버튼");
 			}
 		}
 	}// StdInfoEvent class
-	
+
 	public void stdUpdate() {
 		// 수정할 데이터(PW, SNAME, PH, BIRTH)
 		StdVO uvo = new StdVO();
@@ -193,16 +197,16 @@ public class StdInfo extends JPanel{
 		uvo.setSname(jt_name.getText());
 		uvo.setPh(jt_phone.getText());
 		uvo.setBirth(jt_birth.getText());
-		
+
 		// 수정할 학번 uvo에 추가
 		uvo.setStdno(StdUI.uid);
-		
+
 		int result = dao.stdInfoUpdate(uvo);
-		
-		if(result != 0) {
+
+		if (result != 0) {
 			JOptionPane.showMessageDialog(null, "수정 완료");
 		}
-		
+
 	}
-	
+
 }

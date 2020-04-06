@@ -1,10 +1,7 @@
 package univ2;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,12 +9,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,30 +23,32 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 public class ProInfo extends JPanel {
+	String pid;
 	// Field
-	JPanel topPane, titlePane, jp_search;
+	JPanel topPane, titlePane,subjectPane, jp_search;
 	JLabel jl_title;
 	JTabbedPane adminPane;
 	JLabel jl_search;
 	JComboBox<String> jcb_search;
+	JComboBox<String> jcb_subject;
 	JTextField jt_search;
 	JButton btn_search, btn_AllList;
 	JScrollPane sp_stdInfo;
 	JTable table;
 	DefaultTableModel model;
 	ProInfoDAO dao;
-	
 	Vector<Vector<String>> list;
 	static Vector<String> VCOLNAMES=new Vector<String>();
 	
 	// Constructor
 	public ProInfo() {
+		start();
+	}
+	public ProInfo(String pid) {
+		this.pid = pid;
 		start();
 	}
 
@@ -62,6 +62,7 @@ public class ProInfo extends JPanel {
 		setVectorColumn();
 		// object create
 		topPane = new JPanel();
+		subjectPane = new JPanel();
 		titlePane = new JPanel();
 		jl_title = new JLabel("학생정보관리");
 		jp_search = new JPanel();
@@ -70,7 +71,9 @@ public class ProInfo extends JPanel {
 		jt_search = new JTextField(20);
 		btn_search = new JButton("검색");
 		btn_AllList = new JButton("전체목록");
+		jcb_subject = new JComboBox<String>();
 		dao = new ProInfoDAO();
+		
 
 		// 폰트 셋팅
 		jl_search.setFont(ProUI.FONT);
@@ -84,8 +87,8 @@ public class ProInfo extends JPanel {
 		// table 수정 불가
 		this.setEditable(VCOLNAMES, 0);
 
-		// delete 임시 데이터 차후 삭제
-		list = dao.getResultVectorList();
+		// 데이터베이스 연동
+		list = dao.getResultVectorList(pid);
 		for (Vector<String> vo : list) {
 			model.addRow(vo); // vector 형태를 열로 다 받아드릴수있다.(이중포문을 사용할필요가 없다)
 		}
@@ -96,7 +99,18 @@ public class ProInfo extends JPanel {
 		jcb_search.addItem("학번");
 		jcb_search.addItem("이름");
 		jcb_search.addItem("학과");
-
+	
+		//임시 콤보박스
+		ArrayList<String> tempItem = new ArrayList<String>();
+		tempItem.add("데이터베이스");
+		tempItem.add("과목2");
+		tempItem.add("과목3");
+		for(String str:tempItem) {
+			jcb_subject.addItem(str);
+		}
+		
+		//패널에 과목콤보박스추가
+		subjectPane.add(jcb_subject);
 		// 검색패널에 부가적인거 추가
 		jp_search.add(jl_search);
 		jp_search.add(jcb_search);
@@ -108,14 +122,20 @@ public class ProInfo extends JPanel {
 		topPane.setLayout(boxLayout);
 
 		// 클래스를 별도로만들어서 title디자인 통합
-		titlePane = (JPanel) uiset.title(titlePane, jl_title, sp_stdInfo);
-
-		topPane.add(titlePane, new BorderLayout().NORTH);
+		titlePane = (JPanel) uiset.title(titlePane,subjectPane ,jl_title);
+		
+		topPane.add(titlePane);
+		topPane.add(sp_stdInfo);
+		
 		add(topPane, new BorderLayout().CENTER);
 		add(jp_search);
-
+		
+		//컬럼 이동제한
+		table.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
+		table.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
+		table.setDragEnabled(false);
 		// JFrame visible
-		setSize(500, 600);
+		setSize(600, 600);
 		setVisible(true);
 		// location center
 		Dimension fsize = getSize();
@@ -211,9 +231,11 @@ public class ProInfo extends JPanel {
 			int row = table.getSelectedRow();
 			System.out.println(erow);
 			System.out.println(row);
-			if (erow == row) {
-				Object detailData = table.getValueAt(row, 0);
-				new ProInfoList(detailData,dao);
+			if(me.getClickCount()==2) {
+				if (erow == row) {
+					Object detailData = table.getValueAt(row, 0);
+					new ProInfoList(detailData,dao);
+				}
 			}
 		}
 

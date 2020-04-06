@@ -242,8 +242,8 @@ public class AdmScoreList extends JFrame {
 				dispose();
 			} else if (obj == btn_rename) {
 				System.out.println("수정합니다.");
-				model.fireTableChanged(null);
 				AdmUpdate();
+				model.fireTableChanged(null);
 				// JOptionPane.showMessageDialog(null, "수정 완료");
 			}
 		}

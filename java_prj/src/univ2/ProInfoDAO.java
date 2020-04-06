@@ -13,9 +13,9 @@ public class ProInfoDAO {
 
 		//Field
 		private String driver = "oracle.jdbc.driver.OracleDriver";
-		private String url = "jdbc:oracle:thin:@localhost:1521";//211.63.89.213
+		private String url = "jdbc:oracle:thin:@211.63.89.213:1521";//211.63.89.213
 		private String user = "System";
-		private String password = "root";//oracle
+		private String password = "oracle";//oracle
 		Connection conn;
 		PreparedStatement pstmt;
 		ResultSet rs;
@@ -38,13 +38,21 @@ public class ProInfoDAO {
 			}
 		}
 
-		public Vector<Vector<String>> getResultVectorList() {
+		public Vector<Vector<String>> getResultVectorList(String pid) {
 			Vector<Vector<String>> list = new Vector<Vector<String>>();
-			String sql = "SELECT STDNO,SNAME,MNAME,GENDER,BIRTH FROM STUDENT std,MAJOR maj where std.majorno = maj.MAJORNO";
+			String sql = " SELECT S.STDNO,PNAME,M.MNAME " + 
+					" FROM ENROL EN, STUDENT S, SUBJECT B,PROFESSOR P,MAJOR M " + 
+					" WHERE S.STDNO = EN.STDNO " + 
+					" AND EN.SUBNO = B.SUBNO " + 
+					" AND M.MAJORNO = S.MAJORNO" + 
+					" AND PNAME = ? " + 
+					" AND SUBNAME = '데이터베이스' " ;
 			try {
 				getPreparedStatement(sql);
-				
+				pstmt.setString(1,pid);
+//				pstmt.setString(2,pid);
 				rs = pstmt.executeQuery();
+				
 				ResultSetMetaData rsmd = rs.getMetaData();
 			
 				while(rs.next()) {

@@ -51,8 +51,14 @@ public class AdmInfo extends JPanel{
 	AdminInfoDAO dao ;
 	Vector<Vector<String>> list;
 	static Vector<String> VCOLNAMES=new Vector<String>();
+	AdminStdVO vo;
 	//Constructor
 	public AdmInfo() { 
+		start();
+	}
+	
+	public AdmInfo(AdminStdVO svo) {
+		this.vo = svo;
 		start();
 	}
 
@@ -241,7 +247,7 @@ public class AdmInfo extends JPanel{
 			int column = table.getSelectedColumn();
 			if(erow == row) {
 				Object detailData = table.getValueAt(row, 0);
-				new AdmInfoList(detailData,dao);
+				new AdmInfoList(detailData);
 			}
 		}
 		public void mousePressed(MouseEvent e) { }
@@ -266,6 +272,8 @@ public class AdmInfo extends JPanel{
 		}
 		return result;
 	}
+	
+	
 
 	
 }

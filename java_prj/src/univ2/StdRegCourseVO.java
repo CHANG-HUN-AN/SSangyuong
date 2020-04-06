@@ -3,6 +3,17 @@ package univ2;
 public class StdRegCourseVO {
 	String subno,subname,credit,professor;
 	String pname;
+	String counting;
+	
+
+	public String getCounting() {
+		return counting;
+	}
+
+	public void setCounting(String counting) {
+		this.counting = counting;
+	}
+
 	public String getPname() {
 		return pname;
 	}

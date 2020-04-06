@@ -102,7 +102,10 @@ public class StdMyRegCourse extends JFrame{
 //				data.addRow(vo);
 //			}
 			
-			//
+			//컬럼 이동제한
+			table.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
+			table.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
+			table.setDragEnabled(false);
 			//폰트 적용
 			jl_title.setFont(StdUI.TITLEFONT); 
 			btn_del.setFont(StdUI.FONT); btn_allDel.setFont(StdUI.FONT);btn_cancel.setFont(StdUI.FONT); 

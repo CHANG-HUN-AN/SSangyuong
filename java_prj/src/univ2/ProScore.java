@@ -10,8 +10,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -28,7 +30,8 @@ import univ2.ProScore.StudentScoreMainEvent;
 public class ProScore extends JPanel {
 
 	// Field
-		JPanel mainPane, titlePane, jp_info, jp_result;
+		JPanel mainPane, titlePane, jp_info, jp_result,subjectPane;
+		JComboBox<String>jcb_subject;
 		JLabel jl_title, jl_search;
 
 		JTextField jtf_name, jtf_major, jt_search;
@@ -39,7 +42,7 @@ public class ProScore extends JPanel {
 
 //		JTabbedPane tabPane;
 		JComboBox<String> combo, jcb_search;
-		JScrollPane scoll;
+		JScrollPane scollPane;
 		JButton btn_search, btn_list;
 
 		DefaultTableModel model;
@@ -63,14 +66,14 @@ public class ProScore extends JPanel {
 			getVectorColumn();
 
 			titlePane = new JPanel();
-
+			subjectPane = new JPanel();
 			jp_info = new JPanel();
 			jp_result = new JPanel();
 
 			jl_title = new JLabel("학생성적관리");
 			jl_search = new JLabel("검색>");
 			jcb_search = new JComboBox<String>();
-			jcb_search = new JComboBox<String>();
+			jcb_subject = new JComboBox<String>();
 			jp_result.add(jl_search);
 			jp_result.add(jcb_search);
 
@@ -108,17 +111,31 @@ public class ProScore extends JPanel {
 			}
 
 			table = new JTable(model);
-			scoll = new JScrollPane(table);
+			scollPane = new JScrollPane(table);
 
 			// 콤보박스 목록 추가
 			jcb_search.addItem("학번");
 			jcb_search.addItem("이름");
-
+			
+			//임시 콤보박스
+			ArrayList<String> tempItem = new ArrayList<String>();
+			tempItem.add("데이터베이스");
+			tempItem.add("과목2");
+			tempItem.add("과목3");
+			for(String str:tempItem) {
+				jcb_subject.addItem(str);
+			}
+			subjectPane.add(jcb_subject);
+			//박스 레이아웃 추가
+			BoxLayout boxLayout = new BoxLayout(mainPane, BoxLayout.Y_AXIS);
+			mainPane.setLayout(boxLayout);
+			
 			titlePane.add(jl_title);
-			titlePane = (JPanel) uiset.title(titlePane, jl_title, scoll);
-
-			mainPane.add(titlePane, BorderLayout.CENTER);
-
+			titlePane = (JPanel) uiset.title(titlePane, subjectPane,jl_title);
+			
+			mainPane.add(titlePane);
+			mainPane.add(scollPane);
+			
 			add(mainPane, BorderLayout.CENTER);
 			add(jp_result);
 			setSize(600, 600);

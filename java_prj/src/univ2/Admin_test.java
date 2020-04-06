@@ -10,9 +10,10 @@ public class Admin_test {
 //		new StudentScore(); 
 //		new MgmStdScore();
 		
-//		new MgmSystemUI();
-		new AdmUI();
-//		new ProUI();
+//		new Main_Login();
+		new StdUI("20161101");
+//		new AdmUI();
+//		new ProUI("นฺมพนü");
 		
 		
 	}

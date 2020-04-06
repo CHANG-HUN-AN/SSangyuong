@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -37,7 +39,7 @@ public class StdUI extends JFrame {
 	JTextField tid;
 	JPasswordField tpass;
 	JRadioButton jr_stu, jr_staff;
-	JButton btnLogin, btnJoin;
+	JButton btnLogin, btnJoin, btnLogout;
 
 	JFrame jf_main;
 	JPanel jp_main;
@@ -71,7 +73,7 @@ public class StdUI extends JFrame {
 //		            break;
 //		        }
 //		    }
-			
+
 			// 윈도우
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			mainStart();
@@ -90,21 +92,23 @@ public class StdUI extends JFrame {
 		vo = dao.stdInfoList(uid);
 		jl_text = new JLabel(vo.getSname() + "님 환영합니다 !");
 		jl_img = new JLabel(new ImageIcon("src/univ2/stdicon.png"));
-		
+
 		// jf_main = new JFrame(); // 메인
 //		System.out.println("확인111" + uid);
-		tab_stuInfo = new StdInfo();
-		tab_stuScore = new StdScore();
-		tab_stuReg = new StdRegCourse(vo,dao);
+		tab_stuInfo = new StdInfo(vo, dao);
+		tab_stuScore = new StdScore(vo, dao);
+		tab_stuReg = new StdRegCourse(vo, dao);
 
 		jp_main = new JPanel(new GridLayout(3, 1));
 		jp_text = new JPanel();
 		jp_img = new JPanel();
 
+		btnLogout = new JButton("로그아웃");
 
 		jp_text.add(jl_text);
+		jp_text.add(btnLogout);
 		jp_img.add(jl_img);
-		
+
 		jp_main.add(jp_text, BorderLayout.NORTH);
 		jp_main.add(jp_img, BorderLayout.CENTER);
 
@@ -138,12 +142,21 @@ public class StdUI extends JFrame {
 
 		StdMainEvent eventObj = new StdMainEvent();
 		addWindowListener(eventObj);
+		btnLogout.addActionListener(eventObj);
 	}
 
-	class StdMainEvent extends WindowAdapter {
+	class StdMainEvent extends WindowAdapter implements ActionListener {
 		public void windowClosing(WindowEvent we) {
 			JOptionPane.showMessageDialog(null, "프로그램 종료");
 			System.exit(0);
+		}
+
+		public void actionPerformed(ActionEvent ae) {
+			Object obj = ae.getSource();
+			if (btnLogout == obj) {
+				setVisible(false);
+				new Main_Login();
+			}
 		}
 	}
 }

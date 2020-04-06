@@ -11,7 +11,7 @@ import java.util.Vector;
 public class ProDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@119.194.84.127:1521";//211.63.89.213
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";//211.63.89.213
 	private String user = "SYSTEM";
 	private String pass = "oracle";//oracle
 	Connection conn;

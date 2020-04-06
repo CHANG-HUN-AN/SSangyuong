@@ -292,7 +292,8 @@ public class Main_Login extends JFrame {
 		if (result == 1) {
 			JOptionPane.showMessageDialog(null, "로그인 성공");
 			setVisible(false);
-			new ProUI();
+			System.out.println(uid);
+			new ProUI(uid);
 
 		} else if (result == 0) {
 			JOptionPane.showMessageDialog(null, "로그인 실패, 패스워드가 다름");

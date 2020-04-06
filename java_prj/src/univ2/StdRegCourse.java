@@ -31,6 +31,8 @@ import javax.swing.table.DefaultTableModel;
  * 상단테이블 하단테이블에서 데이터이동시 테이블에 포커싱해주기
  *  4/1 정보검색후 전체검색시 하단테이블로빠진 데이터까지 같이 들어오는 문제(중복데이터) -->완료 (상위프레임에서 두번 실행하는문제)
  *  4/3 15학점미만 9학점이상의 조건성립시 수강신청
+ *  4/6 regCourse2 디자인 2개  regCourse-->이전디자인
+ *  
  * @author dksck
  */
 public class StdRegCourse extends JPanel{
@@ -41,7 +43,10 @@ public class StdRegCourse extends JPanel{
 		JScrollPane coursePane,myCoursePane;
 		JPanel titlePane,myTitlePane;
 		JPanel searchPane,btnPane;
+		JPanel creditPane;
 		JLabel jl_title, jl_mytitle;
+		JLabel jl_credit;
+		JTextField jtf_credit;
 		JTable table,myTable;
 		JTextField jtf_search;
 		JButton btn_reg,btn_del,btn_allDel,btn_myCourse; 
@@ -52,6 +57,7 @@ public class StdRegCourse extends JPanel{
 		Vector<Vector<String>> list;
 		StdVO stdVo ;StdDAO stdDao; String term;
 		String uid = StdUI.uid;
+		
 //		StdMyRegCourse myList;
 		
 		//학기에 맞게 리스트출력하기위해 만든 객체
@@ -105,6 +111,10 @@ public class StdRegCourse extends JPanel{
 			btn_search = new JButton("검색");
 			btn_allSearch = new JButton("전체검색");
 			dao = new StdRegCourseDAO();
+			//학점계산패널에 들어갈 컴포넌트
+			creditPane = new JPanel();
+			jl_credit = new JLabel("학점 > ");
+			jtf_credit = new JTextField(5);
 			//객체생성(테이블 모델,스크롤팬)
 			table = new JTable();
 			myTable = new JTable();
@@ -128,7 +138,13 @@ public class StdRegCourse extends JPanel{
 			for(Vector<String> vo : list) {
 				data.addRow(vo);
 			}
-			
+			//컬럼 이동제한
+			table.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
+			table.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
+			table.setDragEnabled(false);
+			myTable.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
+			myTable.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
+			myTable.setDragEnabled(false);
 			//폰트 적용
 			jl_title.setFont(StdUI.TITLEFONT); jl_mytitle.setFont(StdUI.TITLEFONT);
 			btn_reg.setFont(StdUI.FONT); btn_del.setFont(StdUI.FONT); btn_allDel.setFont(StdUI.FONT); btn_myCourse.setFont(StdUI.FONT);
@@ -139,16 +155,21 @@ public class StdRegCourse extends JPanel{
 			jl_mytitle.setLayout(new BorderLayout());
 			jl_mytitle.setBorder(new CompoundBorder(new EmptyBorder(4, 4, 4, 4), new MatteBorder(0, 0, 1, 0, Color.BLACK)));
 			
-			//j테이블에 데이터모델 부착 jtable.add(model) 이 부착이 안됨 -->setModel로 가능
+			//j테이블에 데이터모델 부착 jtable.add(model) 이 부착이 안됨 
+			//-->0406 )setModel로 가능
 			table.setModel(data);
 			myTable.setModel(myData);
 			coursePane.setViewportView(table);
 			myCoursePane.setViewportView(myTable);
 			
-			//패널에 컴포넌트 부착 !! 패널안에 패널넣을때 패널의 레이아웃 지정안해주면 나중에 레아아웃이 생각한데로 나오지않음
+			//학점계산을 위한 패널
+			creditPane.add(jl_credit);creditPane.add(jtf_credit);
+			//패널에 컴포넌트 부착 !! 
+			//패널안에 패널넣을때 패널의 레이아웃 지정안해주면 나중에 레아아웃이 생각한데로 나오지않음
 			titlePane.setLayout(new BorderLayout());
 			myTitlePane.setLayout(new BorderLayout());
 			titlePane.add(jl_title,new BorderLayout().NORTH);myTitlePane.add(jl_mytitle,new BorderLayout().NORTH);
+																			myTitlePane.add(creditPane,new BorderLayout().EAST);
 			titlePane.add(coursePane,new BorderLayout().CENTER);myTitlePane.add(myCoursePane,new BorderLayout().CENTER);
 			//버튼패널
 			btnPane.add(btn_reg);btnPane.add(btn_del);btnPane.add(btn_allDel);btnPane.add(btn_myCourse);

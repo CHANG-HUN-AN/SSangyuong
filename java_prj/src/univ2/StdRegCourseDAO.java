@@ -13,9 +13,9 @@ import javax.swing.table.DefaultTableModel;
 public class StdRegCourseDAO {
 	// Field
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521";//211.63.89.213
+	private String url = "jdbc:oracle:thin:@211.63.89.213:1521";//211.63.89.213
 	private String user = "System";
-	private String password = "root";//oracle
+	private String password = "oracle";//oracle
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -147,7 +147,7 @@ public class StdRegCourseDAO {
 	public int getRegInsert(String uid,Vector<String> subjectNo) {
 		int result = 0;
 		Vector<Vector<String>> list	= new Vector<Vector<String>>();
-		String sql = "insert into ENROL VALUES('C'||TRIM(TO_CHAR(SEQU_ENROL.NEXTVAL,'000')),?,?)";
+		String sql = "insert into ENROL VALUES('C'||TRIM(TO_CHAR(SEQU_ENROL.NEXTVAL,'0000')),?,?)";
 		try {
 			getPreparedStatement(sql);
 			
